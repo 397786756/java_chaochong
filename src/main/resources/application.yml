@@ -1,0 +1,3 @@
+server:
+  port: 4836
+haoxy.package: com.teeqee.spring.mode.strategy.annotation
