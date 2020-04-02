@@ -1,9 +1,17 @@
 package netty;
 
+import com.alibaba.fastjson.JSONObject;
+import com.teeqee.norak.login.LoginRequest;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.util.CharsetUtil;
+import xyz.noark.core.lang.ByteArray;
+import xyz.noark.core.network.NetworkPacket;
+import xyz.noark.network.codec.ByteBufWrapper;
+import xyz.noark.network.codec.json.SimpleJsonCodec;
 
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
     WebSocketClientHandshaker handshaker;
@@ -45,6 +53,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 System.out.println("WebSocket Client connected! response headers[sec-websocket-extensions]:{}"+response.headers());
             } catch (WebSocketHandshakeException var7) {
                 FullHttpResponse res = (FullHttpResponse)msg;
+
                 String errorMsg = String.format("WebSocket Client failed to connect,status:%s,reason:%s", res.status(), res.content().toString(CharsetUtil.UTF_8));
                 this.handshakeFuture.setFailure(new Exception(errorMsg));
             }
@@ -59,8 +68,27 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
                 //this.listener.onMessage(textFrame.text());
                 System.out.println("TextWebSocketFrame");
             } else if (frame instanceof BinaryWebSocketFrame) {
+                //接收二进制内容
                 BinaryWebSocketFrame binFrame = (BinaryWebSocketFrame)frame;
-                System.out.println("BinaryWebSocketFrame");
+                //解码器
+                SimpleJsonCodec simpleJsonCodec = new SimpleJsonCodec();
+                ByteBuf content = binFrame.content();
+                NetworkPacket networkPacket = simpleJsonCodec.decodePacket(content);
+                ByteArray byteArray = networkPacket.getByteArray();
+                LoginRequest loginRequest = simpleJsonCodec.decodeProtocol(byteArray, LoginRequest.class);
+                int incode = networkPacket.getIncode();
+                Integer opcode = networkPacket.getOpcode();
+                int checksum = networkPacket.getChecksum();
+                int length = networkPacket.getLength();
+                System.out.println("incode  "+incode);
+                System.out.println("opcode  "+opcode);
+                System.out.println("checksum  "+checksum);
+                System.out.println("length  "+length);
+                String password = loginRequest.getPassword();
+                String username = loginRequest.getUsername();
+                System.out.println(username+"    "+password);
+                int length1 = JSONObject.toJSONString(loginRequest).length();
+                System.out.println("转成json对象的长度为:"+length1);
             } else if (frame instanceof PongWebSocketFrame) {
                 System.out.println("WebSocket Client received pong");
             } else if (frame instanceof CloseWebSocketFrame) {

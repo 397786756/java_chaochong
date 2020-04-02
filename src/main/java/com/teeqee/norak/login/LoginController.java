@@ -7,10 +7,11 @@ import xyz.noark.core.network.Session;
 
 import static xyz.noark.log.LogHelper.logger;
 
-@Controller(threadGroup = ExecThreadGroup.ModuleThreadGroup)
+@Controller(threadGroup = ExecThreadGroup.PlayerThreadGroup)
 public class LoginController {
-	@PacketMapping(opcode = 1001, state = Session.State.CONNECTED)
-	public void login(LoginRequest request) {
-		logger.info("登录请求 username={}, password={}", request.getUsername(), request.getPassword());
-	}
+    @PacketMapping(opcode = 1001, state = Session.State.ALL)
+    public void login(Session session, LoginRequest request) {
+        logger.info("登录请求 username={}, password={}", request.getUsername(), request.getPassword());
+        session.send(1002, request);
+    }
 }
