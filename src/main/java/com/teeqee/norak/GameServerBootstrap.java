@@ -1,6 +1,7 @@
 package com.teeqee.norak;
 
 
+import org.springframework.stereotype.Component;
 import xyz.noark.game.bootstrap.BaseServerBootstrap;
 
 /**
@@ -13,6 +14,7 @@ import xyz.noark.game.bootstrap.BaseServerBootstrap;
  * @Package: com.com.teeqee.com.teeqee.component
  * @Software: IntelliJ IDEA
  */
+@Component
 public class GameServerBootstrap  extends BaseServerBootstrap {
     @Override protected String getServerName() {
         return "game-server";

@@ -21,7 +21,7 @@ public class AnnotationTest {
             System.out.println(map);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("服务器指令异常");
+            System.out.println("服务 器指令异常");
         }
     }
 }
