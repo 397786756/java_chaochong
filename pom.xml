@@ -90,6 +90,10 @@
             <artifactId>spring-boot-starter-redis</artifactId>
             <version>1.4.7.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
         <!--spring  test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -103,4 +107,13 @@
             </exclusions>
         </dependency>
     </dependencies>
+   <!--springboot build jar -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

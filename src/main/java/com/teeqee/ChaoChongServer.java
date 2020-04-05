@@ -6,12 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableScheduling
-public class GameTeamApplication implements CommandLineRunner {
+public class ChaoChongServer implements CommandLineRunner {
 
 
     public static void main(String[] args) {
-        SpringApplication.run(GameTeamApplication.class, args);
+        SpringApplication.run(ChaoChongServer.class, args);
         System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "{}[]|");
     }
 

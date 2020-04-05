@@ -65,7 +65,6 @@ public class ClientMain {
         channel.write(ByteArrayUtils.toByteArray((short) (body.length + 4)));
         channel.write(1002);
         channel.writeAndFlush(binaryWebSocketFrame);
-
     }
 
     private void send(Channel channel) {

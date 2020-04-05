@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-@Component
 @DataSourceType("faceRecognition")
 @Service
 public class FaceRecognition implements DataSourceStrategy {

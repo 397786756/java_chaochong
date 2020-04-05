@@ -10,4 +10,7 @@ import java.lang.annotation.Target;
 public @interface DataSourceType {
     //策略名
     String value() default "cmd";
+
+    //自定义的模块
+    String model() default "模块";
 }

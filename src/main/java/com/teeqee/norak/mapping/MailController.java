@@ -10,7 +10,7 @@ import xyz.noark.core.network.Session;
 @Controller(threadGroup = ExecThreadGroup.PlayerThreadGroup)
 public class MailController {
 
-    @PacketMapping(opcode = 2065850721, state = Session.State.ALL)
+    @PacketMapping(opcode = 1002, state = Session.State.ALL)
     public void loginGame(Session session, JSONObject jsonObject) {
         try {
             System.out.println(jsonObject);
