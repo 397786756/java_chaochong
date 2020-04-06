@@ -2,6 +2,7 @@ package netty;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.teeqee.norak.login.LoginRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -16,6 +17,7 @@ import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import xyz.noark.core.lang.ByteArray;
 import xyz.noark.core.network.NetworkProtocol;
 import xyz.noark.core.util.ByteArrayUtils;
 import xyz.noark.network.codec.json.SimpleJsonCodec;
@@ -42,7 +44,7 @@ public class ClientMain {
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }
                 });
-        URI websocketURI = new URI("ws://127.0.0.1:28080/chaochong");
+        URI websocketURI = new URI("ws://127.0.0.1:28080/test");
         HttpHeaders httpHeaders = new DefaultHttpHeaders();
         //进行握手
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
@@ -53,17 +55,19 @@ public class ClientMain {
         handshaker.handshake(channel);
         //阻塞等待是否握手成功
         handler.handshakeFuture().sync();
-        sendJson(channel);
+        websocketClientSendJson(channel);
     }
 
-    private static void sendJson(Channel channel) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("aa", "bb");
-        byte[] body = JSON.toJSONString(jsonObject).getBytes();
-        ByteBuf bf = Unpooled.buffer().writeBytes(body);
-        BinaryWebSocketFrame binaryWebSocketFrame = new BinaryWebSocketFrame(bf);
-        channel.write(ByteArrayUtils.toByteArray((short) (body.length + 4)));
-        channel.write(1002);
+    private static void websocketClientSendJson(Channel channel) {
+        //创建一个登陆体
+        LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsername("222");
+        loginRequest.setPassword("222");
+        NetworkProtocol networkProtocol = new NetworkProtocol(1002, loginRequest);
+        SimpleJsonCodec simpleJsonCodec = new SimpleJsonCodec();
+        byte[] body = simpleJsonCodec.encodePacket(networkProtocol).array();
+        ByteBuf byteBuf = Unpooled.buffer().writeBytes(body);
+        BinaryWebSocketFrame binaryWebSocketFrame = new BinaryWebSocketFrame(byteBuf);
         channel.writeAndFlush(binaryWebSocketFrame);
     }
 
