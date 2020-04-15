@@ -1,3 +1,13 @@
 server:
   port: 4836
-chaoChong.package: com.teeqee.spring.mode.strategy.annotation
+chaoChong.package: com.teeqee.spring.mode.strategy.annotationch
+#spring  全局消息配置
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true #  返回 时间戳
+    # date-format: yyyy-MM-dd HH:mm:ss    格式化
+    # time-zone: GMT+8
+    time-zone: GMT+8
+  profiles:
+    active: home

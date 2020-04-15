@@ -1,11 +1,10 @@
 package com.teeqee.norak;
 
 
-import org.springframework.stereotype.Component;
 import xyz.noark.game.bootstrap.BaseServerBootstrap;
 
 /**
- * @Description:
+ * @Description: 超宠启动类
  * @Author: zhengsongjie
  * @File: GameServer
  * @Version: 1.0.0
@@ -14,10 +13,11 @@ import xyz.noark.game.bootstrap.BaseServerBootstrap;
  * @Package: com.com.teeqee.com.teeqee.component
  * @Software: IntelliJ IDEA
  */
-@Component
-public class GameServerBootstrap  extends BaseServerBootstrap {
-    @Override protected String getServerName() {
-        return "game-server";
+
+public class GameServerBootstrap extends BaseServerBootstrap {
+    @Override
+    protected String getServerName() {
+        return "chaoChong-server";
     }
 
 }

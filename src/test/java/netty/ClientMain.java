@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.norak.login.LoginRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -44,7 +45,7 @@ public class ClientMain {
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }
                 });
-        URI websocketURI = new URI("ws://127.0.0.1:28080/test");
+        URI websocketURI = new URI("ws://127.0.0.1:28080/chaochong");
         HttpHeaders httpHeaders = new DefaultHttpHeaders();
         //进行握手
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
@@ -59,7 +60,7 @@ public class ClientMain {
     }
 
     private static void websocketClientSendJson(Channel channel) {
-        //创建一个登陆体
+        //创建一个对象
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setUsername("222");
         loginRequest.setPassword("222");
@@ -68,32 +69,10 @@ public class ClientMain {
         byte[] body = simpleJsonCodec.encodePacket(networkProtocol).array();
         ByteBuf byteBuf = Unpooled.buffer().writeBytes(body);
         BinaryWebSocketFrame binaryWebSocketFrame = new BinaryWebSocketFrame(byteBuf);
+        String str= ByteBufUtil.hexDump(byteBuf);
+        System.out.println("发送报文格式:"+str);
         channel.writeAndFlush(binaryWebSocketFrame);
+
     }
 
-    private void send(Channel channel) {
-        Thread bina = new Thread(new Runnable() {
-            public void run() {
-                File file = new File("C:\\Users\\Administrator\\Desktop\\test.wav");
-                FileInputStream fin = null;
-                try {
-                    fin = new FileInputStream(file);
-                    byte[] data = new byte[1024];
-                    while (fin.read(data) > 0) {
-                        ByteBuf bf = Unpooled.buffer().writeBytes(data);
-                        BinaryWebSocketFrame binaryWebSocketFrame = new BinaryWebSocketFrame(bf);
-                        channel.writeAndFlush(binaryWebSocketFrame).addListener((ChannelFutureListener) channelFuture -> {
-                            if (channelFuture.isSuccess()) {
-                                System.out.println("bina send success");
-                            } else {
-                                System.out.println("bina send failed  " + channelFuture.cause().toString());
-                            }
-                        });
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
 }

@@ -9,7 +9,7 @@ import static xyz.noark.log.LogHelper.logger;
 
 @Controller(threadGroup = ExecThreadGroup.PlayerThreadGroup)
 public class LoginController {
-    @PacketMapping(opcode = 1001, state = Session.State.ALL)
+    @PacketMapping(opcode = 1002, printLog = false, state = Session.State.ALL)
     public void login(Session session, LoginRequest request) {
         logger.info("登录请求 username={}, password={}", request.getUsername(), request.getPassword());
         session.send(1002, request);

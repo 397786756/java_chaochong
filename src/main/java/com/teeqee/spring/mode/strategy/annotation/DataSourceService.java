@@ -18,6 +18,6 @@ public class DataSourceService {
             return dataSourceChild.connect(map);
         }
         //这边可以返回自定义的Result结果集
-        return new HashMap<>();
+        return new HashMap<>(1);
     }
 }
