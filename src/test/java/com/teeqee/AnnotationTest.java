@@ -16,8 +16,10 @@ public class AnnotationTest {
     private DataSourceService dataSourceService;
 
     @Test
-    public void  test(){
+    public void  test() throws Exception {
         Result fourElements = dataSourceService.connect("fourElements", null, null);
         System.out.println(fourElements);
+        Object o = dataSourceService.connectMethod("log", null, null);
+        System.out.println(o);
     }
 }

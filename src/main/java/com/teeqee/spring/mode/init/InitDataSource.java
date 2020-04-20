@@ -2,6 +2,7 @@ package com.teeqee.spring.mode.init;
 
 
 import com.teeqee.spring.mode.annotation.DataSourceType;
+import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.strategy.CacheCollection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Method;
 import java.net.URL;
 
 @Component
@@ -46,6 +49,20 @@ public class InitDataSource {
                                     //如果存在,得到此注解的value值
                                     DataSourceType dataSourceType = clazz.getAnnotation(DataSourceType.class);
                                     //放入容器中提供使用
+                                    Method[] methods = clazz.getMethods();
+                                    for (Method method : methods) {
+                                        //获取方法上的注解
+                                        Dispather annotation = method.getAnnotation(Dispather.class);
+                                        if (annotation!=null){
+                                            String value = annotation.value();
+                                            CacheCollection.putMethod(value,method);
+                                            //TEST
+                                             CacheCollection.putClass(value, clazz);
+                                        }else {
+
+                                            break;
+                                        }
+                                    }
                                     CacheCollection.putClass(dataSourceType.value(), clazz);
                                 }
                             }

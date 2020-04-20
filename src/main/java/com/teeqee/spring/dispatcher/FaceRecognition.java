@@ -1,6 +1,7 @@
 package com.teeqee.spring.dispatcher;
 
 import com.alibaba.fastjson.JSONObject;
+import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.strategy.DataSourceStrategy;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.spring.result.Result;
@@ -14,6 +15,7 @@ public class FaceRecognition implements DataSourceStrategy {
 
 
     @Override
+    @Dispather(value = "info")
     public Result connect(String cmd, JSONObject data, Channel channel) {
         return new Result("userinfor","22");
     }
