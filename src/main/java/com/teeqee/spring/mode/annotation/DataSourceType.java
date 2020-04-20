@@ -1,4 +1,4 @@
-package com.teeqee.spring.mode.strategy.annotation;
+package com.teeqee.spring.mode.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

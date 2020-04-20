@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class ChaoChongServer implements CommandLineRunner {
+public class ChaoChongServer  {
 
 
     public static void main(String[] args) {
@@ -15,8 +15,4 @@ public class ChaoChongServer implements CommandLineRunner {
         System.setProperty("tomcat.util.http.parser.HttpParser.requestTargetAllow", "{}[]|");
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-
-    }
 }

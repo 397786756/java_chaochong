@@ -2,7 +2,8 @@ package com.teeqee;
 
 
 
-import com.teeqee.spring.mode.strategy.annotation.DataSourceService;
+import com.teeqee.spring.mode.service.DataSourceService;
+import com.teeqee.spring.result.Result;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,12 +17,7 @@ public class AnnotationTest {
 
     @Test
     public void  test(){
-        try {
-            Map<String, Object> map = dataSourceService.connect("fourElements", null);
-            System.out.println(map);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("服务 器指令异常");
-        }
+        Result fourElements = dataSourceService.connect("fourElements", null, null);
+        System.out.println(fourElements);
     }
 }

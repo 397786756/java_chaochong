@@ -1,6 +1,8 @@
 server:
   port: 4836
-chaoChong.package: com.teeqee.spring.mode.strategy.annotationch
+  socket-port: 28081
+  socket-uri: /chaochong
+chaoChong.package: com.teeqee.spring.dispatcher
 #spring  全局消息配置
 spring:
   jackson:
@@ -11,3 +13,18 @@ spring:
     time-zone: GMT+8
   profiles:
     active: home
+mybatis:
+  typeAliasesPackage: com.teeqee.mybatis.pojo
+  mapperLocations: classpath:mapping/*.xml
+  configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 空字段不返回
+    call-setters-on-nulls: true
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+#mybatis分页插件  2019年10月26日13:15:33
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count,countSql

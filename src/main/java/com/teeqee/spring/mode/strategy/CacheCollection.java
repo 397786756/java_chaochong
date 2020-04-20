@@ -1,4 +1,4 @@
-package com.teeqee.spring.mode.strategy.annotation;
+package com.teeqee.spring.mode.strategy;
 
 import java.util.HashMap;
 import java.util.Map;

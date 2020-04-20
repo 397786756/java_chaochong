@@ -1,5 +1,7 @@
-package com.teeqee.spring.mode.strategy.annotation;
+package com.teeqee.spring.mode.context;
 
+import com.teeqee.spring.mode.strategy.CacheCollection;
+import com.teeqee.spring.mode.strategy.DataSourceStrategy;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
