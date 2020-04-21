@@ -19,7 +19,7 @@ import java.util.Map;
  * @Software: IntelliJ IDEA
  */
 @Service("sessionEventService")
-public class SessionEventServiceImpl implements SessionEventService {
+public class SessionEventServiceImpl implements SessionEventService<Channel> {
 
     @Resource
     private DataSourceService dataSourceService;
@@ -40,21 +40,10 @@ public class SessionEventServiceImpl implements SessionEventService {
     }
 
     @Override
-    public void send(Channel channel, String msg) {
-        try {
-            //连续发送错误10次则关闭
-            JSONObject jsonObject = JSONObject.parseObject(msg);
-            String cmd = jsonObject.getString("cmd");
-            JSONObject data = jsonObject.getJSONObject("data");
-            Result result = dataSourceService.connect(cmd, data, channel);
-            if (result != null) {
-                ChannelSupervise.sendToUser(channel.id(), result);
-            }
-        } catch (Exception e) {
-            channel.close();
-            e.printStackTrace();
-        }
+    public void send(String msg, Channel channel) {
+
     }
+
 
     @Override
     public void exceptionCaught(Channel channel) {

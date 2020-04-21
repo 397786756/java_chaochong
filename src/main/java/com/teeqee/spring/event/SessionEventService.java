@@ -9,16 +9,15 @@ import io.netty.channel.Channel;
  * @Author: zhengsongjie
  * @Software: IntelliJ IDEA
  */
-public interface SessionEventService {
+public interface SessionEventService<T> {
 
+    void getId(T channel);
 
-    void getId(Channel channel);
+    void open(T channel);
 
-    void open(Channel channel);
+    void close(T channel);
 
-    void close(Channel channel);
+    void send( String msg,T channel);
 
-    void send(Channel channel, String msg);
-
-    void exceptionCaught(Channel channel);
+    void exceptionCaught(T channel);
 }

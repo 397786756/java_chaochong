@@ -37,7 +37,7 @@ public class WebSocketFrameHandler extends SimpleChannelInboundHandler<Object> {
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
         //如果是文本类型
         if (msg instanceof  TextWebSocketFrame){
-            sessionEventService.send(ctx.channel(),((TextWebSocketFrame) msg).text());
+
         }
     }
 
