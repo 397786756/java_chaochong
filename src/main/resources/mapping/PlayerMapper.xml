@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teeqee.mybatis.dao.PlayerMapper" >
+  <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.Player" >
+    <id column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="gold" property="gold" jdbcType="BIGINT" />
+    <result column="diamond" property="diamond" jdbcType="INTEGER" />
+    <result column="newgamer" property="newgamer" jdbcType="INTEGER" />
+    <result column="avatar" property="avatar" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="INTEGER" />
+    <result column="sound" property="sound" jdbcType="BIT" />
+    <result column="viplv" property="viplv" jdbcType="INTEGER" />
+    <result column="vip" property="vip" jdbcType="INTEGER" />
+    <result column="invitevip" property="invitevip" jdbcType="INTEGER" />
+    <result column="vipreward" property="vipreward" jdbcType="INTEGER" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="country" property="country" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="language" property="language" jdbcType="VARCHAR" />
+    <result column="channelid" property="channelid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    uuid, openid, gold, diamond, newgamer, avatar, nickname, sound, viplv, vip, invitevip, 
+    vipreward, gender, city, country, province, language, channelid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from player
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </select>
+  <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.Player" >
+    insert into player
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="gold != null" >
+        gold,
+      </if>
+      <if test="diamond != null" >
+        diamond,
+      </if>
+      <if test="newgamer != null" >
+        newgamer,
+      </if>
+      <if test="avatar != null" >
+        avatar,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="sound != null" >
+        sound,
+      </if>
+      <if test="viplv != null" >
+        viplv,
+      </if>
+      <if test="vip != null" >
+        vip,
+      </if>
+      <if test="invitevip != null" >
+        invitevip,
+      </if>
+      <if test="vipreward != null" >
+        vipreward,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="country != null" >
+        country,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="language != null" >
+        language,
+      </if>
+      <if test="channelid != null" >
+        channelid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="gold != null" >
+        #{gold,jdbcType=BIGINT},
+      </if>
+      <if test="diamond != null" >
+        #{diamond,jdbcType=INTEGER},
+      </if>
+      <if test="newgamer != null" >
+        #{newgamer,jdbcType=INTEGER},
+      </if>
+      <if test="avatar != null" >
+        #{avatar,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=INTEGER},
+      </if>
+      <if test="sound != null" >
+        #{sound,jdbcType=BIT},
+      </if>
+      <if test="viplv != null" >
+        #{viplv,jdbcType=INTEGER},
+      </if>
+      <if test="vip != null" >
+        #{vip,jdbcType=INTEGER},
+      </if>
+      <if test="invitevip != null" >
+        #{invitevip,jdbcType=INTEGER},
+      </if>
+      <if test="vipreward != null" >
+        #{vipreward,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null" >
+        #{channelid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.teeqee.mybatis.pojo.Player" >
+    update player
+    <set >
+      <if test="openid != null" >
+        openid = #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="gold != null" >
+        gold = #{gold,jdbcType=BIGINT},
+      </if>
+      <if test="diamond != null" >
+        diamond = #{diamond,jdbcType=INTEGER},
+      </if>
+      <if test="newgamer != null" >
+        newgamer = #{newgamer,jdbcType=INTEGER},
+      </if>
+      <if test="avatar != null" >
+        avatar = #{avatar,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=INTEGER},
+      </if>
+      <if test="sound != null" >
+        sound = #{sound,jdbcType=BIT},
+      </if>
+      <if test="viplv != null" >
+        viplv = #{viplv,jdbcType=INTEGER},
+      </if>
+      <if test="vip != null" >
+        vip = #{vip,jdbcType=INTEGER},
+      </if>
+      <if test="invitevip != null" >
+        invitevip = #{invitevip,jdbcType=INTEGER},
+      </if>
+      <if test="vipreward != null" >
+        vipreward = #{vipreward,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null" >
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="language != null" >
+        language = #{language,jdbcType=VARCHAR},
+      </if>
+      <if test="channelid != null" >
+        channelid = #{channelid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where uuid = #{uuid,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

@@ -1,9 +1,8 @@
 package com.teeqee.net.server;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.teeqee.net.handler.HttpRequestHandler;
-import com.teeqee.net.handler.WebSocketFrameHandler;
+import com.teeqee.net.gm.ChannelSupervise;
+import com.teeqee.net.handler.WebsocketServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -48,9 +47,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     private static Channel serverChannel;
 
     @Autowired
-    private HttpRequestHandler httpRequestHandler;
-    @Autowired
-    private WebSocketFrameHandler webSocketFrameHandler;
+    private WebsocketServerHandler WebsocketServerHandler;
 
     @Override
     public void run(String... args) throws Exception {
@@ -91,12 +88,14 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
                         channel.pipeline().addLast("aggregator", new HttpObjectAggregator(65535));
                         channel.pipeline().addLast(new WebSocketFrameAggregator(65535));
                         // 创建 WebSocket 之前会有唯一一次 Http 请求 (Header 中包含 Upgrade 并且值为 websocketne)
-                        channel.pipeline().addLast("http-request", httpRequestHandler);
+                        // channel.pipeline().addLast("http-request", httpRequestHandler);
+                        //顺序放错了
+                        channel.pipeline().addLast("WebsocketServerHandler", WebsocketServerHandler);
                         // 处理所有委托管理的 WebSocket 帧类型以及握手本身
                         // 入参是 ws://gameserver:port/context_path 中的 contex_path
                         channel.pipeline().addLast("websocket-gameserver", new WebSocketServerProtocolHandler(socketUri));
                         // WebSocket RFC 定义了 6 种帧，TextWebSocketFrame 是我们唯一真正需要处理的帧类型
-                        channel.pipeline().addLast("webSocketFrameHandler", webSocketFrameHandler);
+                        // channel.pipeline().addLast("webSocketFrameHandler", webSocketFrameHandler);
                         //添加通道关闭 在上面的idleStateHandler添加即可
                         //channel.pipeline().addLast("heartBeatHandler",new HeartBeatHandler());
                     }
@@ -105,8 +104,8 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         future.addListener(fl -> {
             if (fl.isSuccess()) {
                 serverChannel = future.channel();
-                LOGGER.info("Netty 服务器启动成功");
-                LOGGER.info("WebSocket 服务端启动，端口：" + socketPort);
+                LOGGER.info("Netty server start");
+                LOGGER.info("server port={}",socketPort);
             }
         });
         future.channel().closeFuture().addListener(fl -> {
@@ -130,6 +129,10 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
 
     @Override
     public void destroy() throws Exception {
-        System.out.println("假装关机");
+        //发送消息
+
+        //处理用户数据
+
+        close();
     }
 }

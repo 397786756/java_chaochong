@@ -1,8 +1,7 @@
 package com.teeqee.spring.event;
 
-import com.alibaba.fastjson.JSONObject;
 
-import io.netty.channel.Channel;
+import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
  * @Description: 会话管理层
@@ -11,13 +10,12 @@ import io.netty.channel.Channel;
  */
 public interface SessionEventService<T> {
 
-    void getId(T channel);
 
-    void open(T channel);
+    void open(T session);
 
-    void close(T channel);
+    void close(T session);
 
-    void send( String msg,T channel);
+    void send(String msg, T session) throws Exception;
 
-    void exceptionCaught(T channel);
+    void exceptionCaught(T session);
 }
