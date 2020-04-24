@@ -22,7 +22,7 @@ mybatis:
     call-setters-on-nulls: true
     map-underscore-to-camel-case: true
     cache-enabled: true
-#mybatis分页插件 
+#mybatis分页插件
 # pagehelper:
 #   helperDialect: mysql
 #   reasonable: true

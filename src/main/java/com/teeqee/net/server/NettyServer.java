@@ -47,7 +47,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     private static Channel serverChannel;
 
     @Autowired
-    private WebsocketServerHandler WebsocketServerHandler;
+    private WebsocketServerHandler websocketServerHandler;
 
     @Override
     public void run(String... args) throws Exception {
@@ -90,7 +90,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
                         // 创建 WebSocket 之前会有唯一一次 Http 请求 (Header 中包含 Upgrade 并且值为 websocketne)
                         // channel.pipeline().addLast("http-request", httpRequestHandler);
                         //顺序放错了
-                        channel.pipeline().addLast("WebsocketServerHandler", WebsocketServerHandler);
+                        channel.pipeline().addLast("WebsocketServerHandler", websocketServerHandler);
                         // 处理所有委托管理的 WebSocket 帧类型以及握手本身
                         // 入参是 ws://gameserver:port/context_path 中的 contex_path
                         channel.pipeline().addLast("websocket-gameserver", new WebSocketServerProtocolHandler(socketUri));
