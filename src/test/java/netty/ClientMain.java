@@ -45,7 +45,7 @@ public class ClientMain {
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }
                 });
-        URI websocketURI = new URI("ws://127.0.0.1:28080/chaochong");
+        URI websocketURI = new URI("wss://testchaochong.teeqee.com/chaochong");
         HttpHeaders httpHeaders = new DefaultHttpHeaders();
         //进行握手
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
