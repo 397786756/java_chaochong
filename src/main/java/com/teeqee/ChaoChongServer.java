@@ -55,15 +55,6 @@ public class ChaoChongServer  extends SpringBootServletInitializer implements Co
 
     @Configuration
     public class TomcatConfig {
-        //json字符串转义
-        @Bean
-        public ConfigurableServletWebServerFactory webServerFactory() {
-            TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-            factory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> connector.setProperty("relaxedQueryChars", "|{}[]"));
-            return factory;
-        }
-
-
         /**
          * @param redisConnectionFactory redis序列化
          * @return
