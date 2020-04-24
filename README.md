@@ -11,3 +11,5 @@ https://www.cnblogs.com/hjcenry/p/5856937.html
 https://ifeve.com/netty-in-action-1/
 # 反射method
 https://blog.csdn.net/Goodbye_Youth/article/details/84036809
+#注解反射
+https://blog.csdn.net/qq_45470811/article/details/97768023

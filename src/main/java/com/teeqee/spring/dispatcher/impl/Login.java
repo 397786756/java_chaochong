@@ -29,8 +29,11 @@ public class Login implements DataSourceStrategy {
     }
 
 
-
-
+    /**
+     * @param pingTai 渠道
+     * @param code 用户code
+     * @return
+     */
     private Player playerLogin(Integer pingTai,String code){
         if (pingTai!=null&&code!=null){
             //TODO
