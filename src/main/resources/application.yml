@@ -1,6 +1,6 @@
 server:
   port: 4836
-  socket-port: 40001
+  socket-port: 28081
   socket-uri: /chaochong
 chaoChong.package: com.teeqee.spring.dispatcher.impl
 #spring  全局消息配置
