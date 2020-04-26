@@ -19,7 +19,7 @@ mybatis:
   typeAliasesPackage: com.teeqee.mybatis.pojo
   mapperLocations: classpath:mapping/*.xml
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 空字段不返回
     call-setters-on-nulls: true
     map-underscore-to-camel-case: true

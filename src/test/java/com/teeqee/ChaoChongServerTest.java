@@ -2,9 +2,9 @@ package com.teeqee;
 
 
 
-import com.teeqee.mybatis.dao.PlayerMapper;
-import com.teeqee.spring.mode.service.DataSourceService;
-import com.teeqee.spring.result.Result;
+import com.teeqee.mybatis.dao.PlayerDataMapper;
+import com.teeqee.mybatis.dao.PlayerInfoMapper;
+
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +17,15 @@ import java.util.Map;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ChaoChongServerTest {
-    @Resource
-    private DataSourceService dataSourceService;
-    @Resource
-    private PlayerMapper playerMapper;
+
+   @Resource
+   private PlayerInfoMapper playerInfoMapper;
+   @Resource
+   private PlayerDataMapper playerDataMapper;
 
     @Test
     public void  test() throws Exception {
-        playerMapper.selectByPrimaryKey("222");
+        playerInfoMapper.selectByPrimaryKey(2222+"");
+        playerDataMapper.selectByPrimaryKey(2222+"");
     }
 }

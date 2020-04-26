@@ -43,10 +43,10 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
         logger.info("client msg ={}", msg);
         try {
             JSONObject jsonObject = JSONObject.parseObject(msg);
-            //只判断cmd
             String cmd = jsonObject.getString("cmd");
+            JSONObject data = jsonObject.getJSONObject("data");
             if (cmd!=null){
-                jsonObject.put("session", session);
+                data.put("session", session);
                 Result result = methodMapper.run(jsonObject);
                 ChannelSupervise.sendToUser(session.getChannel().id(), result);
             }

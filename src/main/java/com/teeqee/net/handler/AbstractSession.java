@@ -1,6 +1,7 @@
 package com.teeqee.net.handler;
 
-import com.teeqee.mybatis.pojo.Player;
+
+import com.teeqee.mybatis.pojo.PlayerInfo;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -69,8 +70,8 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
      * @param cmd 获取对象
      * @return 返回对象
      */
-    public Player getPlayerInfo(String cmd){
-        return (Player) keyToAttrs.get(cmd);
+    public PlayerInfo getPlayerInfo(String cmd){
+        return (PlayerInfo) keyToAttrs.get(cmd);
     }
 
 

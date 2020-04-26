@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teeqee.mybatis.dao.PlayerDataMapper" >
+  <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerData" >
+    <result column="uid" property="uid" jdbcType="INTEGER" />
+    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <result column="stockmax" property="stockmax" jdbcType="INTEGER" />
+    <result column="stock" property="stock" jdbcType="INTEGER" />
+    <result column="gold" property="gold" jdbcType="INTEGER" />
+    <result column="diamond" property="diamond" jdbcType="INTEGER" />
+    <result column="newgamer" property="newgamer" jdbcType="INTEGER" />
+    <result column="sound" property="sound" jdbcType="INTEGER" />
+    <result column="biggestanimalid" property="biggestanimalid" jdbcType="INTEGER" />
+    <result column="viplv" property="viplv" jdbcType="INTEGER" />
+    <result column="todaysign" property="todaysign" jdbcType="BIT" />
+    <result column="weeksign" property="weeksign" jdbcType="INTEGER" />
+    <result column="rounds" property="rounds" jdbcType="INTEGER" />
+    <result column="vipreward" property="vipreward" jdbcType="BIT" />
+    <result column="rankchallengenum" property="rankchallengenum" jdbcType="INTEGER" />
+    <result column="refreshworldnum" property="refreshworldnum" jdbcType="INTEGER" />
+    <result column="speedincubate" property="speedincubate" jdbcType="INTEGER" />
+    <result column="lastweekrank" property="lastweekrank" jdbcType="INTEGER" />
+    <result column="lastweekreward" property="lastweekreward" jdbcType="INTEGER" />
+    <result column="totalincubate" property="totalincubate" jdbcType="INTEGER" />
+    <result column="lasttime" property="lasttime" jdbcType="TIMESTAMP" />
+    <result column="rankpermission" property="rankpermission" jdbcType="INTEGER" />
+    <result column="phonefare" property="phonefare" jdbcType="INTEGER" />
+    <result column="phonefarenumber" property="phonefarenumber" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+      uid, openid, stockmax,
+      stock, gold, diamond,
+      newgamer, sound, biggestanimalid,
+      viplv, todaysign, weeksign,
+      rounds, vipreward, rankchallengenum,
+      refreshworldnum, speedincubate, lastweekrank,
+      lastweekreward, totalincubate, lasttime,
+      rankpermission, phonefare, phonefarenumber
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from player_data
+    where openid = #{openid,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insert" parameterType="com.teeqee.mybatis.pojo.PlayerData" >
+    insert into player_data (
+      uid, openid, stockmax,
+      stock, gold, diamond, 
+      newgamer, sound, biggestanimalid, 
+      viplv, todaysign, weeksign, 
+      rounds, vipreward, rankchallengenum, 
+      refreshworldnum, speedincubate, lastweekrank, 
+      lastweekreward, totalincubate, lasttime, 
+      rankpermission, phonefare, phonefarenumber
+      )
+    values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{stockmax,jdbcType=INTEGER}, 
+      #{stock,jdbcType=INTEGER}, #{gold,jdbcType=INTEGER}, #{diamond,jdbcType=INTEGER}, 
+      #{newgamer,jdbcType=INTEGER}, #{sound,jdbcType=INTEGER}, #{biggestanimalid,jdbcType=INTEGER}, 
+      #{viplv,jdbcType=INTEGER}, #{todaysign,jdbcType=BIT}, #{weeksign,jdbcType=INTEGER}, 
+      #{rounds,jdbcType=INTEGER}, #{vipreward,jdbcType=BIT}, #{rankchallengenum,jdbcType=INTEGER}, 
+      #{refreshworldnum,jdbcType=INTEGER}, #{speedincubate,jdbcType=INTEGER}, #{lastweekrank,jdbcType=INTEGER}, 
+      #{lastweekreward,jdbcType=INTEGER}, #{totalincubate,jdbcType=INTEGER}, #{lasttime,jdbcType=TIMESTAMP}, 
+      #{rankpermission,jdbcType=INTEGER}, #{phonefare,jdbcType=INTEGER}, #{phonefarenumber,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerData" >
+    insert into player_data
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="openid != null" >
+        openid,
+      </if>
+      <if test="stockmax != null" >
+        stockmax,
+      </if>
+      <if test="stock != null" >
+        stock,
+      </if>
+      <if test="gold != null" >
+        gold,
+      </if>
+      <if test="diamond != null" >
+        diamond,
+      </if>
+      <if test="newgamer != null" >
+        newgamer,
+      </if>
+      <if test="sound != null" >
+        sound,
+      </if>
+      <if test="biggestanimalid != null" >
+        biggestanimalid,
+      </if>
+      <if test="viplv != null" >
+        viplv,
+      </if>
+      <if test="todaysign != null" >
+        todaysign,
+      </if>
+      <if test="weeksign != null" >
+        weeksign,
+      </if>
+      <if test="rounds != null" >
+        rounds,
+      </if>
+      <if test="vipreward != null" >
+        vipreward,
+      </if>
+      <if test="rankchallengenum != null" >
+        rankchallengenum,
+      </if>
+      <if test="refreshworldnum != null" >
+        refreshworldnum,
+      </if>
+      <if test="speedincubate != null" >
+        speedincubate,
+      </if>
+      <if test="lastweekrank != null" >
+        lastweekrank,
+      </if>
+      <if test="lastweekreward != null" >
+        lastweekreward,
+      </if>
+      <if test="totalincubate != null" >
+        totalincubate,
+      </if>
+      <if test="lasttime != null" >
+        lasttime,
+      </if>
+      <if test="rankpermission != null" >
+        rankpermission,
+      </if>
+      <if test="phonefare != null" >
+        phonefare,
+      </if>
+      <if test="phonefarenumber != null" >
+        phonefarenumber,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="openid != null" >
+        #{openid,jdbcType=VARCHAR},
+      </if>
+      <if test="stockmax != null" >
+        #{stockmax,jdbcType=INTEGER},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="gold != null" >
+        #{gold,jdbcType=INTEGER},
+      </if>
+      <if test="diamond != null" >
+        #{diamond,jdbcType=INTEGER},
+      </if>
+      <if test="newgamer != null" >
+        #{newgamer,jdbcType=INTEGER},
+      </if>
+      <if test="sound != null" >
+        #{sound,jdbcType=INTEGER},
+      </if>
+      <if test="biggestanimalid != null" >
+        #{biggestanimalid,jdbcType=INTEGER},
+      </if>
+      <if test="viplv != null" >
+        #{viplv,jdbcType=INTEGER},
+      </if>
+      <if test="todaysign != null" >
+        #{todaysign,jdbcType=BIT},
+      </if>
+      <if test="weeksign != null" >
+        #{weeksign,jdbcType=INTEGER},
+      </if>
+      <if test="rounds != null" >
+        #{rounds,jdbcType=INTEGER},
+      </if>
+      <if test="vipreward != null" >
+        #{vipreward,jdbcType=BIT},
+      </if>
+      <if test="rankchallengenum != null" >
+        #{rankchallengenum,jdbcType=INTEGER},
+      </if>
+      <if test="refreshworldnum != null" >
+        #{refreshworldnum,jdbcType=INTEGER},
+      </if>
+      <if test="speedincubate != null" >
+        #{speedincubate,jdbcType=INTEGER},
+      </if>
+      <if test="lastweekrank != null" >
+        #{lastweekrank,jdbcType=INTEGER},
+      </if>
+      <if test="lastweekreward != null" >
+        #{lastweekreward,jdbcType=INTEGER},
+      </if>
+      <if test="totalincubate != null" >
+        #{totalincubate,jdbcType=INTEGER},
+      </if>
+      <if test="lasttime != null" >
+        #{lasttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rankpermission != null" >
+        #{rankpermission,jdbcType=INTEGER},
+      </if>
+      <if test="phonefare != null" >
+        #{phonefare,jdbcType=INTEGER},
+      </if>
+      <if test="phonefarenumber != null" >
+        #{phonefarenumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
