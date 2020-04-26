@@ -25,7 +25,7 @@ public class Login  {
     @Dispather(value = "login")
     public Result connect(String cmd, JSONObject data,AbstractSession session) {
         String openId = data.getString("openId");
-        return new Result("login",playerLogin(null,null));
+        return new Result("login",playerLogin(1,openId));
     }
 
 
@@ -34,11 +34,11 @@ public class Login  {
      * @param code 用户code
      * @return
      */
-    public Player playerLogin(Integer pingTai,String code){
-        if (pingTai!=null&&code!=null){
+    public Player playerLogin(Integer pingTai,String openId){
+        if (pingTai!=null&&openId!=null){
             //TODO
         }
-        return null;
+       return new Player(openId);
     }
 
 }

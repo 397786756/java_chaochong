@@ -41,5 +41,7 @@ public class Player {
 
     private Integer channelid;
 
-
+    public Player(String openid) {
+        this.openid = openid;
+    }
 }
