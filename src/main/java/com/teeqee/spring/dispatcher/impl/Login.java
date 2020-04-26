@@ -50,7 +50,10 @@ public class Login {
             if (playerData == null) {
                 playerData = createPlayData(openId);
             }
-            return JSONObject.parseObject(JSON.toJSONString(playerData));
+            String player = JSON.toJSONString(playerData);
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userdata", player);
+            return jsonObject;
         }
         return null;
     }
@@ -59,7 +62,7 @@ public class Login {
         PlayerData playerData = new PlayerData();
         playerData.setOpenid(openId);
         playerDataMapper.insertSelective(playerData);
-        playerData=playerDataMapper.selectByPrimaryKey(openId);
+        playerData = playerDataMapper.selectByPrimaryKey(openId);
         return playerData;
     }
 }
