@@ -8,6 +8,8 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.timeout.IdleStateEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +29,7 @@ import javax.annotation.Resource;
 @ChannelHandler.Sharable
 public class WebsocketServerHandler extends AbstractSession {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Resource
     private SessionEventService<AbstractSession> sessionEventService;
     @Value("${server.socket-uri}")
@@ -35,6 +38,7 @@ public class WebsocketServerHandler extends AbstractSession {
     public void channelActive(ChannelHandlerContext ctx) {
         ctx.fireChannelActive();
         setChannel(ctx.channel());
+        //加入
         ChannelSupervise.addChannel(ctx.channel());
     }
 
@@ -74,19 +78,13 @@ public class WebsocketServerHandler extends AbstractSession {
         if (msg instanceof TextWebSocketFrame) {
             sessionEventService.send(((TextWebSocketFrame) msg).text(),this);
         }else if (msg instanceof FullHttpRequest ){
-            //openId的时候
             FullHttpRequest request = (FullHttpRequest) msg;
             if (request.uri().contains(socketUri)) {
-                String skey = UriUtil.getParam(request.uri(), "sKey");
-                if (skey != null ) {
-                    ctx.fireChannelRead(request.setUri(socketUri).retain());
-                    sessionEventService.open(this);
-                } else {
-                    ctx.close();
-                }
+                ctx.fireChannelRead(request.setUri(socketUri).retain());
             } else {
                 ctx.close();
             }
+            logger.info("websocket connect ={}",ctx.channel().id().asLongText());
         }
     }
 }

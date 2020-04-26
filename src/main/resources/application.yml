@@ -1,6 +1,8 @@
 server:
   port: 4836
+  #websocket port
   socket-port: 28081
+  #websocket path
   socket-uri: /chaochong
 chaoChong.package: com.teeqee.spring.dispatcher.impl
 #spring  全局消息配置

@@ -45,7 +45,7 @@ public class ClientMain {
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }
                 });
-        URI websocketURI = new URI("wss://testchaochong.teeqee.com/chaochong");
+        URI websocketURI = new URI("ws://127.0.0.1:28081/chaochong?sKey=uzuJ3Akl2oR8QcmJHnh-lHbWTYMiDRQSdBCvKjiszNg");
         HttpHeaders httpHeaders = new DefaultHttpHeaders();
         //进行握手
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
@@ -56,7 +56,7 @@ public class ClientMain {
         handshaker.handshake(channel);
         //阻塞等待是否握手成功
         handler.handshakeFuture().sync();
-        websocketClientSendJson(channel);
+        jsonString(channel);
     }
 
     private static void websocketClientSendJson(Channel channel) {
@@ -75,4 +75,9 @@ public class ClientMain {
 
     }
 
+    private static void jsonString(Channel channel) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("cmd", "login");
+        channel.writeAndFlush(jsonObject.toJSONString());
+    }
 }

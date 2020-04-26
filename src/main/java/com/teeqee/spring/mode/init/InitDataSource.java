@@ -49,7 +49,9 @@ public class InitDataSource {
                                     //如果存在,得到此注解的value值
                                     DataSourceType dataSourceType = clazz.getAnnotation(DataSourceType.class);
                                     //放入容器中提供使用
-                                    CacheCollection.putClass(dataSourceType.value(), clazz);
+                                    String cmd = dataSourceType.value();
+                                    //进行判断
+                                    CacheCollection.putClass(cmd, clazz);
                                 }
                             }
                         } catch (ClassNotFoundException e) {

@@ -18,23 +18,28 @@ import java.util.Map;
 public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
 
 
-    protected String openId;
+    /**因为超宠是登录后再传openId的*/
+    private String openId;
 
     protected String pingTai;
 
     protected Channel channel;
+
+
     /** 是否已经传openId*/
     private boolean sendOpenId=false;
 
-    private Date loginTime=new Date();
+    /**存对象*/
+    private Map<String, Object> keyToAttrs = new HashMap<>();
 
+    private Date loginTime=new Date();
 
 
     public String getOpenId() {
         return openId;
     }
 
-    private Map<String, Object> keyToAttrs = new HashMap<>();
+
 
     public Channel getChannel() {
         return channel;
@@ -66,6 +71,11 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
      */
     public Player getPlayerInfo(String cmd){
         return (Player) keyToAttrs.get(cmd);
+    }
+
+
+    public void getOnLineInfo(String openId){
+
     }
 
 }

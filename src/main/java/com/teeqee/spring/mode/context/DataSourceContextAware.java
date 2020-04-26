@@ -16,12 +16,8 @@ public class DataSourceContextAware implements ApplicationContextAware {
     private ApplicationContext applicationContext;
 
     @SuppressWarnings(value = {"unchecked"})
-    public DataSourceStrategy getStrategyInstance(String dsType) {
-        Class clazz = CacheCollection.getDS(dsType);
-        if (clazz != null) {
-            return (DataSourceStrategy) applicationContext.getBean(clazz);
-        }
-        return null;
+    public Class getStrategyInstance(String dsType) {
+        return CacheCollection.getDS(dsType);
     }
 
     @Override

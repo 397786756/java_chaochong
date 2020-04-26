@@ -105,7 +105,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
             if (fl.isSuccess()) {
                 serverChannel = future.channel();
                 LOGGER.info("Netty server start");
-                LOGGER.info("server port={}",socketPort);
+                LOGGER.info("server port = {}",socketPort);
             }
         });
         future.channel().closeFuture().addListener(fl -> {
@@ -125,6 +125,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         if (workerGroup != null) {
             workerGroup.shutdownGracefully();
         }
+        LOGGER.info("Netty server byeBye");
     }
 
     @Override

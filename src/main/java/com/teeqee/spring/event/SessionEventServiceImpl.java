@@ -36,25 +36,25 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Override
     public void open(AbstractSession session) {
-        logger.info("客户端连接={}", session.getChannel().id().asLongText());
+        logger.info("clint open={}", session.getChannel().id().asLongText());
     }
 
     @Override
     public void close(AbstractSession session) {
-        logger.info("客户端关闭={}", session.getChannel().id().asLongText());
-        logger.info("假装他数据储存好了");
+        logger.info("client close={}", session.getChannel().id().asLongText());
+        logger.info("update playerInfo");
         ChannelSupervise.removeSession(session);
     }
 
     @Override
     public void send(String msg, AbstractSession session) {
-        logger.info("客户端消息={}", msg);
-        Result connect = dataSourceService.connect(msg, null, session);
+        logger.info("client msg ={}", msg);
+        Object connect = dataSourceService.connect(msg, null, session);
         ChannelSupervise.sendToUser(session.getChannel().id(), connect);
     }
 
     @Override
     public void exceptionCaught(AbstractSession session) {
-        logger.info("客户端异常={}", session.getChannel().id().asLongText());
+        logger.info("client exceptionCaught ={}", session.getChannel().id().asLongText());
     }
 }

@@ -81,10 +81,10 @@ public class ChannelSupervise {
     public static void removeSession(AbstractSession session) {
        if (session!=null){
            Channel channel = session.getChannel();
-           String openId = session.getOpenId();
            if (channel!=null){
                GlobalGroup.remove(channel);
            }
+           String openId = session.getOpenId();
            if (openId!=null){
                sessionMap.remove(openId);
            }

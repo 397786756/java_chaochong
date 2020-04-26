@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "/test",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-public class GMcontroller {
+public class GMController {
     @RequestMapping("/hello")
     public Result helloWord(){
         return new Result("hello chaochong",200);

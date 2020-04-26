@@ -17,14 +17,14 @@ import javax.annotation.Resource;
 
 @DataSourceType("login")
 @Service
-public class Login implements DataSourceStrategy {
+public class Login  {
 
     @Resource
     private PlayerMapper playerMapper;
 
     @Dispather(value = "login")
-    @Override
     public Result connect(String cmd, JSONObject data,AbstractSession session) {
+        String openId = data.getString("openId");
         return new Result("login",playerLogin(null,null));
     }
 
@@ -34,10 +34,11 @@ public class Login implements DataSourceStrategy {
      * @param code 用户code
      * @return
      */
-    private Player playerLogin(Integer pingTai,String code){
+    public Player playerLogin(Integer pingTai,String code){
         if (pingTai!=null&&code!=null){
             //TODO
         }
         return null;
     }
+
 }
