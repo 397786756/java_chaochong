@@ -19,26 +19,9 @@ import javax.annotation.Resource;
 @Service
 public class Login  {
 
-    @Resource
-    private PlayerMapper playerMapper;
 
     @Dispather(value = "login")
-    public Result login(String cmd, JSONObject data,AbstractSession session) {
-        String openId = data.getString("openId");
-        return new Result("login",playerLogin(1,openId));
+    public Result login( JSONObject data) {
+        return new Result("login","openId");
     }
-
-
-    /**
-     * @param pingTai 渠道
-     * @param openId 用户openId
-     * @return
-     */
-    public Player playerLogin(Integer pingTai,String openId){
-        if (pingTai!=null&&openId!=null){
-            //TODO
-        }
-       return new Player(openId);
-    }
-
 }

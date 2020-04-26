@@ -23,13 +23,11 @@ public class RedisRank  {
 
 
     @Dispather(value = "rank")
-    public Result rank(String cmd, JSONObject data, AbstractSession session) {
+    public Result rank(JSONObject data) {
         HashMap<String, String> map = new HashMap<>();
         //获取到redis的Key
         RedisTemplate redisTemplate = (RedisTemplate)SpringUtil2.getBean("redisTemplate");
         System.out.println(redisTemplate);
-        map.put(cmd, System.currentTimeMillis()/1000+"");
-        session.setMap(map);
         return new Result("rank","假装排行榜是正常的");
     }
 }

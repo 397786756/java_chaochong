@@ -2,9 +2,11 @@ package com.teeqee.spring.result;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 
 /**

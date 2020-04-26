@@ -19,7 +19,7 @@ public class CacheCollection {
     /**
      * 根据策略名获取 Class
      * @param dsType
-     * @return
+     * @return 返回对象
      */
     public static Class getDS(String dsType) {
         return ALL_DATA_SOURCE.get(dsType);
@@ -30,4 +30,5 @@ public class CacheCollection {
     public static void putClass(String dsType,Class clazz){
         ALL_DATA_SOURCE.put(dsType,clazz);
     }
+
 }

@@ -1,23 +1,15 @@
 package com.teeqee.spring.event;
 
-import com.teeqee.mybatis.dao.PlayerMapper;
+import com.alibaba.fastjson.JSONObject;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.AbstractSession;
-import com.teeqee.spring.mode.service.DataSourceService;
+import com.teeqee.spring.dispatcher.method.MethodMapper;
 import com.teeqee.spring.result.Result;
-import com.teeqee.utils.UriUtil;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.FullHttpRequest;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-
-import java.util.Map;
 
 /**
  * @Description: 会话处理器
@@ -30,7 +22,7 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource
-    private DataSourceService dataSourceService;
+    private MethodMapper methodMapper;
 
 
 
@@ -47,10 +39,21 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     }
 
     @Override
-    public void send(String msg, AbstractSession session) {
+    public void send(String msg, AbstractSession session) throws Exception {
         logger.info("client msg ={}", msg);
-        Object connect = dataSourceService.connect(msg, null, session);
-        ChannelSupervise.sendToUser(session.getChannel().id(), connect);
+        try {
+            JSONObject jsonObject = JSONObject.parseObject(msg);
+            //只判断cmd
+            String cmd = jsonObject.getString("cmd");
+            if (cmd!=null){
+                jsonObject.put("session", session);
+                Result result = methodMapper.run(jsonObject);
+                ChannelSupervise.sendToUser(session.getChannel().id(), result);
+            }
+        } catch (Exception e) {
+            session.getChannel().close();
+            e.printStackTrace();
+        }
     }
 
     @Override
