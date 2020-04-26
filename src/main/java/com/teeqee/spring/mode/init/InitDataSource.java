@@ -20,9 +20,7 @@ public class InitDataSource {
     @Value("${chaoChong.package}")
     private String packageVo;
 
-    /**
-     * 服务器启动时候加载
-     */
+    /**服务器启动时候加载*/
     @PostConstruct
     public void init() {
         initAllDataSourceType(packageVo);
