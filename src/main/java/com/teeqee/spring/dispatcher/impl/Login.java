@@ -23,7 +23,7 @@ public class Login  {
     private PlayerMapper playerMapper;
 
     @Dispather(value = "login")
-    public Result connect(String cmd, JSONObject data,AbstractSession session) {
+    public Result login(String cmd, JSONObject data,AbstractSession session) {
         String openId = data.getString("openId");
         return new Result("login",playerLogin(1,openId));
     }
@@ -31,7 +31,7 @@ public class Login  {
 
     /**
      * @param pingTai 渠道
-     * @param code 用户code
+     * @param openId 用户openId
      * @return
      */
     public Player playerLogin(Integer pingTai,String openId){

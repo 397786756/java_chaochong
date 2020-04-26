@@ -27,10 +27,11 @@ public class DataSourceService {
         //加入泛型
         Class<?> aClass = dataSourceContextAware.getStrategyInstance(dsType);
         //判断一下会话的状态
-        if (aClass != null&&data!=null&&channel.getChannel().isOpen()) {
+        if (aClass != null&&channel.getChannel().isOpen()) {
             try {
                 //获取接口
-                Method method = aClass.getMethod("connect", String.class, JSONObject.class, AbstractSession.class);
+                data=new JSONObject();
+                Method method = aClass.getMethod(dsType, String.class, JSONObject.class, AbstractSession.class);
                 //返回一个实例化对象
                 Object obj = aClass.newInstance();
                 return method.invoke(obj, dsType, data, channel);

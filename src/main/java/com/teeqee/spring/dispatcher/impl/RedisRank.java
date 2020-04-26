@@ -23,7 +23,7 @@ public class RedisRank  {
 
 
     @Dispather(value = "rank")
-    public Result connect(String cmd, JSONObject data, AbstractSession session) {
+    public Result rank(String cmd, JSONObject data, AbstractSession session) {
         HashMap<String, String> map = new HashMap<>();
         //获取到redis的Key
         RedisTemplate redisTemplate = (RedisTemplate)SpringUtil2.getBean("redisTemplate");
