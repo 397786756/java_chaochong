@@ -28,7 +28,11 @@ public class MethodMapper implements CommandLineRunner{
     public Result run(JSONObject jsonObject) {
         String cmd = jsonObject.getString("cmd");
         JSONObject data = jsonObject.getJSONObject("data");
-        return map.get(cmd).apply(jsonObject);
+        Function<JSONObject, Result> function = map.get(cmd);
+        if (function!=null){
+            return function.apply(jsonObject);
+        }
+        return new Result("error",cmd+"-> cmd undefined");
     }
 
     @Override
