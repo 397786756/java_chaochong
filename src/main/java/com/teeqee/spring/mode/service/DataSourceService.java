@@ -6,9 +6,12 @@ import com.teeqee.spring.mode.context.DataSourceContextAware;
 import com.teeqee.spring.dispatcher.DataSourceStrategy;
 import com.teeqee.spring.result.Result;
 import io.netty.channel.Channel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -16,7 +19,10 @@ import java.lang.reflect.Method;
 @Component
 public class DataSourceService {
 
-    private final DataSourceContextAware dataSourceContextAware;
+    @Resource
+    private  DataSourceContextAware dataSourceContextAware;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     public DataSourceService(DataSourceContextAware dataSourceContextAware) {
@@ -27,6 +33,7 @@ public class DataSourceService {
         //加入泛型
         Class<?> aClass = dataSourceContextAware.getStrategyInstance(dsType);
         //判断一下会话的状态
+        logger.info("cmd={},class={}", dsType,aClass);
         if (aClass != null&&channel.getChannel().isOpen()) {
             try {
                 //获取接口
