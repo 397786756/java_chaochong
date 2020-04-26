@@ -52,7 +52,7 @@ public class Login {
             }
             String player = JSON.toJSONString(playerData);
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("userdata", player);
+            jsonObject.put("userdata", JSONObject.parseObject(player));
             return jsonObject;
         }
         return null;
