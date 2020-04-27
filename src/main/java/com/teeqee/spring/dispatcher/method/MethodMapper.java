@@ -33,7 +33,7 @@ public class MethodMapper implements CommandLineRunner{
         if (function!=null){
             return new Result(cmd,function.apply(model));
         }
-        return null;
+        return new Result("errod","cmd undefined");
     }
 
     @Override

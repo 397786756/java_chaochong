@@ -83,8 +83,8 @@ public class PlayerData {
      */
     public PlayerData(String openid) {
         this.openid=openid;
-        this.stockmax=30;
-        this.stock=30;
+        this.stockmax=10;
+        this.stock=10;
         this.gold=0;
         this.diamond=0;
         this.newgamer=0;
