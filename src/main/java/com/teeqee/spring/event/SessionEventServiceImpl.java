@@ -48,8 +48,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
         try {
             JSONObject jsonObject = JSONObject.parseObject(msg);
             String cmd = jsonObject.getString("cmd");
-            JSONObject data = jsonObject.getJSONObject("data");
-            if (cmd!=null&&data!=null){
+            if (cmd!=null){
+                JSONObject data = jsonObject.getJSONObject("data");
                 MethodModel methodModel = new MethodModel(cmd, data, session);
                 Result result = methodMapper.run(methodModel);
                 ChannelSupervise.sendToUser(session.getChannel().id(), result);

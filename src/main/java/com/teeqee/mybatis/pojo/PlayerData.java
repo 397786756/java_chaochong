@@ -189,7 +189,7 @@ public class PlayerData {
         if (taskdata==null){
             this.taskdata=StaticData.TASK_DATA;
         }
-        List<Taskdata> taskdataList = JSONArray.parseArray(animaldata, Taskdata.class);
+        List<Taskdata> taskdataList = JSONArray.parseArray(taskdata, Taskdata.class);
         JSONArray jsonArray = new JSONArray(taskdataList.size());
         taskdataList.forEach(taskdata->{
             String json = JSONObject.toJSONString(taskdata);
