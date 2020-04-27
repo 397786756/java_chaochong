@@ -71,7 +71,9 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
         logger.info("client close={}", session.getChannel().id().asLongText());
         logger.info("update playerInfo");
         PlayerData playerData = session.getPlayerData();
+        if (playerData!=null){
+            playerDataMapper.updateByPrimaryKeySelective(playerData);
+        }
         //TODO 用户下线
-        playerDataMapper.updateByPrimaryKeySelective(playerData);
     }
 }
