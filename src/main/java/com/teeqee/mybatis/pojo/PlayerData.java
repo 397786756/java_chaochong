@@ -113,31 +113,33 @@ public class PlayerData {
      */
     public JSONObject loginPush(){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("rankpermission", rankpermission);
-        jsonObject.put("weeksign", weeksign);
-        jsonObject.put("todaysign", todaysign);
-        jsonObject.put("sound", sound);
-        jsonObject.put("stockmax", stockmax);
-        jsonObject.put("gold", gold);
-        jsonObject.put("lastweekreward", lastweekreward);
-        jsonObject.put("speedincubate", speedincubate);
-        jsonObject.put("viplv", viplv);
-        jsonObject.put("nickname", nickname);
-        jsonObject.put("totalincubate", totalincubate);
-        jsonObject.put("stock", stock);
-        jsonObject.put("newgamer", newgamer);
-        jsonObject.put("vipreward", vipreward);
-        jsonObject.put("openid", openid);
-        jsonObject.put("biggestanimalid", biggestanimalid);
-        jsonObject.put("avatar", avatar);
-        jsonObject.put("phonefare", phonefare);
-        jsonObject.put("diamond", diamond);
-        jsonObject.put("lasttime", lasttime);
-        jsonObject.put("rankchallengenum", rankchallengenum);
-        jsonObject.put("phonefarenumber", phonefarenumber);
-        jsonObject.put("lastweekrank", lastweekrank);
-        jsonObject.put("refreshworldnum", refreshworldnum);
-        jsonObject.put("rounds", rounds);
+        JSONObject data = new JSONObject();
+        data.put("rankpermission", rankpermission);
+        data.put("weeksign", weeksign);
+        data.put("todaysign", todaysign);
+        data.put("sound", sound);
+        data.put("stockmax", stockmax);
+        data.put("gold", gold);
+        data.put("lastweekreward", lastweekreward);
+        data.put("speedincubate", speedincubate);
+        data.put("viplv", viplv);
+        data.put("nickname", nickname);
+        data.put("totalincubate", totalincubate);
+        data.put("stock", stock);
+        data.put("newgamer", newgamer);
+        data.put("vipreward", vipreward);
+        data.put("openid", openid);
+        data.put("biggestanimalid", biggestanimalid);
+        data.put("avatar", avatar);
+        data.put("phonefare", phonefare);
+        data.put("diamond", diamond);
+        data.put("lasttime", lasttime);
+        data.put("rankchallengenum", rankchallengenum);
+        data.put("phonefarenumber", phonefarenumber);
+        data.put("lastweekrank", lastweekrank);
+        data.put("refreshworldnum", refreshworldnum);
+        data.put("rounds", rounds);
+        jsonObject.put(PlayerCmd.PLAYER_DATA, data);
         return jsonObject;
     }
 
