@@ -7,7 +7,7 @@ package com.teeqee.spring.dispatcher.cmd;
  */
 public class PlayerCmd {
     /**获取用户数据*/
-    public static final String PLAYER_DATA= "userData";
+    public static final String PLAYER_DATA= "userdata";
     /**获取宠物的位置信息*/
     public static final String SITE_DATA= "sitedata";
     /**拉取玩家动物信息*/
