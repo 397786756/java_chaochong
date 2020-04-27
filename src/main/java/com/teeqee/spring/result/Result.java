@@ -17,7 +17,6 @@ import java.util.function.Function;
  */
 @Data
 public class Result implements Serializable {
-
     private String cmd;
     private Object data;
 
@@ -26,10 +25,13 @@ public class Result implements Serializable {
     }
 
 
-    public Result(String cmd, Object data) {
+    public Result( String cmd,Object data) {
         super();
-        this.cmd = cmd;
+        this.cmd=cmd;
         this.data = data;
     }
+
+
+
 }
 

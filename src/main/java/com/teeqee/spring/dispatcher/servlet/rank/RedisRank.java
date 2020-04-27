@@ -1,19 +1,15 @@
-package com.teeqee.spring.dispatcher.impl;
+package com.teeqee.spring.dispatcher.servlet.rank;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.teeqee.net.handler.AbstractSession;
-import com.teeqee.spring.dispatcher.DataSourceStrategy;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.spring.result.Result;
 import com.teeqee.utils.SpringUtil2;
-import io.netty.channel.Channel;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 
 
@@ -28,6 +24,6 @@ public class RedisRank  {
         //获取到redis的Key
         RedisTemplate redisTemplate = (RedisTemplate)SpringUtil2.getBean("redisTemplate");
         System.out.println(redisTemplate);
-        return new Result("rank","假装排行榜是正常的");
+        return null;
     }
 }

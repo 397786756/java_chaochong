@@ -61,7 +61,7 @@ public class InitDataSource {
                     } else {
                         String className = packageVo + "." + file.getName().replace(".class", "");
                         try {
-                            // class cn.haoxy.ref.inter.impl.faceRecognition
+                            // class cn.haoxy.ref.inter.servlet.faceRecognition
                             Class<?> clazz = Class.forName(className);
                             //判断是否含有spring的service注解
                             if (clazz.isAnnotationPresent(Service.class)) {

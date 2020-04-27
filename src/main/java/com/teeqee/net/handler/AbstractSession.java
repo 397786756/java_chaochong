@@ -1,7 +1,12 @@
 package com.teeqee.net.handler;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
+import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
+import com.teeqee.spring.dispatcher.cmd.StaticData;
+import com.teeqee.spring.dispatcher.model.MethodModel;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,24 +25,49 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
 
 
     /**因为超宠是登录后再传openId的*/
-    private String openId;
-
-    protected String pingTai;
+    private String openid;
+    /**平台*/
+    private String pingTai;
 
     protected Channel channel;
-
-
-    /** 是否已经传openId*/
-    private boolean sendOpenId=false;
-
+    /** 是否已经传openId并且登录*/
+    private boolean loginStatus;
+    /**登录的时间*/
+    private Date loginTime=new Date();
     /**存对象*/
     private Map<String, Object> keyToAttrs = new HashMap<>();
 
-    private Date loginTime=new Date();
 
+    /**
+     * @param openid 玩家的openid 标记着已经登录了
+     */
+    public boolean isLogin(String openid){
+        if (this.openid==null){
+            this.openid=openid;
+            loginStatus=true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isLoginStatus() {
+        return loginStatus;
+    }
+
+    public void setLoginStatus(boolean loginStatus) {
+        this.loginStatus = loginStatus;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
 
     public String getOpenId() {
-        return openId;
+        return openid;
     }
 
 
@@ -62,21 +92,20 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
         return keyToAttrs.get(key);
     }
 
+    /**
+     * @param key playerCmd
+     * @param v 用户的数据源
+     */
     public void add(String key, Object v) {
         keyToAttrs.put(key, v);
     }
 
     /**
-     * @param cmd 获取对象
-     * @return 返回对象
+     * @return 返回用户的playerData
      */
-    public PlayerInfo getPlayerInfo(String cmd){
-        return (PlayerInfo) keyToAttrs.get(cmd);
+    public PlayerData getPlayerData(){
+        return (PlayerData) keyToAttrs.get(PlayerCmd.PLAYER_DATA);
     }
 
-
-    public void getOnLineInfo(String openId){
-
-    }
 
 }

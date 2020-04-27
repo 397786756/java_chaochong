@@ -16,6 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GMController {
     @RequestMapping("/hello")
     public Result helloWord(){
-        return new Result("hello chaochong",200);
+        return null;
     }
 }

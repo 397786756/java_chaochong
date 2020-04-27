@@ -4,7 +4,7 @@ server:
   socket-port: 28081
   #websocket path
   socket-uri: /chaochong
-chaoChong.package: com.teeqee.spring.dispatcher.impl
+chaoChong.package: com.teeqee.spring.dispatcher.servlet
 #spring  全局消息配置
 spring:
   jackson:
@@ -19,7 +19,7 @@ mybatis:
   typeAliasesPackage: com.teeqee.mybatis.pojo
   mapperLocations: classpath:mapping/*.xml
   configuration:
-    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 空字段不返回
     call-setters-on-nulls: true
     map-underscore-to-camel-case: true

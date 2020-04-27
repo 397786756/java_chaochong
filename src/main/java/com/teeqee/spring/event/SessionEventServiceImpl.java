@@ -1,9 +1,12 @@
 package com.teeqee.spring.event;
 
 import com.alibaba.fastjson.JSONObject;
+import com.teeqee.mybatis.dao.PlayerDataMapper;
+import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
+import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Resource
     private MethodMapper methodMapper;
+    @Resource
+    private PlayerDataMapper playerDataMapper;
 
 
 
@@ -33,8 +38,7 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Override
     public void close(AbstractSession session) {
-        logger.info("client close={}", session.getChannel().id().asLongText());
-        logger.info("update playerInfo");
+        offLine(session);
         ChannelSupervise.removeSession(session);
     }
 
@@ -45,9 +49,9 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
             JSONObject jsonObject = JSONObject.parseObject(msg);
             String cmd = jsonObject.getString("cmd");
             JSONObject data = jsonObject.getJSONObject("data");
-            if (cmd!=null){
-                data.put("session", session);
-                Result result = methodMapper.run(jsonObject);
+            if (cmd!=null&&data!=null){
+                MethodModel methodModel = new MethodModel(cmd, data, session);
+                Result result = methodMapper.run(methodModel);
                 ChannelSupervise.sendToUser(session.getChannel().id(), result);
             }
         } catch (Exception e) {
@@ -59,5 +63,15 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     @Override
     public void exceptionCaught(AbstractSession session) {
         logger.info("client exceptionCaught ={}", session.getChannel().id().asLongText());
+    }
+
+
+
+    private void offLine(AbstractSession session){
+        logger.info("client close={}", session.getChannel().id().asLongText());
+        logger.info("update playerInfo");
+        PlayerData playerData = session.getPlayerData();
+        //TODO 用户下线
+        playerDataMapper.updateByPrimaryKeySelective(playerData);
     }
 }

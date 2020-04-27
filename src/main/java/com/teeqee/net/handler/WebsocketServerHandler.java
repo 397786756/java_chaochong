@@ -56,6 +56,7 @@ public class WebsocketServerHandler extends AbstractSession {
                 case READER_IDLE:
                     break;
                 case WRITER_IDLE:
+                    //TODO 30S没有传递code或者openid直接关闭
                     break;
                 case ALL_IDLE:
                     ctx.channel().close();

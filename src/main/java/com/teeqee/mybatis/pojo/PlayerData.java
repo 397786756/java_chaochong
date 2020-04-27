@@ -1,58 +1,200 @@
 package com.teeqee.mybatis.pojo;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
+import com.teeqee.spring.dispatcher.cmd.StaticData;
+import com.teeqee.spring.dispatcher.servlet.login.entity.Animaldata;
+import com.teeqee.spring.dispatcher.servlet.login.entity.Site;
+import com.teeqee.spring.dispatcher.servlet.login.entity.Taskdata;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class PlayerData {
+    /**玩家的uid*/
     private Integer uid;
-
+    /**渠道的用户id*/
     private String openid;
-
+    /**孵化器最大库存*/
     private Integer stockmax;
-
+    /**孵化器剩余库存*/
     private Integer stock;
-
+    /**金币数量*/
     private Integer gold;
-
+    /**钻石数量*/
     private Integer diamond;
-
+    /**新手引导步数*/
     private Integer newgamer;
-
+    /**是否开启声音    1-->开启    0-->不开启*/
     private Integer sound;
-
+    /**最高级动物的等级*/
     private Integer biggestanimalid;
-
+    /**vip的等级*/
     private Integer viplv;
-
+    /**今日是否签到*/
     private Boolean todaysign;
-
+    /**玩家总共签到次数*/
     private Integer weeksign;
-
+    /**关卡数*/
     private Integer rounds;
-
+    /**今天有没有领取vip奖励*/
     private Integer vipreward;
-
+    /**世界打榜剩余挑战次数*/
     private Integer rankchallengenum;
-
+    /**世界打榜换一批的次数*/
     private Integer refreshworldnum;
-
+    /**玩家急速孵化总次数*/
     private Integer speedincubate;
-
+    /**上周世界打榜的排名*/
     private Integer lastweekrank;
-
+    /**领取打榜奖励的次数*/
     private Integer lastweekreward;
-
+    /**玩家孵化的总次数*/
     private Integer totalincubate;
-
+    /**玩家离线的时间戳(毫秒)*/
     private Date lasttime;
-
+    /**公告参与次数*/
     private Integer rankpermission;
-
+    /**是否显示过领取话费页面,0是未显示过领取话费的，1是显示过*/
     private Integer phonefare;
-
+    /**玩家话费数量*/
     private Integer phonefarenumber;
+    /**获取宠物的位置信息*/
+    private String sitedata;
+    /**玩家的动物信息*/
+    private String animaldata;
+    /**玩家的任务信息*/
+    private String taskdata;
 
 
+    /**头像*/
+    private String avatar="";
+    /**昵称*/
+    private String nickname="未授权的玩家";
+
+    public PlayerData() {
+    }
+
+    /**
+     * @param openid 构造函数
+     */
+    public PlayerData(String openid) {
+        this.openid=openid;
+        this.stockmax=30;
+        this.stock=30;
+        this.gold=0;
+        this.diamond=0;
+        this.newgamer=0;
+        this.sound=1;
+        this.biggestanimalid=1;
+        this.viplv=0;
+        this.todaysign=false;
+        this.weeksign=0;
+        this.rounds=0;
+        this.vipreward=0;
+        this.rankchallengenum=10;
+        this.refreshworldnum=3;
+        this.speedincubate=0;
+        this.lastweekrank=1;
+        this.lastweekreward=0;
+        this.totalincubate=0;
+        this.rankpermission=0;
+        this.phonefare=0;
+        this.phonefarenumber=0;
+        this.lasttime=new Date();
+    }
+
+
+    /**
+     * @return 返回用户登录需要的数据
+     */
+    public JSONObject loginPush(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("rankpermission", rankpermission);
+        jsonObject.put("weeksign", weeksign);
+        jsonObject.put("todaysign", todaysign);
+        jsonObject.put("sound", sound);
+        jsonObject.put("stockmax", stockmax);
+        jsonObject.put("gold", gold);
+        jsonObject.put("lastweekreward", lastweekreward);
+        jsonObject.put("speedincubate", speedincubate);
+        jsonObject.put("viplv", viplv);
+        jsonObject.put("nickname", nickname);
+        jsonObject.put("totalincubate", totalincubate);
+        jsonObject.put("stock", stock);
+        jsonObject.put("newgamer", newgamer);
+        jsonObject.put("vipreward", vipreward);
+        jsonObject.put("openid", openid);
+        jsonObject.put("biggestanimalid", biggestanimalid);
+        jsonObject.put("avatar", avatar);
+        jsonObject.put("phonefare", phonefare);
+        jsonObject.put("diamond", diamond);
+        jsonObject.put("lasttime", lasttime);
+        jsonObject.put("rankchallengenum", rankchallengenum);
+        jsonObject.put("phonefarenumber", phonefarenumber);
+        jsonObject.put("lastweekrank", lastweekrank);
+        jsonObject.put("refreshworldnum", refreshworldnum);
+        jsonObject.put("rounds", rounds);
+        return jsonObject;
+    }
+
+    /**
+     * 获取宠物的位置信息
+     */
+    public JSONObject getsite(){
+        //需要进行转义
+            if (sitedata==null){
+               this.sitedata=StaticData.SITEDATA;
+            }
+        List<Site> siteList = JSONArray.parseArray(sitedata, Site.class);
+        JSONArray jsonArray = new JSONArray(siteList.size());
+        siteList.forEach(site->{
+            String json = JSONObject.toJSONString(site);
+            jsonArray.add(json);
+        });
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(PlayerCmd.SITE_DATA, jsonArray);
+        return jsonObject;
+    }
+
+    /**
+     * 拉取玩家动物信息
+     */
+    public JSONObject getanimal(){
+        //需要进行转义
+        if (animaldata==null){
+            this.animaldata=StaticData.ANIMAL_DATA;
+        }
+        List<Animaldata> animaldataList = JSONArray.parseArray(animaldata, Animaldata.class);
+        JSONArray jsonArray = new JSONArray(animaldataList.size());
+        animaldataList.forEach(site->{
+            String json = JSONObject.toJSONString(site);
+            jsonArray.add(json);
+        });
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(PlayerCmd.ANIMAL_DATA, jsonArray);
+        return jsonObject;
+    }
+
+    /**
+     * 拉取玩家动物信息
+     */
+    public JSONObject gettask(){
+        //需要进行转义
+        if (taskdata==null){
+            this.taskdata=StaticData.TASK_DATA;
+        }
+        List<Taskdata> taskdataList = JSONArray.parseArray(animaldata, Taskdata.class);
+        JSONArray jsonArray = new JSONArray(taskdataList.size());
+        taskdataList.forEach(taskdata->{
+            String json = JSONObject.toJSONString(taskdata);
+            jsonArray.add(json);
+        });
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(PlayerCmd.TASK_DATA, jsonArray);
+        return jsonObject;
+    }
 }

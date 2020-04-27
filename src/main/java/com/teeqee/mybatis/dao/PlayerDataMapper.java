@@ -11,4 +11,10 @@ public interface PlayerDataMapper {
     int insertSelective(PlayerData record);
 
     PlayerData selectByPrimaryKey(String openid);
+
+    int deleteByPrimaryKey(Integer uid);
+
+    int updateByPrimaryKeySelective(PlayerData record);
+
+    int updateByPrimaryKey(PlayerData record);
 }

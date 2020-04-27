@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerInfo" >
     <id column="uid" property="uid" jdbcType="INTEGER" />
     <result column="openid" property="openid" jdbcType="VARCHAR" />
-    <result column="avatar" property="avatar" jdbcType="INTEGER" />
-    <result column="nickname" property="nickname" jdbcType="INTEGER" />
+    <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
     <result column="invitevip" property="invitevip" jdbcType="INTEGER" />
     <result column="gender" property="gender" jdbcType="INTEGER" />
     <result column="city" property="city" jdbcType="VARCHAR" />
@@ -15,27 +15,27 @@
     <result column="channelid" property="channelid" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    uid, openid, avatar, nickname, invitevip, gender, city, country, province, language, 
+    uid, openid, avatar, nickname, invitevip, gender, city, country, province, language,
     channelid
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select 
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
     <include refid="Base_Column_List" />
     from player_info
-    where openid = #{uid,jdbcType=VARCHAR}
+    where openid = #{openid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from player_info
     where uid = #{uid,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.teeqee.mybatis.pojo.PlayerInfo" >
-    insert into player_info (uid, openid, avatar, 
-      nickname, invitevip, gender, 
-      city, country, province, 
+    insert into player_info (uid, openid, avatar,
+      nickname, invitevip, gender,
+      city, country, province,
       language, channelid)
-    values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{avatar,jdbcType=INTEGER}, 
-      #{nickname,jdbcType=INTEGER}, #{invitevip,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER}, 
-      #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+    values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR},
+      #{nickname,jdbcType=VARCHAR}, #{invitevip,jdbcType=INTEGER}, #{gender,jdbcType=INTEGER},
+      #{city,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
       #{language,jdbcType=VARCHAR}, #{channelid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerInfo" >
@@ -80,10 +80,10 @@
         #{openid,jdbcType=VARCHAR},
       </if>
       <if test="avatar != null" >
-        #{avatar,jdbcType=INTEGER},
+        #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="nickname != null" >
-        #{nickname,jdbcType=INTEGER},
+        #{nickname,jdbcType=VARCHAR},
       </if>
       <if test="invitevip != null" >
         #{invitevip,jdbcType=INTEGER},
@@ -115,10 +115,10 @@
         openid = #{openid,jdbcType=VARCHAR},
       </if>
       <if test="avatar != null" >
-        avatar = #{avatar,jdbcType=INTEGER},
+        avatar = #{avatar,jdbcType=VARCHAR},
       </if>
       <if test="nickname != null" >
-        nickname = #{nickname,jdbcType=INTEGER},
+        nickname = #{nickname,jdbcType=VARCHAR},
       </if>
       <if test="invitevip != null" >
         invitevip = #{invitevip,jdbcType=INTEGER},
@@ -147,8 +147,8 @@
   <update id="updateByPrimaryKey" parameterType="com.teeqee.mybatis.pojo.PlayerInfo" >
     update player_info
     set openid = #{openid,jdbcType=VARCHAR},
-      avatar = #{avatar,jdbcType=INTEGER},
-      nickname = #{nickname,jdbcType=INTEGER},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
       invitevip = #{invitevip,jdbcType=INTEGER},
       gender = #{gender,jdbcType=INTEGER},
       city = #{city,jdbcType=VARCHAR},
