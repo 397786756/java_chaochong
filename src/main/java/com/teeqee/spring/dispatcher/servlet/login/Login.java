@@ -34,6 +34,8 @@ public class Login {
     /**playerLog dao*/
     @Resource
     private PlayerLogMapper playerLogMapper;
+    @Resource
+    private PlayerInfoMapper playerInfoMapper;
 
     @Dispather(value = "login")
     public JSONObject login(MethodModel model) {
@@ -101,10 +103,24 @@ public class Login {
      * @return 修改玩家隐私信息
      */
     @Dispather(value = "userinfor")
-    public JSONObject userinfor(MethodModel model){
-        JSONObject data = model.getData();
-        model.getSession().getPlayerInfo().updateUserInfo(data);
-        return null;
+    public boolean userinfor(MethodModel model){
+        AbstractSession session = model.getSession();
+        String openId = session.getOpenId();
+        if (openId!=null){
+            PlayerInfo playerInfo = session.getPlayerInfo();
+            if (playerInfo!=null){
+                return playerInfo.updateUserInfo(model.getData());
+            }else {
+                PlayerInfo playerInfoMysql = playerInfoMapper.selectByPrimaryKey(openId);
+                if (playerInfoMysql==null){
+                    playerInfoMysql=new PlayerInfo(openId);
+                    playerInfoMapper.insertSelective(playerInfoMysql);
+                }
+                session.add(PlayerCmd.PLAYER_INFO, playerInfoMysql);
+                return playerInfoMysql.updateUserInfo(model.getData()) ;
+            }
+        }
+        return false;
     }
     /**
      * @param model 数据源

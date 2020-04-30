@@ -2,8 +2,10 @@ package com.teeqee.spring.event;
 
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
+import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerLogMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
+import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.AbstractSession;
@@ -32,7 +34,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     private PlayerDataMapper playerDataMapper;
     @Resource
     private PlayerLogMapper playerLogMapper;
-
+    @Resource
+    private PlayerInfoMapper playerInfoMapper;
 
 
     @Override
@@ -66,7 +69,7 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
                 }
             }
         } catch (Exception e) {
-            session.getChannel().close();
+           // session.getChannel().close();
             e.printStackTrace();
         }
     }
@@ -91,7 +94,12 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
         if (playerLog!=null){
             playerLogMapper.updateByPrimaryKeySelective(playerLog);
         }
-
+        //头像昵称
+        PlayerInfo playerInfo = session.getPlayerInfo();
+        if (playerInfo!=null){
+            playerInfoMapper.updateByPrimaryKeySelective(playerInfo);
+        }
+        ChannelSupervise.removeSession(session);
         //TODO 用户下线
     }
 }

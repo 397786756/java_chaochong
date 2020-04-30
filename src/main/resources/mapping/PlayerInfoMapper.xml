@@ -18,7 +18,7 @@
     uid, openid, avatar, nickname, invitevip, gender, city, country, province, language,
     channelid
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
     <include refid="Base_Column_List" />
     from player_info
@@ -142,7 +142,7 @@
         channelid = #{channelid,jdbcType=INTEGER},
       </if>
     </set>
-    where uid = #{uid,jdbcType=INTEGER}
+    where openid = #{openid,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.teeqee.mybatis.pojo.PlayerInfo" >
     update player_info

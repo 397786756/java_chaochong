@@ -29,6 +29,9 @@ public class PlayerInfo {
 
     private Integer channelid;
 
+    public PlayerInfo(String openid) {
+        this.openid = openid;
+    }
 
     public PlayerInfo() {
     }
@@ -46,7 +49,7 @@ public class PlayerInfo {
 //     "country"://国家
 //     "language"://语言
 // }"
-    public void updateUserInfo(JSONObject data) {
+    public boolean updateUserInfo(JSONObject data) {
         if (data!=null&&data.size()>0){
             String avatar = data.getString("avatar");
             String nickname = data.getString("nickname");
@@ -76,7 +79,9 @@ public class PlayerInfo {
             if (language!=null){
                 this.language=language;
             }
+            return true;
         }
+        return false;
     }
 
 }
