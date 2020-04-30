@@ -7,6 +7,7 @@ import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 
 import com.teeqee.spring.dispatcher.servlet.entity.Animaldata;
+import com.teeqee.spring.dispatcher.servlet.entity.BuildingData;
 import com.teeqee.spring.dispatcher.servlet.entity.Site;
 import com.teeqee.spring.dispatcher.servlet.entity.Taskdata;
 import lombok.Data;
@@ -73,6 +74,8 @@ public class PlayerData {
     private String taskdata;
     /**当前玩家玩转盘的次数*/
     private Integer dartnum;
+    /**建筑data*/
+    private String buildingdata;
 
     /**头像*/
     private String avatar="";
@@ -147,6 +150,31 @@ public class PlayerData {
         return jsonObject;
     }
 
+
+    /**
+     * @return 拉取建筑
+     */
+    public JSONObject getbuilding(){
+        if (buildingdata==null){
+            this.buildingdata=StaticData.BUILDING_DATA;
+        }
+        JSONArray jsonArray = JSONArray.parseArray(buildingdata);
+        JSONArray returnArray = new JSONArray();
+        for (Object o : jsonArray) {
+            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
+            Integer lv = jsonObject.getInteger("lv");
+            Integer id = jsonObject.getInteger("id");
+            BuildingData buildingData = new BuildingData(id, lv);
+            Integer ss = jsonObject.getInteger("ss");
+            if (ss!=null){
+                buildingData.setSs(ss);
+            }
+            returnArray.add(JSON.toJSON(buildingData));
+        }
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(PlayerCmd.BUILDING_DATA, returnArray);
+        return jsonObject;
+    }
 
     /**
      * @return 从后端中获取缓存

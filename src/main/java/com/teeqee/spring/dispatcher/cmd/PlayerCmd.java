@@ -1,7 +1,7 @@
 package com.teeqee.spring.dispatcher.cmd;
 
 /**
- * @Description: 用户的自定义的组件
+ * @Description: 用户的自定义的组件(就是返回数据源的时候的JSONArray的key)
  * @author : zhengsongjie
  * @Software: IntelliJ IDEA
  */
@@ -19,5 +19,6 @@ public class PlayerCmd {
     public static final String ANIMAL_DATA= "animaldata";
     /**拉取任务*/
     public static final String TASK_DATA= "taskdata";
-
+   /**拉取建筑*/
+   public static final String BUILDING_DATA="buildingdata";
 }

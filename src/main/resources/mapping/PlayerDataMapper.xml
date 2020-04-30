@@ -30,12 +30,13 @@
     <result column="animaldata" property="animaldata" jdbcType="VARCHAR" />
     <result column="taskdata" property="taskdata" jdbcType="VARCHAR" />
     <result column="dartnum" property="dartnum" jdbcType="INTEGER" />
+    <result column="buildingdata" property="buildingdata" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     uid, openid, stockmax, stock, gold, diamond, newgamer, sound, biggestanimalid, viplv,
     todaysign, weeksign, rounds, vipreward, rankchallengenum, refreshworldnum, speedincubate,
     lastweekrank, lastweekreward, totalincubate, lasttime, rankpermission, phonefare,
-    phonefarenumber, sitedata, animaldata, taskdata, dartnum
+    phonefarenumber, sitedata, animaldata, taskdata, dartnum, buildingdata
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -46,6 +47,8 @@
     data.sitedata,
     data.animaldata,
     data.taskdata,
+    data.dartnum as dartnum,
+    data.buildingdata as buildingdata,
     info.avatar as avatar ,
     info.nickname as nickname
     from
@@ -71,7 +74,7 @@
       lastweekreward, totalincubate, lasttime,
       rankpermission, phonefare, phonefarenumber,
       sitedata, animaldata, taskdata,
-      dartnum)
+      dartnum, buildingdata)
     values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{stockmax,jdbcType=INTEGER},
       #{stock,jdbcType=INTEGER}, #{gold,jdbcType=INTEGER}, #{diamond,jdbcType=INTEGER},
       #{newgamer,jdbcType=INTEGER}, #{sound,jdbcType=INTEGER}, #{biggestanimalid,jdbcType=INTEGER},
@@ -81,7 +84,7 @@
       #{lastweekreward,jdbcType=INTEGER}, #{totalincubate,jdbcType=INTEGER}, #{lasttime,jdbcType=TIMESTAMP},
       #{rankpermission,jdbcType=INTEGER}, #{phonefare,jdbcType=INTEGER}, #{phonefarenumber,jdbcType=INTEGER},
       #{sitedata,jdbcType=VARCHAR}, #{animaldata,jdbcType=VARCHAR}, #{taskdata,jdbcType=VARCHAR},
-      #{dartnum,jdbcType=INTEGER})
+      #{dartnum,jdbcType=INTEGER}, #{buildingdata,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerData" >
     insert into player_data
@@ -170,6 +173,9 @@
       <if test="dartnum != null" >
         dartnum,
       </if>
+      <if test="buildingdata != null" >
+        buildingdata,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uid != null" >
@@ -255,6 +261,9 @@
       </if>
       <if test="dartnum != null" >
         #{dartnum,jdbcType=INTEGER},
+      </if>
+      <if test="buildingdata != null" >
+        #{buildingdata,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -342,6 +351,9 @@
       <if test="dartnum != null" >
         dartnum = #{dartnum,jdbcType=INTEGER},
       </if>
+      <if test="buildingdata != null" >
+        buildingdata = #{buildingdata,jdbcType=VARCHAR},
+      </if>
     </set>
     where uid = #{uid,jdbcType=INTEGER}
   </update>
@@ -373,7 +385,8 @@
       sitedata = #{sitedata,jdbcType=VARCHAR},
       animaldata = #{animaldata,jdbcType=VARCHAR},
       taskdata = #{taskdata,jdbcType=VARCHAR},
-      dartnum = #{dartnum,jdbcType=INTEGER}
+      dartnum = #{dartnum,jdbcType=INTEGER},
+      buildingdata = #{buildingdata,jdbcType=VARCHAR}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
 </mapper>

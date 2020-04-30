@@ -14,7 +14,7 @@ spring:
     # time-zone: GMT+8
     time-zone: GMT+8
   profiles:
-    active: dev,pass
+    active: test,pass
 mybatis:
   typeAliasesPackage: com.teeqee.mybatis.pojo
   mapperLocations: classpath:mapping/*.xml

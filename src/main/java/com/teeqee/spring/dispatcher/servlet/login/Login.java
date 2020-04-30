@@ -63,6 +63,14 @@ public class Login {
 
     /**
      * @param model 数据源
+     * @return 拉取建筑
+     */
+    @Dispather(value = "getbuilding")
+    public JSONObject getbuilding(MethodModel model){
+        return model.getSession().getPlayerData().getbuilding();
+    }
+    /**
+     * @param model 数据源
      * @return 返回获取宠物的位置信息
      */
     @Dispather(value = "getsite")

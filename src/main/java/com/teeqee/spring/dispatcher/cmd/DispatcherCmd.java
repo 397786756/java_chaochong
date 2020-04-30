@@ -20,4 +20,6 @@ public class DispatcherCmd {
     public static final String GET_CACHE= "getcache";
     /**从后端中拉取缓存*/
     public static final String NEW_HEART= "newheart";
+    /**拉取建筑*/
+    public static final String GET_BUILDING= "getbuilding";
 }
