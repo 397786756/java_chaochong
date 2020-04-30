@@ -35,7 +35,6 @@ public class MethodMapper implements CommandLineRunner{
 
     public Result run(MethodModel model) {
         String cmd = model.getCmd();
-        logger.info("cmd:{}", cmd);
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
             return new Result(cmd,function.apply(model));

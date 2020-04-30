@@ -214,6 +214,9 @@ public class PlayerData {
             this.animaldata=StaticData.ANIMAL_DATA;
         }
         JSONArray animaldataList = JSONArray.parseArray(animaldata);
+        if (animaldataList.size()==0){
+            animaldataList=JSONArray.parseArray(StaticData.ANIMAL_DATA);
+        }
         JSONArray jsonArray = new JSONArray(animaldataList.size());
         animaldataList.forEach(animal->{
             Animaldata animaldata = JSONObject.parseObject(JSON.toJSONString(animal), Animaldata.class);
