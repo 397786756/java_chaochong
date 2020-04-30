@@ -5,6 +5,7 @@ import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.cmd.DispatcherCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.login.Login;
+import com.teeqee.spring.dispatcher.servlet.update.PlayerUpdate;
 import com.teeqee.spring.result.Result;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -18,9 +19,12 @@ import java.util.function.Function;
 public class MethodMapper implements CommandLineRunner{
 
 
-
+    /**login push*/
     @Resource
     private Login login;
+    /**update*/
+    @Resource
+    private PlayerUpdate playerUpdate;
 
 
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
@@ -50,5 +54,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.USER_INFOR,map->login.userinfor(map));
         /**从后端中拉取缓存*/
         map.put(DispatcherCmd.GET_CACHE,map->login.getcache(map));
+        /**很长很大的心跳包*/
+        map.put(DispatcherCmd.NEW_HEART,map->playerUpdate.newheart(map));
     }
 }

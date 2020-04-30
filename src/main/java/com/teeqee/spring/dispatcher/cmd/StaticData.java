@@ -1,10 +1,8 @@
 package com.teeqee.spring.dispatcher.cmd;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.teeqee.spring.dispatcher.servlet.login.entity.Animaldata;
-import com.teeqee.spring.dispatcher.servlet.login.entity.Taskdata;
+import com.teeqee.spring.dispatcher.servlet.entity.Animaldata;
+import com.teeqee.spring.dispatcher.servlet.entity.Taskdata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +34,9 @@ public class StaticData {
     public static void main(String[] args) {
         List<Object> list = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
-            Taskdata taskdata = new Taskdata(i, 0, 0);
+            Taskdata taskdata = new Taskdata(i, 0, 0,0);
             list.add(taskdata);
         }
-        System.out.println(list.toString());
+
     }
 }

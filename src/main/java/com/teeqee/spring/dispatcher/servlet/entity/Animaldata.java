@@ -1,4 +1,4 @@
-package com.teeqee.spring.dispatcher.servlet.login.entity;
+package com.teeqee.spring.dispatcher.servlet.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

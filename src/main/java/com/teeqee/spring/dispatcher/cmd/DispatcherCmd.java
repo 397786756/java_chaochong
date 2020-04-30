@@ -18,4 +18,6 @@ public class DispatcherCmd {
     public static final String USER_INFOR= "userinfor";
     /**从后端中拉取缓存*/
     public static final String GET_CACHE= "getcache";
+    /**从后端中拉取缓存*/
+    public static final String NEW_HEART= "newheart";
 }

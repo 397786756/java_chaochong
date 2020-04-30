@@ -15,6 +15,8 @@ import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.spring.result.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,7 +26,7 @@ import java.util.Date;
 @DataSourceType("login")
 @Service
 public class Login {
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**playerData dao*/
     @Resource
@@ -138,6 +140,7 @@ public class Login {
         if (playerLog==null){
             playerLog=new PlayerLog(openId,new Date());
             playerLogMapper.insertSelective(playerLog);
+            logger.info("create player openid:{}", openId);
         }else {
             //登录次数+1
             playerLog.loginTotalAdd();

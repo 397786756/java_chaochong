@@ -5,13 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
-import com.teeqee.spring.dispatcher.servlet.login.entity.Animaldata;
-import com.teeqee.spring.dispatcher.servlet.login.entity.Site;
-import com.teeqee.spring.dispatcher.servlet.login.entity.Taskdata;
+
+import com.teeqee.spring.dispatcher.servlet.entity.Animaldata;
+import com.teeqee.spring.dispatcher.servlet.entity.Site;
+import com.teeqee.spring.dispatcher.servlet.entity.Taskdata;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
+
 
 @Data
 public class PlayerData {
@@ -69,7 +71,8 @@ public class PlayerData {
     private String animaldata;
     /**玩家的任务信息*/
     private String taskdata;
-
+    /**当前玩家玩转盘的次数*/
+    private Integer dartnum;
 
     /**头像*/
     private String avatar="";
@@ -208,11 +211,129 @@ public class PlayerData {
             Integer d = jsonObject.getInteger("d");
             Integer t = jsonObject.getInteger("t");
             Integer n = jsonObject.getInteger("n");
-            Taskdata taskdata = new Taskdata(t, n, d);
+            Integer m = jsonObject.getInteger("m");
+            if (m==null){
+                m=0;
+            }
+            Taskdata taskdata = new Taskdata(t, n, d,m);
             returnArray.add(JSON.toJSON(taskdata));
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.TASK_DATA, returnArray);
         return jsonObject;
     }
+
+
+    /**
+     * 我觉得我是个心跳包
+     */
+    public JSONObject newheart(JSONObject data){
+        if (data!=null&&data.size()>0){
+            //宠物的位置
+            JSONArray sitedata = data.getJSONArray("sitedata");
+            if (sitedata!=null){
+                updateSitedata(sitedata);
+            }
+            //任务
+            JSONArray taskdata = data.getJSONArray("taskdata");
+            if (taskdata!=null){
+                updateTaskdata(taskdata);
+            }
+            //我也不知道干嘛
+            JSONArray buildingdata = data.getJSONArray("buildingdata");
+             //动物的位置
+            JSONArray animaldata = data.getJSONArray("animaldata");
+            if (animaldata!=null){
+                updateAnimaldata(animaldata);
+            }
+            Integer stock = data.getInteger("stock");
+            if (stock!=null){
+                this.stock=stock;
+            }
+            Integer stockmax = data.getInteger("stockmax");
+            if (stockmax!=null){
+                this.stockmax=stockmax;
+            }
+            Integer dartnum = data.getInteger("dartnum");
+            if (dartnum!=null){
+                this.dartnum=dartnum;
+            }
+            Integer gold = data.getInteger("gold");
+            if (gold!=null){
+                this.gold=gold;
+            }
+            Integer diamond = data.getInteger("diamond");
+            if (diamond!=null){
+                this.diamond=diamond;
+            }
+            Integer totalincubate = data.getInteger("totalincubate");
+            if (totalincubate!=null){
+                this.totalincubate=totalincubate;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param animaldata 修改玩家的animaldata
+     */
+    private void updateAnimaldata(JSONArray animaldata){
+        List<Animaldata> animaldataList = animaldata.toJavaList(Animaldata.class);
+        JSONArray jsonArray = new JSONArray(animaldata.size());
+        for (Animaldata animal : animaldataList) {
+            JSONObject jsonObject = new JSONObject();
+            Integer a = animal.getA();
+            Integer l = animal.getL();
+            jsonObject.put("a", a);
+            jsonObject.put("l", l);
+            jsonArray.add(jsonObject);
+        }
+        this.animaldata=jsonArray.toJSONString();
+    }
+
+
+    /**
+     * @param taskdata 任务数据
+     */
+    private  void updateTaskdata(JSONArray taskdata){
+        List<Taskdata> taskDataList = taskdata.toJavaList(Taskdata.class);
+        if (taskDataList!=null&&taskDataList.size()>0){
+            JSONArray jsonArray = new JSONArray(taskDataList.size());
+            for (Taskdata task : taskDataList) {
+                Integer d = task.getD();
+                Integer n = task.getN();
+                Integer t = task.getT();
+                Integer m = task.getM();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("d",d );
+                jsonObject.put("n",n );
+                jsonObject.put("t",t );
+                jsonObject.put("m",m );
+                jsonArray.add(jsonObject);
+            }
+            //转成json对象
+            this.taskdata=jsonArray.toJSONString();
+        }
+    }
+    /**
+     * @param sitedata 宠物的位置
+     */
+    private  void updateSitedata(JSONArray sitedata){
+        List<Site> sites = sitedata.toJavaList(Site.class);
+        if (sites!=null&&sites.size()>0){
+            JSONArray jsonArray = new JSONArray(sites.size());
+            for (Site site : sites) {
+                JSONObject jsonMap = new JSONObject();
+                int a = site.getA();
+                int s = site.getS();
+                jsonMap.put("a", a);
+                jsonMap.put("s", s);
+                jsonArray.add(jsonMap);
+            }
+            //转成json对象
+           this.sitedata=jsonArray.toJSONString();
+        }
+    }
+
+
 }
