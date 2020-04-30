@@ -27,7 +27,7 @@ public class StaticData {
     /**
      *拉取玩家动物信息 初始化
      */
-    public static final String ANIMAL_DATA= "[{\"animalid\":1,\"lv\":1}]";
+    public static final String ANIMAL_DATA= "[{\"id\":1,\"lv\":1}]";
 
 
 
