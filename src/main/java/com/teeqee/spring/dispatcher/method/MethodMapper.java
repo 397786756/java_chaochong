@@ -7,6 +7,8 @@ import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.login.Login;
 import com.teeqee.spring.dispatcher.servlet.update.PlayerUpdate;
 import com.teeqee.spring.result.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,7 @@ import java.util.function.Function;
 
 @Component
 public class MethodMapper implements CommandLineRunner{
-
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**login push*/
     @Resource
@@ -33,6 +35,7 @@ public class MethodMapper implements CommandLineRunner{
 
     public Result run(MethodModel model) {
         String cmd = model.getCmd();
+        logger.info("cmd:{}", cmd);
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
             return new Result(cmd,function.apply(model));

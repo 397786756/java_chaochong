@@ -298,8 +298,11 @@ public class PlayerData {
             if (totalincubate!=null){
                 this.totalincubate=totalincubate;
             }
+            data.clear();
+            data.put("info", true);
+            return data;
         }
-        return null;
+        return new JSONObject();
     }
 
     /**
