@@ -210,14 +210,14 @@ public class PlayerData {
      */
     public JSONObject getanimal(){
         //需要进行转义
-        if (animaldata==null){
+        if (animaldata==null||"".equals(animaldata)){
             this.animaldata=StaticData.ANIMAL_DATA;
         }
-        List<Animaldata> animaldataList = JSONArray.parseArray(animaldata, Animaldata.class);
+        JSONArray animaldataList = JSONArray.parseArray(animaldata);
         JSONArray jsonArray = new JSONArray(animaldataList.size());
-        animaldataList.forEach(site->{
-            JSONObject parseObject = JSONObject.parseObject(JSON.toJSONString(site));
-            jsonArray.add(parseObject);
+        animaldataList.forEach(animal->{
+            Animaldata animaldata = JSONObject.parseObject(JSON.toJSONString(animal), Animaldata.class);
+            jsonArray.add(animaldata);
         });
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.ANIMAL_DATA, jsonArray);

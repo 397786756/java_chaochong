@@ -42,12 +42,4 @@ public class StaticData {
     public static final String BUILDING_DATA="[{\"lv\":1,\"id\":0},{\"lv\":1,\"id\":1},{\"lv\":1,\"id\":2},{\"lv\":1,\"id\":3},{\"lv\":1,\"id\":4},{\"lv\":1,\"id\":5},{\"ss\":0,\"lv\":1,\"id\":6}]";
 
 
-    public static void main(String[] args) {
-        List<BuildingData> list = JSONArray.parseArray(BUILDING_DATA, BuildingData.class);
-        JSONArray jsonArray = new JSONArray(list.size());
-        for (BuildingData buildingData : list) {
-            jsonArray.add(JSONObject.parseObject(JSON.toJSONString(buildingData)));
-        }
-        System.out.println(jsonArray.toJSONString());
-    }
 }
