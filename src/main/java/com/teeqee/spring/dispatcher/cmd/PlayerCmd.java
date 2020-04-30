@@ -8,6 +8,11 @@ package com.teeqee.spring.dispatcher.cmd;
 public class PlayerCmd {
     /**获取用户数据*/
     public static final String PLAYER_DATA= "userdata";
+    /**获取用户隐私信息*/
+    public static final String PLAYER_INFO="playInfo";
+    /**获取用户日志的记录*/
+    public static final String PLAYER_LOG="playLog";
+
     /**获取宠物的位置信息*/
     public static final String SITE_DATA= "sitedata";
     /**拉取玩家动物信息*/

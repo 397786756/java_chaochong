@@ -33,7 +33,7 @@ public class MethodMapper implements CommandLineRunner{
         if (function!=null){
             return new Result(cmd,function.apply(model));
         }
-        return new Result("errod","cmd undefined");
+        return new Result("error","undefined "+cmd);
     }
 
     @Override
@@ -46,5 +46,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.GET_ANIMAL,map->login.getanimal(map));
         /**拉取任务信息*/
         map.put(DispatcherCmd.GET_TASK,map->login.gettask(map));
+        /**修改头像昵称语言 返回空信息*/
+        map.put(DispatcherCmd.USER_INFOR,map->login.userinfor(map));
+        /**从后端中拉取缓存*/
+        map.put(DispatcherCmd.GET_CACHE,map->login.getcache(map));
     }
 }

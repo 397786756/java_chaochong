@@ -48,11 +48,12 @@
     info.avatar as avatar ,
     info.nickname as nickname
     from
-    player_data data,
+    player_data data
+    left join
     player_info info
-    where
+    on
     data.openid=info.openid
-    and
+    where
     data.openid = #{openid,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

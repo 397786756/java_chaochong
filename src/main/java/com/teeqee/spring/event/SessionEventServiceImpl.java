@@ -2,7 +2,11 @@ package com.teeqee.spring.event;
 
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
+import com.teeqee.mybatis.dao.PlayerInfoMapper;
+import com.teeqee.mybatis.dao.PlayerLogMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
+import com.teeqee.mybatis.pojo.PlayerInfo;
+import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
@@ -11,6 +15,7 @@ import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 
@@ -28,6 +33,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     private MethodMapper methodMapper;
     @Resource
     private PlayerDataMapper playerDataMapper;
+    @Resource
+    private PlayerLogMapper playerLogMapper;
 
 
 
@@ -38,8 +45,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Override
     public void close(AbstractSession session) {
-       // offLine(session);
-       // ChannelSupervise.removeSession(session);
+        offLine(session);
+        ChannelSupervise.removeSession(session);
     }
 
     @Override
@@ -49,10 +56,17 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
             JSONObject jsonObject = JSONObject.parseObject(msg);
             String cmd = jsonObject.getString("cmd");
             if (cmd!=null){
+                PlayerLog playerLog = session.getPlayerLog();
+                if (playerLog!=null){
+                    //操作次数+1
+                    playerLog.messageNumAdd();
+                }
                 JSONObject data = jsonObject.getJSONObject("data");
                 MethodModel methodModel = new MethodModel(cmd, data, session);
                 Result result = methodMapper.run(methodModel);
-                ChannelSupervise.sendToUser(session.getChannel().id(), result);
+                if (result!=null){
+                    ChannelSupervise.sendToUser(session.getChannel().id(), result);
+                }
             }
         } catch (Exception e) {
             session.getChannel().close();
@@ -70,10 +84,17 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     private void offLine(AbstractSession session){
         logger.info("client close={}", session.getChannel().id().asLongText());
         logger.info("update playerInfo");
+        //存数据
         PlayerData playerData = session.getPlayerData();
         if (playerData!=null){
             playerDataMapper.updateByPrimaryKeySelective(playerData);
         }
+        //修改日志
+        PlayerLog playerLog = session.getPlayerLog();
+        if (playerLog!=null){
+            playerLogMapper.updateByPrimaryKeySelective(playerLog);
+        }
+
         //TODO 用户下线
     }
 }

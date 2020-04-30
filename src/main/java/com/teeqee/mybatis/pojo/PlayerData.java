@@ -144,6 +144,13 @@ public class PlayerData {
         return jsonObject;
     }
 
+
+    /**
+     * @return 从后端中获取缓存
+     */
+    public JSONObject getCache(){
+        return new JSONObject();
+    }
     /**
      * 获取宠物的位置信息(完成)
      */

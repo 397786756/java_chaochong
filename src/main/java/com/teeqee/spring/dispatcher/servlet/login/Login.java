@@ -5,8 +5,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
+import com.teeqee.mybatis.dao.PlayerLogMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
+import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
@@ -16,6 +18,7 @@ import com.teeqee.spring.result.Result;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 
 @DataSourceType("login")
@@ -26,24 +29,33 @@ public class Login {
     /**playerData dao*/
     @Resource
     private PlayerDataMapper playerDataMapper;
+    /**playerLog dao*/
+    @Resource
+    private PlayerLogMapper playerLogMapper;
 
     @Dispather(value = "login")
     public JSONObject login(MethodModel model) {
         AbstractSession session = model.getSession();
-        JSONObject data = model.getData();
-        if (data != null && data.size() > 0) {
-            String openid = data.getString("openid");
-            if (openid != null) {
-                PlayerData playerData = session.getPlayerData();
-                if (playerData==null){
+        //判断是否有重复登录
+        PlayerData playerData = session.getPlayerData();
+        if (playerData ==null){
+            JSONObject data = model.getData();
+            if (data != null && data.size() > 0) {
+                String openid = data.getString("openid");
+                if (openid != null) {
+                    //修改为已经登录
                     session.isLogin(openid);
+                    //获取数据
                     playerData = localLogin(openid);
+                    //添加进去
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
+                    session.add(PlayerCmd.PLAYER_LOG,createPlayerLog(openid));
+                    return playerData.loginPush();
                 }
-                return playerData.loginPush();
             }
+        }else {
+            return playerData.loginPush();
         }
-        //返回openid异常
         return null;
     }
 
@@ -53,8 +65,7 @@ public class Login {
      */
     @Dispather(value = "getsite")
     public JSONObject getsite(MethodModel model){
-        JSONObject getsite = model.getSession().getPlayerData().getsite();
-        return getsite;
+        return model.getSession().getPlayerData().getsite();
     }
 
     /**
@@ -75,23 +86,37 @@ public class Login {
         return model.getSession().getPlayerData().getanimal();
     }
 
-
+    /**
+     * @param model 数据源
+     * @return 修改玩家隐私信息
+     */
+    @Dispather(value = "userinfor")
+    public JSONObject userinfor(MethodModel model){
+        JSONObject data = model.getData();
+        model.getSession().getPlayerInfo().updateUserInfo(data);
+        return null;
+    }
+    /**
+     * @param model 数据源
+     * @return 从后端拉取缓存
+     */
+    @Dispather(value = "getcache")
+    public JSONObject getcache(MethodModel model) {
+        return model.getSession().getPlayerData().getCache();
+    }
 
     /**
      * @param openId 用户的openId
-     * @return 本地登录
+     * @return 登录的信息
      */
 
     private PlayerData localLogin(String openId) {
-        if (openId != null && openId.length() > 0) {
             PlayerData playerData = playerDataMapper.selectByPrimaryKey(openId);
             //没有则直接创建
             if (playerData == null) {
                 playerData = createPlayData(openId);
             }
            return playerData;
-        }
-        return null;
     }
 
 
@@ -104,4 +129,20 @@ public class Login {
         playerDataMapper.insertSelective(playerData);
         return playerData;
     }
+    /**
+     * @param openId 用户的id
+     * @return 返回用户的数据源
+     */
+    private PlayerLog createPlayerLog(String openId) {
+        PlayerLog playerLog = playerLogMapper.selectByTimeLog(openId, new Date());
+        if (playerLog==null){
+            playerLog=new PlayerLog(openId,new Date());
+            playerLogMapper.insertSelective(playerLog);
+        }else {
+            //登录次数+1
+            playerLog.loginTotalAdd();
+        }
+        return playerLog;
+    }
+
 }

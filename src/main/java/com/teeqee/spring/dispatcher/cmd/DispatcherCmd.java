@@ -14,4 +14,8 @@ public class DispatcherCmd {
     public static final String  GET_ANIMAL="getanimal";
     /**拉取任务*/
     public static final String  GET_TASK="gettask";
+    /**更新用户信息*/
+    public static final String USER_INFOR= "userinfor";
+    /**从后端中拉取缓存*/
+    public static final String GET_CACHE= "getcache";
 }

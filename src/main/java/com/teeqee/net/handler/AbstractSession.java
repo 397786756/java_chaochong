@@ -1,14 +1,11 @@
 package com.teeqee.net.handler;
 
 
-import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
+import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
-import com.teeqee.spring.dispatcher.cmd.StaticData;
-import com.teeqee.spring.dispatcher.model.MethodModel;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
@@ -41,13 +38,11 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
     /**
      * @param openid 玩家的openid 标记着已经登录了
      */
-    public boolean isLogin(String openid){
+    public void isLogin(String openid){
         if (this.openid==null){
             this.openid=openid;
             loginStatus=true;
-            return true;
         }
-        return false;
     }
 
     public boolean isLoginStatus() {
@@ -107,5 +102,16 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
         return (PlayerData) keyToAttrs.get(PlayerCmd.PLAYER_DATA);
     }
 
-
+    /**
+     * @return 返回用户的playerInfo
+     */
+    public PlayerInfo getPlayerInfo(){
+        return (PlayerInfo) keyToAttrs.get(PlayerCmd.PLAYER_INFO);
+    }
+    /**
+     * @return 返回用户的playerLog
+     */
+    public PlayerLog getPlayerLog(){
+        return (PlayerLog) keyToAttrs.get(PlayerCmd.PLAYER_LOG);
+    }
 }
