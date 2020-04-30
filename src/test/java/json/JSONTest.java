@@ -21,17 +21,7 @@ import java.util.List;
  */
 public class JSONTest {
     public static void main(String[] args) {
-        JSONArray jsonArray = new JSONArray();
-        for (int i = 0; i <8; i++) {
-            Taskdata taskdata = new Taskdata();
-            taskdata.setD(i+1);
-            taskdata.setN(0);
-            taskdata.setT(0);
-            JSONObject e = JSONObject.parseObject(JSON.toJSONString(taskdata));
-            jsonArray.add(e);
-            System.out.println(e);
-        }
-        System.out.println(jsonArray.toJSONString());
+
     }
 
     private void getJsonKey(String json){

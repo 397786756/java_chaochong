@@ -1,5 +1,6 @@
 package com.teeqee.mybatis.pojo;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
@@ -144,23 +145,27 @@ public class PlayerData {
     }
 
     /**
-     * 获取宠物的位置信息
+     * 获取宠物的位置信息(完成)
      */
     public JSONObject getsite(){
         //需要进行转义
             if (sitedata==null){
                this.sitedata=StaticData.SITEDATA;
             }
-        List<Site> siteList = JSONArray.parseArray(sitedata, Site.class);
-        JSONArray jsonArray = new JSONArray(siteList.size());
-        siteList.forEach(site->{
-            String json = JSONObject.toJSONString(site);
-            jsonArray.add(json);
-        });
+        JSONArray jsonArray = JSONArray.parseArray(sitedata);
+        JSONArray returnArray = new JSONArray();
+        for (Object o : jsonArray) {
+            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
+            Integer s = jsonObject.getInteger("s");
+            Integer a = jsonObject.getInteger("a");
+            Site site = new Site(s,a);
+            returnArray.add(JSON.toJSON(site));
+        }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(PlayerCmd.SITE_DATA, jsonArray);
+        jsonObject.put(PlayerCmd.SITE_DATA, returnArray);
         return jsonObject;
     }
+
 
     /**
      * 拉取玩家动物信息
@@ -173,8 +178,8 @@ public class PlayerData {
         List<Animaldata> animaldataList = JSONArray.parseArray(animaldata, Animaldata.class);
         JSONArray jsonArray = new JSONArray(animaldataList.size());
         animaldataList.forEach(site->{
-            String json = JSONObject.toJSONString(site);
-            jsonArray.add(json);
+            JSONObject parseObject = JSONObject.parseObject(JSON.toJSONString(site));
+            jsonArray.add(parseObject);
         });
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.ANIMAL_DATA, jsonArray);
@@ -189,14 +194,18 @@ public class PlayerData {
         if (taskdata==null){
             this.taskdata=StaticData.TASK_DATA;
         }
-        List<Taskdata> taskdataList = JSONArray.parseArray(taskdata, Taskdata.class);
-        JSONArray jsonArray = new JSONArray(taskdataList.size());
-        taskdataList.forEach(taskdata->{
-            String json = JSONObject.toJSONString(taskdata);
-            jsonArray.add(json);
-        });
+        JSONArray jsonArray = JSONArray.parseArray(taskdata);
+        JSONArray returnArray = new JSONArray();
+        for (Object o : jsonArray) {
+            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
+            Integer d = jsonObject.getInteger("d");
+            Integer t = jsonObject.getInteger("t");
+            Integer n = jsonObject.getInteger("n");
+            Taskdata taskdata = new Taskdata(t, n, d);
+            returnArray.add(JSON.toJSON(taskdata));
+        }
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(PlayerCmd.TASK_DATA, jsonArray);
+        jsonObject.put(PlayerCmd.TASK_DATA, returnArray);
         return jsonObject;
     }
 }

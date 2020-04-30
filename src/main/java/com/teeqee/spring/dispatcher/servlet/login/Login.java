@@ -63,8 +63,7 @@ public class Login {
      */
     @Dispather(value = "gettask")
     public JSONObject gettask(MethodModel model){
-        JSONObject gettask = model.getSession().getPlayerData().gettask();
-        return gettask;
+        return model.getSession().getPlayerData().gettask();
     }
 
     /**
@@ -73,8 +72,7 @@ public class Login {
      */
     @Dispather(value = "getanimal")
     public JSONObject getanimal(MethodModel model){
-        JSONObject getanimal = model.getSession().getPlayerData().getanimal();
-        return getanimal;
+        return model.getSession().getPlayerData().getanimal();
     }
 
 

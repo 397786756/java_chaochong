@@ -14,4 +14,9 @@ public class Animaldata {
     private Integer a;
     @JSONField(name="lv")
     private Integer l;
+
+    public Animaldata(Integer a, Integer l) {
+        this.a = a;
+        this.l = l;
+    }
 }

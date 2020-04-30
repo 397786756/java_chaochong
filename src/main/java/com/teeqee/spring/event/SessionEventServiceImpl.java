@@ -38,8 +38,8 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Override
     public void close(AbstractSession session) {
-        offLine(session);
-        ChannelSupervise.removeSession(session);
+       // offLine(session);
+       // ChannelSupervise.removeSession(session);
     }
 
     @Override
