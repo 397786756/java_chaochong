@@ -47,13 +47,11 @@ public class Login {
                 if (openid != null) {
                     //修改为已经登录
                     session.isLogin(openid);
+                    //TODO 平台
                     //获取数据
                     playerData = localLogin(openid);
-                    //添加进去
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
                     session.add(PlayerCmd.PLAYER_LOG,createPlayerLog(openid));
-                    //传openId才添加进去
-                    ChannelSupervise.addSession(session);
                     return playerData.loginPush();
                 }
             }

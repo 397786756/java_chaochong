@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhengsongjie
  * @date 2020-03-12 下午 05:02
  */
-@Component
 public class ChannelSupervise {
 
     /**
@@ -28,37 +27,6 @@ public class ChannelSupervise {
      */
     private static ChannelGroup GlobalGroup = new DefaultChannelGroup("channelGroups", GlobalEventExecutor.INSTANCE);
 
-    /**
-     * sessionMap 删除了 不应该也一起删除了?
-     */
-    private static ConcurrentHashMap<String, Session> sessionMap = new ConcurrentHashMap<>(1024);
-
-
-    /**
-     * 添加会话
-     */
-    public static void addSession(Session session) {
-        String openId = session.getOpenId();
-        if (openId != null) {
-            sessionMap.put(openId, session);
-        }
-    }
-
-    /**
-     * 获取会话
-     */
-    public static Session getSession(String openId) {
-        return sessionMap.get(openId);
-    }
-
-
-    @Scheduled(cron = "0/5 * * * * ?")
-    public void task(){
-        for (Channel channel : GlobalGroup) {
-            System.out.println(channel.id().asLongText());
-        }
-        sessionMap.forEach((k,v)-> System.out.println(sessionMap.get(k).getOpenId()));
-    }
     /**
      * @param channel 添加用户管道
      */
@@ -70,7 +38,7 @@ public class ChannelSupervise {
      * 移除用户的会话
      */
     public static void removeSession(Channel channel) {
-
+        GlobalGroup.remove(channel);
     }
 
     /**

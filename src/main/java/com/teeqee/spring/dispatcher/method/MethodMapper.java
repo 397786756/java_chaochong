@@ -25,14 +25,8 @@ public class MethodMapper implements CommandLineRunner{
     /**update*/
     @Resource
     private PlayerUpdate playerUpdate;
-
-
-    /**
-     * 问题出在这个map上
-     */
+    /**method map*/
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
-
-
 
     public Result run(MethodModel model) {
         String cmd = model.getCmd();

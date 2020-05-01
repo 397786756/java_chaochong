@@ -57,9 +57,9 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
                 case READER_IDLE:
                     break;
                 case WRITER_IDLE:
-                    //TODO 30S没有传递code或者openid直接关闭
                     break;
                 case ALL_IDLE:
+                    channelInactive(ctx);
                     break;
                 default:
                     break;
@@ -82,7 +82,6 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
             FullHttpRequest request = (FullHttpRequest) msg;
             if (request.uri().contains(socketUri)) {
                 ctx.fireChannelRead(request.setUri(socketUri).retain());
-
             } else {
                 ctx.close();
             }

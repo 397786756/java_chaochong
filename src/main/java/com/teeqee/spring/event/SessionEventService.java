@@ -2,6 +2,7 @@ package com.teeqee.spring.event;
 
 
 import com.teeqee.net.handler.Session;
+import io.netty.channel.Channel;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
@@ -10,9 +11,6 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @Software: IntelliJ IDEA
  */
 public interface SessionEventService {
-
-
-    void open(Session session);
 
     void close(Session session);
 

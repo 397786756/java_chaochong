@@ -17,7 +17,10 @@ public class NettyPlayerInfoAttributeKey {
     public static AttributeKey<Session> PLAYER_INFO_ATTRIBUTEKEY= AttributeKey.valueOf("session");
 
 
-
+    /**
+     * @param channel 管道
+     * @return 返回会话session
+     */
     public static Session getSession(Channel channel){
         Session session = channel.attr(PLAYER_INFO_ATTRIBUTEKEY).get();
         if (session==null){

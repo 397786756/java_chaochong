@@ -8,6 +8,7 @@ import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
+import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
 import com.teeqee.spring.dispatcher.model.MethodModel;
@@ -38,12 +39,6 @@ public class SessionEventServiceImpl implements SessionEventService {
     private PlayerLogMapper playerLogMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
-
-
-    @Override
-    public void open(Session session) {
-        logger.info("clint open={}", session.getId());
-    }
 
     @Override
     public void close(Session session) {
@@ -77,6 +72,7 @@ public class SessionEventServiceImpl implements SessionEventService {
 
     @Override
     public void exceptionCaught(Session session) {
+        //记录错误日志
         logger.info("client exceptionCaught ={}", session.getId());
     }
 
