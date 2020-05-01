@@ -214,13 +214,14 @@ public class PlayerData {
             this.animaldata=StaticData.ANIMAL_DATA;
         }
         JSONArray animaldataList = JSONArray.parseArray(animaldata);
-        if (animaldataList.size()==0){
-            animaldataList=JSONArray.parseArray(StaticData.ANIMAL_DATA);
-        }
         JSONArray jsonArray = new JSONArray(animaldataList.size());
         animaldataList.forEach(animal->{
-            Animaldata animaldata = JSONObject.parseObject(JSON.toJSONString(animal), Animaldata.class);
-            jsonArray.add(animaldata);
+            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(animal));
+            Integer a = jsonObject.getInteger("a");
+            Integer l = jsonObject.getInteger("l");
+            Animaldata animaldata = new Animaldata(a, l);
+            JSONObject object = JSONObject.parseObject(JSON.toJSONString(animaldata));
+            jsonArray.add(object);
         });
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.ANIMAL_DATA, jsonArray);

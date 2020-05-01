@@ -38,8 +38,6 @@ public class WebsocketServerHandler extends AbstractSession {
     public void channelActive(ChannelHandlerContext ctx) {
         ctx.fireChannelActive();
         setChannel(ctx.channel());
-        //加入
-        ChannelSupervise.addChannel(ctx.channel());
     }
 
     @Override
@@ -82,6 +80,7 @@ public class WebsocketServerHandler extends AbstractSession {
             FullHttpRequest request = (FullHttpRequest) msg;
             if (request.uri().contains(socketUri)) {
                 ctx.fireChannelRead(request.setUri(socketUri).retain());
+
             } else {
                 ctx.close();
             }

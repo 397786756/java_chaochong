@@ -26,7 +26,7 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
     /**平台*/
     private String pingTai;
 
-    protected Channel channel;
+    private Channel channel;
     /** 是否已经传openId并且登录*/
     private boolean loginStatus;
     /**登录的时间*/

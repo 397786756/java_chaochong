@@ -79,7 +79,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
                     @Override
                     protected void initChannel(SocketChannel channel) throws Exception {
                         //添加心跳机制(心跳狗)
-                        channel.pipeline().addLast("heart-dog", new IdleStateHandler(30, 30, 60, TimeUnit.SECONDS));
+                        channel.pipeline().addLast("heart-dog", new IdleStateHandler(500, 500, 600, TimeUnit.SECONDS));
                         // WebSocket 是基于 Http 协议的，要使用 Http 解编码器
                         channel.pipeline().addLast("http-codec", new HttpServerCodec());
                         // 用于大数据流的分区传输

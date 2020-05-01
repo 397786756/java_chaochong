@@ -9,6 +9,7 @@ import com.teeqee.mybatis.dao.PlayerLogMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
+import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
@@ -54,6 +55,8 @@ public class Login {
                     //添加进去
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
                     session.add(PlayerCmd.PLAYER_LOG,createPlayerLog(openid));
+                    //传openId才添加进去
+                    ChannelSupervise.addSession(session);
                     return playerData.loginPush();
                 }
             }

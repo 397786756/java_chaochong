@@ -14,6 +14,7 @@ import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import javax.annotation.Resource;
  * @Software: IntelliJ IDEA
  */
 @Component
+@Scope("prototype")
 public class SessionEventServiceImpl implements SessionEventService<AbstractSession> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -40,13 +42,13 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
     @Override
     public void open(AbstractSession session) {
+        ChannelSupervise.addChannel(session.getChannel());
         logger.info("clint open={}", session.getChannel().id().asLongText());
     }
 
     @Override
     public void close(AbstractSession session) {
         offLine(session);
-        ChannelSupervise.removeSession(session);
     }
 
     @Override
@@ -62,6 +64,7 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
                     playerLog.messageNumAdd();
                 }
                 JSONObject data = jsonObject.getJSONObject("data");
+                //新建一个会话
                 MethodModel methodModel = new MethodModel(cmd, data, session);
                 Result result = methodMapper.run(methodModel);
                 if (result!=null){
@@ -69,7 +72,6 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
                 }
             }
         } catch (Exception e) {
-           // session.getChannel().close();
             e.printStackTrace();
         }
     }

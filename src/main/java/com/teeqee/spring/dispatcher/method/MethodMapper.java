@@ -10,6 +10,7 @@ import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,6 +30,9 @@ public class MethodMapper implements CommandLineRunner{
     private PlayerUpdate playerUpdate;
 
 
+    /**
+     * 问题出在这个map上
+     */
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
 
 
@@ -37,7 +41,8 @@ public class MethodMapper implements CommandLineRunner{
         String cmd = model.getCmd();
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
-            return new Result(cmd,function.apply(model));
+            Object apply = function.apply(model);
+            return new Result(cmd, apply);
         }
         return new Result("error","undefined "+cmd);
     }
