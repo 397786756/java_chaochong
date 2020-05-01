@@ -1,10 +1,12 @@
 package com.teeqee.net.handler;
 
 import com.teeqee.net.gm.ChannelSupervise;
+import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
 import com.teeqee.spring.event.SessionEventService;
-import com.teeqee.utils.UriUtil;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.timeout.IdleStateEvent;
@@ -27,22 +29,23 @@ import javax.annotation.Resource;
  */
 @Component
 @ChannelHandler.Sharable
-public class WebsocketServerHandler extends AbstractSession {
+public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Resource
-    private SessionEventService<AbstractSession> sessionEventService;
     @Value("${server.socket-uri}")
     private String socketUri;
+    @Resource
+    private SessionEventService sessionEventService;
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
         ctx.fireChannelActive();
-        setChannel(ctx.channel());
+        ChannelSupervise.addChannel(ctx.channel());
+        NettyPlayerInfoAttributeKey.getSession(ctx.channel());
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        sessionEventService.close(this);
+        sessionEventService.close(ctx.channel().attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get());
     }
 
     @Override
@@ -57,7 +60,6 @@ public class WebsocketServerHandler extends AbstractSession {
                     //TODO 30S没有传递code或者openid直接关闭
                     break;
                 case ALL_IDLE:
-                    ctx.channel().close();
                     break;
                 default:
                     break;
@@ -68,14 +70,14 @@ public class WebsocketServerHandler extends AbstractSession {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         cause.printStackTrace();
-        sessionEventService.close(this);
+       // sessionEventService.close(session);
     }
 
 
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (msg instanceof TextWebSocketFrame) {
-            sessionEventService.send(((TextWebSocketFrame) msg).text(),this);
+            sessionEventService.send(((TextWebSocketFrame) msg).text(),NettyPlayerInfoAttributeKey.getSession(ctx.channel()));
         }else if (msg instanceof FullHttpRequest ){
             FullHttpRequest request = (FullHttpRequest) msg;
             if (request.uri().contains(socketUri)) {

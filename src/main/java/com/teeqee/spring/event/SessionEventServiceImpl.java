@@ -8,10 +8,11 @@ import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
-import com.teeqee.net.handler.AbstractSession;
+import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.result.Result;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
@@ -25,8 +26,7 @@ import javax.annotation.Resource;
  * @Software: IntelliJ IDEA
  */
 @Component
-@Scope("prototype")
-public class SessionEventServiceImpl implements SessionEventService<AbstractSession> {
+public class SessionEventServiceImpl implements SessionEventService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -41,18 +41,17 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
 
 
     @Override
-    public void open(AbstractSession session) {
-        ChannelSupervise.addChannel(session.getChannel());
-        logger.info("clint open={}", session.getChannel().id().asLongText());
+    public void open(Session session) {
+        logger.info("clint open={}", session.getId());
     }
 
     @Override
-    public void close(AbstractSession session) {
+    public void close(Session session) {
         offLine(session);
     }
 
     @Override
-    public void send(String msg, AbstractSession session) throws Exception {
+    public void send(String msg, Session session) throws Exception {
         logger.info("client msg ={}", msg);
         try {
             JSONObject jsonObject = JSONObject.parseObject(msg);
@@ -77,14 +76,14 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
     }
 
     @Override
-    public void exceptionCaught(AbstractSession session) {
-        logger.info("client exceptionCaught ={}", session.getChannel().id().asLongText());
+    public void exceptionCaught(Session session) {
+        logger.info("client exceptionCaught ={}", session.getId());
     }
 
 
 
-    private void offLine(AbstractSession session){
-        logger.info("client close={}", session.getChannel().id().asLongText());
+    private void offLine(Session session){
+        logger.info("client close={}", session.getId());
         logger.info("update playerInfo");
         //存数据
         PlayerData playerData = session.getPlayerData();
@@ -101,7 +100,7 @@ public class SessionEventServiceImpl implements SessionEventService<AbstractSess
         if (playerInfo!=null){
             playerInfoMapper.updateByPrimaryKeySelective(playerInfo);
         }
-        ChannelSupervise.removeSession(session);
+        ChannelSupervise.removeSession(session.getChannel());
         //TODO 用户下线
     }
 }

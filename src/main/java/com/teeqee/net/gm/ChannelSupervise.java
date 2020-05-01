@@ -1,7 +1,7 @@
 package com.teeqee.net.gm;
 
 import com.alibaba.fastjson.JSON;
-import com.teeqee.net.handler.AbstractSession;
+import com.teeqee.net.handler.Session;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelId;
 import io.netty.channel.group.ChannelGroup;
@@ -31,13 +31,13 @@ public class ChannelSupervise {
     /**
      * sessionMap 删除了 不应该也一起删除了?
      */
-    private static ConcurrentHashMap<String, AbstractSession> sessionMap = new ConcurrentHashMap<>(1024);
+    private static ConcurrentHashMap<String, Session> sessionMap = new ConcurrentHashMap<>(1024);
 
 
     /**
      * 添加会话
      */
-    public static void addSession(AbstractSession session) {
+    public static void addSession(Session session) {
         String openId = session.getOpenId();
         if (openId != null) {
             sessionMap.put(openId, session);
@@ -47,7 +47,7 @@ public class ChannelSupervise {
     /**
      * 获取会话
      */
-    public static AbstractSession getSession(String openId) {
+    public static Session getSession(String openId) {
         return sessionMap.get(openId);
     }
 
@@ -62,25 +62,15 @@ public class ChannelSupervise {
     /**
      * @param channel 添加用户管道
      */
-    public static void addChannel(Channel channel) {
+    public static void  addChannel(Channel channel) {
         GlobalGroup.add(channel);
     }
 
     /**
      * 移除用户的会话
      */
-    public static void removeSession(AbstractSession session) {
-       if (session!=null){
-           Channel channel = session.getChannel();
-           if (channel!=null){
-               channel.close();
-               GlobalGroup.remove(channel);
-           }
-           String openId = session.getOpenId();
-           if (openId!=null){
-               sessionMap.remove(openId);
-           }
-       }
+    public static void removeSession(Channel channel) {
+
     }
 
     /**

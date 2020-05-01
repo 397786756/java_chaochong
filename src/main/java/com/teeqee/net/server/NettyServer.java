@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -46,7 +47,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
      */
     private static Channel serverChannel;
 
-    @Autowired
+    @Resource
     private WebsocketServerHandler websocketServerHandler;
 
     @Override

@@ -1,7 +1,5 @@
 package com.teeqee.spring.dispatcher.servlet.login;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
@@ -10,12 +8,11 @@ import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
-import com.teeqee.net.handler.AbstractSession;
+import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
-import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +37,7 @@ public class Login {
 
     @Dispather(value = "login")
     public JSONObject login(MethodModel model) {
-        AbstractSession session = model.getSession();
+        Session session = model.getSession();
         //判断是否有重复登录
         PlayerData playerData = session.getPlayerData();
         if (playerData ==null){
@@ -107,7 +104,7 @@ public class Login {
      */
     @Dispather(value = "userinfor")
     public boolean userinfor(MethodModel model){
-        AbstractSession session = model.getSession();
+        Session session = model.getSession();
         String openId = session.getOpenId();
         if (openId!=null){
             PlayerInfo playerInfo = session.getPlayerInfo();

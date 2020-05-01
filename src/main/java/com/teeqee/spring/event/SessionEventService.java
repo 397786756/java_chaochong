@@ -1,6 +1,7 @@
 package com.teeqee.spring.event;
 
 
+import com.teeqee.net.handler.Session;
 import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
@@ -8,14 +9,14 @@ import io.netty.handler.codec.http.FullHttpRequest;
  * @Author: zhengsongjie
  * @Software: IntelliJ IDEA
  */
-public interface SessionEventService<T> {
+public interface SessionEventService {
 
 
-    void open(T session);
+    void open(Session session);
 
-    void close(T session);
+    void close(Session session);
 
-    void send(String msg, T session) throws Exception;
+    void send(String msg, Session session) throws Exception;
 
-    void exceptionCaught(T session);
+    void exceptionCaught(Session session);
 }

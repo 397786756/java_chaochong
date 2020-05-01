@@ -1,7 +1,5 @@
 package com.teeqee.spring.dispatcher.method;
 
-import com.alibaba.fastjson.JSONObject;
-import com.teeqee.net.handler.AbstractSession;
 import com.teeqee.spring.dispatcher.cmd.DispatcherCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.login.Login;
@@ -10,7 +8,6 @@ import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

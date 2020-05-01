@@ -6,7 +6,7 @@ import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import io.netty.channel.Channel;
-import io.netty.channel.SimpleChannelInboundHandler;
+
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,22 +18,41 @@ import java.util.Map;
  * @Software: IntelliJ IDEA
  */
 
-public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
-
-
+public class Session<T>  {
     /**因为超宠是登录后再传openId的*/
     private String openid;
     /**平台*/
-    private String pingTai;
-
+    private Integer pingTai;
+    /**channel*/
     private Channel channel;
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public void setChannel(Channel channel) {
+        this.channel = channel;
+    }
+
     /** 是否已经传openId并且登录*/
     private boolean loginStatus;
     /**登录的时间*/
     private Date loginTime=new Date();
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
     /**存对象*/
     private Map<String, Object> keyToAttrs = new HashMap<>();
 
+  public String getId(){
+      return openid;
+  }
 
     /**
      * @param openid 玩家的openid 标记着已经登录了
@@ -44,6 +63,7 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
             loginStatus=true;
         }
     }
+
 
     public boolean isLoginStatus() {
         return loginStatus;
@@ -63,16 +83,6 @@ public abstract class AbstractSession<T> extends SimpleChannelInboundHandler {
 
     public String getOpenId() {
         return openid;
-    }
-
-
-
-    public Channel getChannel() {
-        return channel;
-    }
-
-    public void setChannel(Channel channel) {
-        this.channel = channel;
     }
 
     public Map<String, Object> getMap() {
