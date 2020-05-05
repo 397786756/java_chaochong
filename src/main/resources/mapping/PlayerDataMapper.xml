@@ -50,7 +50,7 @@
     data.taskdata,
     data.dartnum as dartnum,
     data.buildingdata as buildingdata,
-    data.step
+    data.step,
     info.avatar as avatar ,
     info.nickname as nickname
     from
