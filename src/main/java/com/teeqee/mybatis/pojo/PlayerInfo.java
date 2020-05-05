@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class PlayerInfo {
     private Integer uid;
@@ -28,6 +30,8 @@ public class PlayerInfo {
     private String language;
 
     private Integer channelid;
+
+    private Date createtime;
 
     public PlayerInfo(String openid) {
         this.openid = openid;

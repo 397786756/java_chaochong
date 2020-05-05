@@ -51,11 +51,16 @@ public class Login {
                     //获取数据
                     playerData = localLogin(openid);
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
-                    session.add(PlayerCmd.PLAYER_LOG,createPlayerLog(openid));
+                    PlayerLog playerLog = createPlayerLog(openid);
+                    session.add(PlayerCmd.PLAYER_LOG, playerLog);
+                    //玩家基本信息
+                    PlayerInfo playerInfo = createPlayerInfo(openid);
+                    session.add(PlayerCmd.PLAYER_INFO, playerInfo);
                     return playerData.loginPush();
                 }
             }
         }else {
+            //直接返回
             return playerData.loginPush();
         }
         return null;
@@ -171,5 +176,18 @@ public class Login {
         }
         return playerLog;
     }
-
+    /**
+     * @param openId 用户的id
+     * @return 返回用户的数据源
+     */
+    private PlayerInfo createPlayerInfo(String openId) {
+        PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(openId);
+        if (playerInfo==null){
+            playerInfo=new PlayerInfo();
+            playerInfo.setOpenid(openId);
+            playerInfo.setCreatetime(new Date());
+            playerInfoMapper.insertSelective(playerInfo);
+        }
+        return playerInfo;
+    }
 }
