@@ -34,13 +34,10 @@ public class MethodMapper implements CommandLineRunner{
         if (function!=null){
             Object apply = function.apply(model);
             //结果集可能不返回
-            if (apply!=null){
-                return new Result(cmd, apply);
-            }
+            return new Result(cmd, apply);
         }else {
             return new Result("error","undefined "+cmd);
         }
-        return null;
     }
 
     @Override
@@ -65,5 +62,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.GET_DARTBOARD,map->playerUpdate.getdartboard(map));
         /**更新新手引导步数*/
         map.put(DispatcherCmd.ENDOFGUIDE,map->playerUpdate.endofguide(map));
+        /**更新新手引导步数*/
+        map.put(DispatcherCmd.CLOSE_SOUND,map->playerUpdate.closesound(map));
+        /**更新新手引导步数*/
+        map.put(DispatcherCmd.OPEN_SOUND,map->playerUpdate.opensound(map));
     }
 }

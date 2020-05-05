@@ -25,7 +25,8 @@ public class PlayerUpdate {
      */
     @Dispather(value = "newheart")
     public JSONObject newheart(MethodModel model){
-       return model.getSession().getPlayerData().newheart(model.getData());
+        JSONObject data = model.getData();
+        return model.getSession().getPlayerData().newheart(data);
     }
 
 
@@ -39,14 +40,21 @@ public class PlayerUpdate {
 
     /**更新新手引导*/
     @Dispather(value = "endofguide")
-    public JSONObject endofguide(MethodModel model){
+    public Boolean endofguide(MethodModel model){
         JSONObject data = model.getData();
-        if (data!=null){
-            Integer step = data.getInteger("step");
-            if (step!=null){
-                 model.getSession().getPlayerData().endofguide(step);
-            }
-        }
-        return null;
+        Integer step = data.getInteger("step");
+        return model.getSession().getPlayerData().endofguide(step);
+    }
+
+    /**关闭声音*/
+    @Dispather(value = "closesound")
+    public Boolean closesound(MethodModel model){
+        return model.getSession().getPlayerData().closesound();
+    }
+
+    /**开启声音*/
+    @Dispather(value = "opensound")
+    public Boolean opensound(MethodModel model){
+        return model.getSession().getPlayerData().opensound();
     }
 }

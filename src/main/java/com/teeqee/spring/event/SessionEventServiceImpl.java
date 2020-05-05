@@ -55,10 +55,10 @@ public class SessionEventServiceImpl implements SessionEventService {
                     playerLog.messageNumAdd();
                 }
                 JSONObject data = jsonObject.getJSONObject("data");
-                //新建一个会话
+                //新建一个数据源
                 MethodModel methodModel = new MethodModel(cmd, data, session);
                 Result result = methodMapper.run(methodModel);
-                if (result!=null){
+                if (result!=null&&result.getData()!=null){
                     ChannelSupervise.sendToUser(session.getChannel().id(), result);
                 }
             }

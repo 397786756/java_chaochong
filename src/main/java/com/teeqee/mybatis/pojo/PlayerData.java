@@ -383,13 +383,29 @@ public class PlayerData {
     }
 
     /**更新新手引导*/
-    public void endofguide(Integer step){
+    public Boolean endofguide(Integer step){
         if (step>0){
             if (step>this.step){
                 this.step=step;
             }
         }
+        return null;
     }
+
+
+
+    /**开启声音*/
+    public Boolean opensound(){
+        this.sound=1;
+        return null;
+    }
+
+    /**关闭声音*/
+    public Boolean closesound(){
+        this.sound=0;
+        return null;
+    }
+
 }
 
 /**

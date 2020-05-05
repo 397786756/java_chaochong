@@ -26,4 +26,8 @@ public class DispatcherCmd {
     public static final String GET_DARTBOARD= "getdartboard";
     /**更新新手引导步数*/
     public static final String ENDOFGUIDE="endofguide";
+    /**开启声音*/
+    public static final String OPEN_SOUND="opensound";
+    /**关闭声音*/
+    public static final String CLOSE_SOUND="closesound";
 }
