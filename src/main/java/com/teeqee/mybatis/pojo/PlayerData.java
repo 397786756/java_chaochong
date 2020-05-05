@@ -383,14 +383,12 @@ public class PlayerData {
     }
 
     /**更新新手引导*/
-    public boolean endofguide(Integer step){
+    public void endofguide(Integer step){
         if (step>0){
             if (step>this.step){
                 this.step=step;
-                return true;
             }
         }
-        return false;
     }
 }
 

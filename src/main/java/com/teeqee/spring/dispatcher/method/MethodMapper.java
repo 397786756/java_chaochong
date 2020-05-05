@@ -33,7 +33,10 @@ public class MethodMapper implements CommandLineRunner{
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
             Object apply = function.apply(model);
-            return new Result(cmd, apply);
+            //结果集可能不返回
+            if (apply!=null){
+                return new Result(cmd, apply);
+            }
         }
         return new Result("error","undefined "+cmd);
     }
