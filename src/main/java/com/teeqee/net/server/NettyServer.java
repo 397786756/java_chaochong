@@ -2,9 +2,13 @@ package com.teeqee.net.server;
 
 
 import com.teeqee.net.gm.ChannelSupervise;
+import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
+import com.teeqee.net.handler.Session;
 import com.teeqee.net.handler.WebsocketServerHandler;
+import com.teeqee.spring.event.SessionEventService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -25,6 +29,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -49,6 +54,8 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
 
     @Resource
     private WebsocketServerHandler websocketServerHandler;
+    @Resource
+    private SessionEventService sessionEventService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -58,9 +65,9 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     /**
      * 自动关闭当前server
      */
-    private void closeServer() {
+    private void closeServer() throws Exception{
         if (serverChannel != null) {
-            serverChannel.close();
+            destroy();
             LOGGER.info("netty  gameserver close bye");
         }
     }
@@ -131,10 +138,18 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
 
     @Override
     public void destroy() throws Exception {
-        //发送消息
-
-        //处理用户数据
-
+        playerDataUpdate();
         close();
+    }
+
+    /**处理用户数据*/
+    private void playerDataUpdate(){
+        ChannelGroup globalGroup = ChannelSupervise.getGlobalGroup();
+        for (Channel channel : globalGroup) {
+            Session session = channel.attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get();
+            if (session != null) {
+                sessionEventService.close(session);
+            }
+        }
     }
 }

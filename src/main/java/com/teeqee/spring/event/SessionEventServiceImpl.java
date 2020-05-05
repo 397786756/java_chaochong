@@ -8,15 +8,12 @@ import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.net.gm.ChannelSupervise;
-import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.result.Result;
-import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;

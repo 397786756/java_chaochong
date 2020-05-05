@@ -52,4 +52,8 @@ public class ChannelSupervise {
             channel.writeAndFlush(textWebSocketFrame);
         }
     }
+
+    public static ChannelGroup getGlobalGroup() {
+        return GlobalGroup;
+    }
 }
