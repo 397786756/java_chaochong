@@ -77,7 +77,7 @@ public class SessionEventServiceImpl implements SessionEventService {
     }
 
 
-
+    /**用户退出*/
     private void offLine(Session session){
         logger.info("client close={}", session.getId());
         logger.info("update playerInfo");

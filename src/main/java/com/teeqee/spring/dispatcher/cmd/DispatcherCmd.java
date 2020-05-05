@@ -22,4 +22,6 @@ public class DispatcherCmd {
     public static final String NEW_HEART= "newheart";
     /**拉取建筑*/
     public static final String GET_BUILDING= "getbuilding";
+    /**拉取幸运转盘*/
+    public static final String GET_DARTBOARD= "dartboard";
 }

@@ -109,6 +109,8 @@ public class Login {
             if (playerInfo!=null){
                 return playerInfo.updateUserInfo(model.getData());
             }else {
+                //这边可以直接不查询sql
+                //TODO
                 PlayerInfo playerInfoMysql = playerInfoMapper.selectByPrimaryKey(openId);
                 if (playerInfoMysql==null){
                     playerInfoMysql=new PlayerInfo(openId);

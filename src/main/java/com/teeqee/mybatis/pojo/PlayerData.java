@@ -271,7 +271,7 @@ public class PlayerData {
             if (taskdata!=null){
                 updateTaskdata(taskdata);
             }
-            //我也不知道干嘛
+            //看样子像建筑
             JSONArray buildingdata = data.getJSONArray("buildingdata");
              //动物的位置
             JSONArray animaldata = data.getJSONArray("animaldata");
@@ -371,4 +371,28 @@ public class PlayerData {
     }
 
 
+    /**获取幸运转盘*/
+    public JSONObject getdartboard(){
+          String jsonKey="dartboard";
+        Dartboard dartboard = new Dartboard();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put(jsonKey, dartboard);
+        return jsonObject;
+    }
+
+}
+
+/**
+ * 不用看了 我是幸运转盘
+ */
+@Data
+class Dartboard{
+    private int amount1;
+    private int amount2;
+    private int amount3;
+    private int amount4;
+    private int amount5;
+    private int amount6;
+    private int amount7;
+    private int amount8;
 }

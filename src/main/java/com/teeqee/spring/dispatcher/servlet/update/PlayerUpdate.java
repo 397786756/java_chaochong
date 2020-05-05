@@ -27,4 +27,14 @@ public class PlayerUpdate {
     public JSONObject newheart(MethodModel model){
        return model.getSession().getPlayerData().newheart(model.getData());
     }
+
+
+    /**
+     * 获取幸运大转盘
+     */
+    @Dispather(value = "getdartboard")
+    public JSONObject getdartboard(MethodModel model){
+        return model.getSession().getPlayerData().getdartboard();
+    }
+
 }
