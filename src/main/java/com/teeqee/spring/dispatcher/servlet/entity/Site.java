@@ -1,6 +1,7 @@
 package com.teeqee.spring.dispatcher.servlet.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import lombok.Data;
 import lombok.ToString;
 
 /**
@@ -9,27 +10,12 @@ import lombok.ToString;
  */
 
 @ToString
+@Data
 public class Site {
     @JSONField(name="siteid")
     private int s;
     @JSONField(name="animalid")
     private int a;
-
-    public int getS() {
-        return s;
-    }
-
-    public int getA() {
-        return a;
-    }
-
-    public void setS(int s) {
-        this.s = s;
-    }
-
-    public void setA(int a) {
-        this.a = a;
-    }
 
     public Site(int s, int a) {
         this.s = s;
