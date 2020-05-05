@@ -23,7 +23,7 @@ import java.util.Date;
 
 @DataSourceType("login")
 @Service
-public class Login {
+public class PlayerLogin {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**playerData dao*/
@@ -182,6 +182,8 @@ public class Login {
         if (playerInfo==null){
             playerInfo=new PlayerInfo();
             playerInfo.setOpenid(openId);
+            //设置个渠道
+            playerInfo.setChannelid(1000);
             playerInfo.setCreatetime(new Date());
             playerInfoMapper.insertSelective(playerInfo);
         }

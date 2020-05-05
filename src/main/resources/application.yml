@@ -24,6 +24,7 @@ mybatis:
     call-setters-on-nulls: true
     map-underscore-to-camel-case: true
     cache-enabled: true
+rankTask: 5 #排行榜每五分钟
 #mybatis分页插件
 # pagehelper:
 #   helperDialect: mysql

@@ -2,12 +2,10 @@ package com.teeqee.spring.dispatcher.method;
 
 import com.teeqee.spring.dispatcher.cmd.DispatcherCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
-import com.teeqee.spring.dispatcher.servlet.login.Login;
-import com.teeqee.spring.dispatcher.servlet.rank.RedisRank;
+import com.teeqee.spring.dispatcher.servlet.login.PlayerLogin;
+import com.teeqee.spring.dispatcher.servlet.rank.PlayerRank;
 import com.teeqee.spring.dispatcher.servlet.update.PlayerUpdate;
 import com.teeqee.spring.result.Result;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -20,13 +18,13 @@ import java.util.function.Function;
 public class MethodMapper implements CommandLineRunner{
     /**login push*/
     @Resource
-    private Login login;
+    private PlayerLogin playerLogin;
     /**update*/
     @Resource
     private PlayerUpdate playerUpdate;
     /**rank*/
     @Resource
-    private RedisRank redisRank;
+    private PlayerRank playerRank;
     /**method map*/
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
 
@@ -44,21 +42,21 @@ public class MethodMapper implements CommandLineRunner{
     @Override
     public void run(String... args) {
         /**用户登录*/
-        map.put(DispatcherCmd.LOGIN,map->login.login(map));
+        map.put(DispatcherCmd.LOGIN,map-> playerLogin.login(map));
         /**获取宠物的位置信息*/
-        map.put(DispatcherCmd.GET_SITE,map->login.getsite(map));
+        map.put(DispatcherCmd.GET_SITE,map-> playerLogin.getsite(map));
         /**拉取玩家动物信息*/
-        map.put(DispatcherCmd.GET_ANIMAL,map->login.getanimal(map));
+        map.put(DispatcherCmd.GET_ANIMAL,map-> playerLogin.getanimal(map));
         /**拉取任务信息*/
-        map.put(DispatcherCmd.GET_TASK,map->login.gettask(map));
+        map.put(DispatcherCmd.GET_TASK,map-> playerLogin.gettask(map));
         /**修改头像昵称语言 返回空信息*/
-        map.put(DispatcherCmd.USER_INFOR,map->login.userinfor(map));
+        map.put(DispatcherCmd.USER_INFOR,map-> playerLogin.userinfor(map));
         /**从后端中拉取缓存*/
-        map.put(DispatcherCmd.GET_CACHE,map->login.getcache(map));
+        map.put(DispatcherCmd.GET_CACHE,map-> playerLogin.getcache(map));
         /**很长很大的心跳包*/
         map.put(DispatcherCmd.NEW_HEART,map->playerUpdate.newheart(map));
         /**拉取建筑*/
-        map.put(DispatcherCmd.GET_BUILDING,map->login.getbuilding(map));
+        map.put(DispatcherCmd.GET_BUILDING,map-> playerLogin.getbuilding(map));
         /**拉取幸运转盘*/
         map.put(DispatcherCmd.GET_DARTBOARD,map->playerUpdate.getdartboard(map));
         /**更新新手引导步数*/
@@ -82,6 +80,6 @@ public class MethodMapper implements CommandLineRunner{
         /**玩家分享得打榜次数*/
         map.put(DispatcherCmd.SHARE_FOR_CHALLENGE,map->playerUpdate.shareforchallenge(map));
         /**玩家分享得打榜次数*/
-        map.put(DispatcherCmd.TOP_LISTMISSNUM,map->redisRank.toplistmissnum(map));
+        map.put(DispatcherCmd.TOP_LISTMISSNUM,map->playerRank.toplistmissnum(map));
     }
 }
