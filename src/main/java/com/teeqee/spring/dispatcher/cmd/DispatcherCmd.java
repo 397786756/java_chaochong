@@ -24,4 +24,6 @@ public class DispatcherCmd {
     public static final String GET_BUILDING= "getbuilding";
     /**拉取幸运转盘*/
     public static final String GET_DARTBOARD= "getdartboard";
+    /**更新新手引导步数*/
+    public static final String ENDOFGUIDE="endofguide";
 }

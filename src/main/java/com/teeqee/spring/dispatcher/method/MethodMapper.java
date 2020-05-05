@@ -56,7 +56,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.NEW_HEART,map->playerUpdate.newheart(map));
         /**拉取建筑*/
         map.put(DispatcherCmd.GET_BUILDING,map->login.getbuilding(map));
-        /**拉取建筑*/
+        /**拉取幸运转盘*/
         map.put(DispatcherCmd.GET_DARTBOARD,map->playerUpdate.getdartboard(map));
+        /**更新新手引导步数*/
+        map.put(DispatcherCmd.ENDOFGUIDE,map->playerUpdate.endofguide(map));
     }
 }

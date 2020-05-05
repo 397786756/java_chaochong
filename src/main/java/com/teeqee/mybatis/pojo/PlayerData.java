@@ -76,6 +76,8 @@ public class PlayerData {
     private Integer dartnum;
     /**建筑data*/
     private String buildingdata;
+    /**引导步数*/
+    private Integer step=0;
 
     /**头像*/
     private String avatar="";
@@ -380,6 +382,16 @@ public class PlayerData {
         return jsonObject;
     }
 
+    /**更新新手引导*/
+    public boolean endofguide(Integer step){
+        if (step>0){
+            if (step>this.step){
+                this.step=step;
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 /**

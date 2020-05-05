@@ -37,4 +37,16 @@ public class PlayerUpdate {
         return model.getSession().getPlayerData().getdartboard();
     }
 
+    /**更新新手引导*/
+    @Dispather(value = "endofguide")
+    public boolean endofguide(MethodModel model){
+        JSONObject data = model.getData();
+        if (data!=null){
+            Integer step = data.getInteger("step");
+            if (step!=null){
+                return model.getSession().getPlayerData().endofguide(step);
+            }
+        }
+        return false;
+    }
 }
