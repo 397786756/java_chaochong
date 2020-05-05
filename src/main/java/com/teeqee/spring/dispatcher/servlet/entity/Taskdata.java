@@ -9,7 +9,7 @@ import lombok.ToString;
  * @Author: zhengsongjie
  * @Software: IntelliJ IDEA
  */
-@Data
+
 @ToString
 public class Taskdata {
     @JSONField(name="taskid")
@@ -18,10 +18,33 @@ public class Taskdata {
     private Integer n;
     @JSONField(name="done")
     private Integer d;
-
     public Taskdata(Integer t, Integer n, Integer d) {
         this.t = t;
         this.n = n;
+        this.d = d;
+    }
+
+    public Integer getT() {
+        return t;
+    }
+
+    public void setT(Integer t) {
+        this.t = t;
+    }
+
+    public Integer getN() {
+        return n;
+    }
+
+    public void setN(Integer n) {
+        this.n = n;
+    }
+
+    public Integer getD() {
+        return d;
+    }
+
+    public void setD(Integer d) {
         this.d = d;
     }
 }

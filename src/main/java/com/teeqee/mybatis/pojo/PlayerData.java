@@ -35,13 +35,13 @@ public class PlayerData {
     /**最高级动物的等级*/
     private Integer biggestanimalid;
     /**vip的等级*/
-    private Integer viplv;
+    private Integer viplv=0;
     /**今天有没有领取vip奖励*/
-    private Integer vipreward;
+    private Integer vipreward=0;
     /**vip点数*/
-    private Integer vip;
+    private Integer vip=0;
     /**玩家当前VIP邀请人数*/
-    private Integer invitevip;
+    private Integer invitevip=0;
     /**今日是否签到*/
     private Boolean todaysign;
     /**玩家总共签到次数*/
