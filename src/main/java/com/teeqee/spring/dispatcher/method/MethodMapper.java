@@ -71,5 +71,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.SIGN,map->playerUpdate.sign(map));
         /**通关统计*/
         map.put(DispatcherCmd.ROUNDS,map->playerUpdate.rounds(map));
+        /**更新玩家话费数量*/
+        map.put(DispatcherCmd.UPDATE_PHONEFARENUMBER,map->playerUpdate.updatephonefarenumber(map));
     }
 }

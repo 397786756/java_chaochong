@@ -79,4 +79,9 @@ public class PlayerUpdate {
     public JSONObject rounds(MethodModel model) {
         return model.getSession().getPlayerData().rounds(model.getData());
     }
+    /**话费增加*/
+    @Dispather(value = "updatephonefarenumber")
+    public Boolean updatephonefarenumber(MethodModel model) {
+        return model.getSession().getPlayerData().updatephonefarenumber(model.getData().getDouble("addphonefarenumber"));
+    }
 }

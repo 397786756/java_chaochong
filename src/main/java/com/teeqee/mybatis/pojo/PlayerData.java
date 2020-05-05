@@ -430,6 +430,8 @@ public class PlayerData {
         json.put("golddata", jsonObject);
         return json;
     }
+
+
     /**通关统计(爬塔)*/
     public JSONObject rounds(JSONObject jsonObject){
         if (jsonObject!=null&&jsonObject.size()>0){
@@ -455,6 +457,14 @@ public class PlayerData {
         if (type!=null&&!todaysign){
             this.todaysign=true;
             this.weeksign+=1;
+        }
+        return null;
+    }
+
+    /**增加话费 话费是double*/
+    public Boolean updatephonefarenumber(Double addphonefarenumber){
+        if (addphonefarenumber!=null&&addphonefarenumber>0){
+            this.phonefarenumber+=addphonefarenumber.intValue();
         }
         return null;
     }

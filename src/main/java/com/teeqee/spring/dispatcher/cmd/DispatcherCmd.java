@@ -38,4 +38,6 @@ public class DispatcherCmd {
     public static final String SIGN="sign";
     /**通关统计*/
     public static final String ROUNDS="rounds";
+    /**更新玩家话费数量*/
+    public static final String UPDATE_PHONEFARENUMBER="updatephonefarenumber";
 }

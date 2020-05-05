@@ -1,5 +1,6 @@
 package com.teeqee;
 
+import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -19,7 +20,9 @@ import java.util.function.Function;
 public class ChaoChongMap {
     public HashMap<String, Function> functionHashMap=new HashMap<>();
     public static void main(String[] args) {
-
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("double", 2.555D);
+        System.out.println(jsonObject.getInteger("double"));
     }
 }
 
