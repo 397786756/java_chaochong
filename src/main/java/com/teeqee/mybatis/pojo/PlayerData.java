@@ -3,6 +3,7 @@ package com.teeqee.mybatis.pojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 
@@ -472,5 +473,12 @@ public class PlayerData {
     /**更新玩家显示领取话费*/
     public Integer updatephonefare(){
         return null;
+    }
+
+    /**更新玩家显示领取话费*/
+    public JSONObject shareforchallenge(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("rankchallengenum", rankchallengenum);
+        return jsonObject;
     }
 }

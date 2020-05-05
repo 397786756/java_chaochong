@@ -89,4 +89,9 @@ public class PlayerUpdate {
     public Integer updatephonefare(MethodModel model) {
         return model.getSession().getPlayerData().updatephonefare();
     }
+    /**玩家分享得打榜次数*/
+    @Dispather(value = "shareforchallenge")
+    public JSONObject shareforchallenge(MethodModel model) {
+        return model.getSession().getPlayerData().shareforchallenge();
+    }
 }

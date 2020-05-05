@@ -42,4 +42,6 @@ public class DispatcherCmd {
     public static final String UPDATE_PHONEFARENUMBER="updatephonefarenumber";
     /**更新玩家显示领取话费*/
     public static final String UPDATE_PHONEFARE="updatephonefare";
+    /**玩家分享得打榜次数*/
+    public static final String SHARE_FOR_CHALLENGE = "shareforchallenge";
 }
