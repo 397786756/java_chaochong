@@ -46,4 +46,8 @@ public class DispatcherCmd {
     public static final String SHARE_FOR_CHALLENGE = "shareforchallenge";
     /**玩家未射中排行榜*/
     public static final String TOP_LISTMISSNUM = "toplistmissnum";
+    /**玩家领取vip*/
+    public static final String REWARD_VIP = "rewardvip";
+    /**玩家观看视频增加vip等级*/
+    public static final String VIDEO_FOR_VIP = "videoforvip";
 }

@@ -48,6 +48,8 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
         return missRankInfos;
     }
 
+
+    /**玩家排行榜的热更新*/
     @Scheduled(cron = "0/60 * * * * ?")
     public void task(){
 

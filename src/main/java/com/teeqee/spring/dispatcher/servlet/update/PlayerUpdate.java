@@ -94,4 +94,15 @@ public class PlayerUpdate {
     public JSONObject shareforchallenge(MethodModel model) {
         return model.getSession().getPlayerData().shareforchallenge();
     }
+    /**玩家领取vip*/
+    @Dispather(value = "rewardvip")
+    public Boolean rewardvip(MethodModel model) {
+        return model.getSession().getPlayerData().rewardvip();
+    }
+
+    /**玩家观看视频增加vip等级*/
+    @Dispather(value = "videoforvip")
+    public JSONObject videoforvip(MethodModel model) {
+        return model.getSession().getPlayerData().videoforvip();
+    }
 }

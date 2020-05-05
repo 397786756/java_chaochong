@@ -276,6 +276,9 @@ public class PlayerData {
             }
             //看样子像建筑
             JSONArray buildingdata = data.getJSONArray("buildingdata");
+            if (buildingdata!=null){
+                updateBuildingdata(buildingdata);
+            }
              //动物的位置
             JSONArray animaldata = data.getJSONArray("animaldata");
             if (animaldata!=null){
@@ -310,6 +313,26 @@ public class PlayerData {
             return data;
         }
         return new JSONObject();
+    }
+
+    /**修改建筑data*/
+    //TODO 和登录获取的建筑data数据类型不一样
+    //原 {
+    //                "buildingid": 6,    //建筑id    (孵化器)
+    //                "buildinglv": 1,    //建筑等级
+    //                "successodds": 0,   //升级祭坛的成功率
+    //            }
+    //现在
+    //         {
+    //          "dataid"://本条数据唯一标识
+    //          "uid"://玩家uid
+    //          "buildingid"://建筑id
+    //          "buildinglv"://能力等级
+    //          }
+    private void updateBuildingdata(JSONArray buildingdata) {
+        if (buildingdata.size()>0){
+            int size = buildingdata.size();
+        }
     }
 
     /**
@@ -482,6 +505,28 @@ public class PlayerData {
     public JSONObject shareforchallenge(){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("rankchallengenum", rankchallengenum);
+        return jsonObject;
+    }
+
+    /**玩家领取vip*/
+    public Boolean rewardvip() {
+        if (vipreward==0){
+            vipreward=1;
+        }
+        return null;
+    }
+
+    /**玩家观看视频增加vip等级*/
+    public JSONObject videoforvip() {
+        JSONObject jsonObject = new JSONObject(4);
+        //玩家当前VIP等级
+        jsonObject.put("viplv", viplv);
+        //玩家当前VIP点数
+        jsonObject.put("vip", vip);
+        //玩家当前VIP邀请人数
+        jsonObject.put("invitevip", invitevip);
+        //玩家今日是否领取vip奖励
+        jsonObject.put("vipreward", vipreward);
         return jsonObject;
     }
 }

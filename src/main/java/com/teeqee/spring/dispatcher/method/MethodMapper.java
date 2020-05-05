@@ -79,7 +79,11 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.UPDATE_PHONEFARE,map->playerUpdate.updatephonefare(map));
         /**玩家分享得打榜次数*/
         map.put(DispatcherCmd.SHARE_FOR_CHALLENGE,map->playerUpdate.shareforchallenge(map));
-        /**玩家分享得打榜次数*/
+        /**玩家领取vip*/
+        map.put(DispatcherCmd.REWARD_VIP,map->playerUpdate.rewardvip(map));
+        /**未命中排行榜*/
         map.put(DispatcherCmd.TOP_LISTMISSNUM,map->playerRank.toplistmissnum(map));
+        /**玩家观看视频增加vip等级*/
+        map.put(DispatcherCmd.VIDEO_FOR_VIP,map->playerUpdate.videoforvip(map));
     }
 }
