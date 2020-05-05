@@ -241,7 +241,6 @@ public class PlayerData {
         if (taskdata==null){
             this.taskdata=StaticData.TASK_DATA;
         }
-        logger.info("playerTask:{}", taskdata);
         JSONArray jsonArray = JSONArray.parseArray(taskdata);
         JSONArray returnArray = new JSONArray();
         for (Object o : jsonArray) {
@@ -253,7 +252,6 @@ public class PlayerData {
             returnArray.add(JSON.toJSON(taskdata));
         }
         JSONObject jsonObject = new JSONObject();
-        logger.info("taskJsonArray:{}", returnArray);
         jsonObject.put(PlayerCmd.TASK_DATA, returnArray);
         return jsonObject;
     }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teeqee.mybatis.dao.ServerInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.ServerInfo" >
+    <id column="uuid" property="uuid" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
+    <result column="open_time" property="openTime" jdbcType="TIMESTAMP" />
+    <result column="video_time" property="videoTime" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    uuid, channel_id, chinese_name, open_time, video_time
+  </sql>
+  <select id="serverInfoList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from server_info
+  </select>
+</mapper>

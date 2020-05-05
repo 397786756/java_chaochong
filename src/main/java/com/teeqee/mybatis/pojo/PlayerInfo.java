@@ -87,4 +87,12 @@ public class PlayerInfo {
         return false;
     }
 
+    /**获取昵称*/
+    public String getMyNickName(){
+        return nickname==null?"未授权玩家":nickname;
+    }
+    /**获取头像url*/
+    public String getMyAvatar(){
+        return avatar==null?"":avatar;
+    }
 }
