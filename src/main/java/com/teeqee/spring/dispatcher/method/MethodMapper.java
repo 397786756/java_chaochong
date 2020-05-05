@@ -37,8 +37,10 @@ public class MethodMapper implements CommandLineRunner{
             if (apply!=null){
                 return new Result(cmd, apply);
             }
+        }else {
+            return new Result("error","undefined "+cmd);
         }
-        return new Result("error","undefined "+cmd);
+        return null;
     }
 
     @Override
