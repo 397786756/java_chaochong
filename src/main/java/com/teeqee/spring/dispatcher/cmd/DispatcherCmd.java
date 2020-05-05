@@ -36,4 +36,6 @@ public class DispatcherCmd {
     public static final String GET_VIP="getvip";
     /**签到*/
     public static final String SIGN="sign";
+    /**通关统计*/
+    public static final String ROUNDS="rounds";
 }

@@ -30,9 +30,8 @@ public class MethodMapper implements CommandLineRunner{
         String cmd = model.getCmd();
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
-            Object apply = function.apply(model);
             //结果集可能不返回
-            return new Result(cmd, apply);
+            return new Result(cmd, function.apply(model));
         }else {
             return new Result("error","undefined "+cmd);
         }
@@ -70,5 +69,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.GET_VIP,map->playerUpdate.getvip(map));
         /**签到*/
         map.put(DispatcherCmd.SIGN,map->playerUpdate.sign(map));
+        /**通关统计*/
+        map.put(DispatcherCmd.ROUNDS,map->playerUpdate.rounds(map));
     }
 }

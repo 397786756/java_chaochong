@@ -63,16 +63,20 @@ public class PlayerUpdate {
     public JSONObject getactive(MethodModel model){
         return model.getSession().getPlayerData().getactive();
     }
-    /**玩家获取自己vip相关信息
-     * 不能使用get方法作为普通方法
-     * */
+    /**玩家获取自己vip相关信息 不能使用get方法作为普通方法*/
     @Dispather(value = "getvip")
     public JSONObject getvip(MethodModel model) {
         return model.getSession().getPlayerData().getvipInfo();
     }
+    /**玩家领取离线奖励*/
     @Dispather(value = "sign")
     public Boolean sign(MethodModel model) {
         Integer type = model.getData().getInteger("type");
         return model.getSession().getPlayerData().sign(type);
+    }
+    /**通关统计*/
+    @Dispather(value = "rounds")
+    public JSONObject rounds(MethodModel model) {
+        return model.getSession().getPlayerData().rounds(model.getData());
     }
 }

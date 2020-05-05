@@ -420,6 +420,35 @@ public class PlayerData {
         return jsonObject;
     }
 
+
+    /**返回用户的金币和钻石*/
+    public JSONObject goldAndDiamondInfo(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("gold", gold);
+        jsonObject.put("diamond", diamond);
+        JSONObject json = new JSONObject();
+        json.put("golddata", jsonObject);
+        return json;
+    }
+    /**通关统计(爬塔)*/
+    public JSONObject rounds(JSONObject jsonObject){
+        if (jsonObject!=null&&jsonObject.size()>0){
+            //是否顺利通关 0代表未通关 1代表通关
+            Integer success = jsonObject.getInteger("success");
+            //获取的金币数量
+            Integer gold = jsonObject.getInteger("gold");
+            if (success==1){
+                this.sound+=1;
+            }
+            if (gold!=null&&gold>0){
+                this.gold+=gold;
+            }
+            //返回金币和钻石
+          return goldAndDiamondInfo();
+        }
+        return null;
+    }
+
     /**签到*/
     public Boolean sign(Integer type){
         //如果今天没有签到
