@@ -468,4 +468,9 @@ public class PlayerData {
         }
         return null;
     }
+
+    /**更新玩家显示领取话费*/
+    public Integer updatephonefare(){
+        return null;
+    }
 }

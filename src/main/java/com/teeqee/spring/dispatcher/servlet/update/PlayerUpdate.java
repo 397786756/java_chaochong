@@ -84,4 +84,9 @@ public class PlayerUpdate {
     public Boolean updatephonefarenumber(MethodModel model) {
         return model.getSession().getPlayerData().updatephonefarenumber(model.getData().getDouble("addphonefarenumber"));
     }
+    /**更新玩家显示领取话费*/
+    @Dispather(value = "updatephonefare")
+    public Integer updatephonefare(MethodModel model) {
+        return model.getSession().getPlayerData().updatephonefare();
+    }
 }
