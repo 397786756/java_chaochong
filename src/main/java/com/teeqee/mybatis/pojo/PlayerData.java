@@ -3,13 +3,10 @@ package com.teeqee.mybatis.pojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
-
 import com.teeqee.spring.dispatcher.servlet.entity.*;
 import lombok.Data;
-
 import java.util.Date;
 import java.util.List;
 

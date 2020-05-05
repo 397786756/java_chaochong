@@ -3,8 +3,6 @@ package com.teeqee.mybatis.pojo;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 
 /**
  * 用户日志

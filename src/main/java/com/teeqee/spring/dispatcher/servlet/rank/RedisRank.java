@@ -28,9 +28,9 @@ public class RedisRank  {
         PlayerInfo playerInfo = model.getSession().getPlayerInfo();
         //获取渠道id
         Integer channelid = playerInfo.getChannelid();
-        System.out.println(redisTemplate);
+        System.out.println(redisTemplate.toString());
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("redis", redisTemplate);
+        jsonObject.put("redis", redisTemplate.toString());
         return jsonObject;
     }
 }

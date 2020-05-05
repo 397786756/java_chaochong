@@ -2,7 +2,6 @@ package com.teeqee.mybatis.pojo;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.teeqee.spring.dispatcher.model.MethodModel;
 import lombok.Data;
 
 import java.util.Date;

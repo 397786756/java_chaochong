@@ -51,11 +51,8 @@ public class Login {
                     //获取数据
                     playerData = localLogin(openid);
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
-                    PlayerLog playerLog = createPlayerLog(openid);
-                    session.add(PlayerCmd.PLAYER_LOG, playerLog);
-                    //玩家基本信息
-                    PlayerInfo playerInfo = createPlayerInfo(openid);
-                    session.add(PlayerCmd.PLAYER_INFO, playerInfo);
+                    session.add(PlayerCmd.PLAYER_LOG, createPlayerLog(openid));
+                    session.add(PlayerCmd.PLAYER_INFO,  createPlayerInfo(openid));
                     return playerData.loginPush();
                 }
             }
