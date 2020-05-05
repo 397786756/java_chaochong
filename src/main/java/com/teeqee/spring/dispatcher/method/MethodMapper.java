@@ -3,6 +3,7 @@ package com.teeqee.spring.dispatcher.method;
 import com.teeqee.spring.dispatcher.cmd.DispatcherCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.login.Login;
+import com.teeqee.spring.dispatcher.servlet.rank.RedisRank;
 import com.teeqee.spring.dispatcher.servlet.update.PlayerUpdate;
 import com.teeqee.spring.result.Result;
 import org.slf4j.Logger;
@@ -23,6 +24,9 @@ public class MethodMapper implements CommandLineRunner{
     /**update*/
     @Resource
     private PlayerUpdate playerUpdate;
+    /**rank*/
+    @Resource
+    private RedisRank redisRank;
     /**method map*/
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
 
@@ -75,7 +79,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.UPDATE_PHONEFARENUMBER,map->playerUpdate.updatephonefarenumber(map));
         /**更新玩家显示领取话费*/
         map.put(DispatcherCmd.UPDATE_PHONEFARE,map->playerUpdate.updatephonefare(map));
-        /**更新玩家显示领取话费*/
+        /**玩家分享得打榜次数*/
         map.put(DispatcherCmd.SHARE_FOR_CHALLENGE,map->playerUpdate.shareforchallenge(map));
+        /**玩家分享得打榜次数*/
+        map.put(DispatcherCmd.TOP_LISTMISSNUM,map->redisRank.toplistmissnum(map));
     }
 }
