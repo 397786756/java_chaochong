@@ -7,12 +7,16 @@ import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 import com.teeqee.spring.dispatcher.servlet.entity.*;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Date;
 import java.util.List;
 
 
 @Data
 public class PlayerData {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**玩家的uid*/
     private Integer uid;
     /**渠道的用户id*/
@@ -237,6 +241,7 @@ public class PlayerData {
         if (taskdata==null){
             this.taskdata=StaticData.TASK_DATA;
         }
+        logger.info("playerTask:{}", taskdata);
         JSONArray jsonArray = JSONArray.parseArray(taskdata);
         JSONArray returnArray = new JSONArray();
         for (Object o : jsonArray) {
@@ -248,6 +253,7 @@ public class PlayerData {
             returnArray.add(JSON.toJSON(taskdata));
         }
         JSONObject jsonObject = new JSONObject();
+        logger.info("taskJsonArray:{}", returnArray);
         jsonObject.put(PlayerCmd.TASK_DATA, returnArray);
         return jsonObject;
     }

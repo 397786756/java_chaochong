@@ -6,11 +6,10 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.spring.dispatcher.model.MethodModel;
-import com.teeqee.spring.dispatcher.servlet.entity.RankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.MissRankInfo;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,7 +31,7 @@ public class PlayerRank  {
         JSONObject jsonObject = new JSONObject();
         if (channelid!=null&&channelid>0){
             String toplistmissnum1 = "toplistmissnum";
-            List<RankInfo> toplistmissnum = redisService.getRankList(channelid, toplistmissnum1);
+            List<MissRankInfo> toplistmissnum = redisService.getRankList(channelid, toplistmissnum1);
             JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(toplistmissnum));
             jsonObject.put(toplistmissnum1,jsonArray);
         }

@@ -1,6 +1,6 @@
 package com.teeqee.spring.dispatcher.servlet.rank.service;
 
-import com.teeqee.spring.dispatcher.servlet.entity.RankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.MissRankInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -35,20 +35,20 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     @Resource
     private RedisTemplate redisTemplate;
     /**未名中的排行榜*/
-    private ConcurrentHashMap<String,List<RankInfo>> rankMap=new ConcurrentHashMap<>(16);
+    private ConcurrentHashMap<String,List<MissRankInfo>> rankMap=new ConcurrentHashMap<>(16);
 
     @Override
-    public List<RankInfo> getRankList(Integer pingTai, String redisKey) {
+    public List<MissRankInfo> getRankList(Integer pingTai, String redisKey) {
         //合并的key
         String addRedisKey=pingTai+"_"+redisKey;
-        List<RankInfo> rankInfos = rankMap.get(addRedisKey);
-        if (rankInfos==null){
+        List<MissRankInfo> missRankInfos = rankMap.get(addRedisKey);
+        if (missRankInfos==null){
 
         }
-        return rankInfos;
+        return missRankInfos;
     }
 
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0/60 * * * * ?")
     public void task(){
 
     }
@@ -66,9 +66,9 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
      */
     @Override
     public void run(String... args) throws Exception {
-        List<RankInfo> list = new ArrayList<>(16);
-        RankInfo rankInfo = new RankInfo(2,"玩家","", 20, 1L);
-        list.add(rankInfo);
+        List<MissRankInfo> list = new ArrayList<>(16);
+        MissRankInfo missRankInfo = new MissRankInfo(2,"玩家","", 20, 1L);
+        list.add(missRankInfo);
         rankMap.put("1000_toplistmissnum",list);
     }
 }

@@ -151,5 +151,6 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
                 sessionEventService.close(session);
             }
         }
+
     }
 }

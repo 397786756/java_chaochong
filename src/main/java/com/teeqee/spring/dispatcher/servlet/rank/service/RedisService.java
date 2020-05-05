@@ -1,6 +1,6 @@
 package com.teeqee.spring.dispatcher.servlet.rank.service;
 
-import com.teeqee.spring.dispatcher.servlet.entity.RankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.MissRankInfo;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface RedisService {
      * @param pingTai 平台id
      * @return 返回排行榜
      */
-     List<RankInfo> getRankList(Integer pingTai,String redisKey);
+     List<MissRankInfo> getRankList(Integer pingTai, String redisKey);
 }
