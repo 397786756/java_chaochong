@@ -18,13 +18,10 @@ public class Taskdata {
     private Integer n;
     @JSONField(name="done")
     private Integer d;
-    @JSONField(name="neednumber")
-    private Integer m;
 
-    public Taskdata(Integer t, Integer n, Integer d, Integer m) {
+    public Taskdata(Integer t, Integer n, Integer d) {
         this.t = t;
         this.n = n;
         this.d = d;
-        this.m=m;
     }
 }

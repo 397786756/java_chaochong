@@ -245,11 +245,7 @@ public class PlayerData {
             Integer d = jsonObject.getInteger("d");
             Integer t = jsonObject.getInteger("t");
             Integer n = jsonObject.getInteger("n");
-            Integer m = jsonObject.getInteger("m");
-            if (m==null){
-                m=0;
-            }
-            Taskdata taskdata = new Taskdata(t, n, d,m);
+            Taskdata taskdata = new Taskdata(t, n, d;
             returnArray.add(JSON.toJSON(taskdata));
         }
         JSONObject jsonObject = new JSONObject();
