@@ -34,4 +34,6 @@ public class DispatcherCmd {
     public static final String GET_ACTIVE="getactive";
     /**玩家获取自己vip相关信息*/
     public static final String GET_VIP="getvip";
+    /**签到*/
+    public static final String SIGN="sign";
 }

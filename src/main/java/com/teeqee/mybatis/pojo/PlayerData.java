@@ -419,4 +419,14 @@ public class PlayerData {
         jsonObject.put("vipreward", vipreward);
         return jsonObject;
     }
+
+    /**签到*/
+    public Boolean sign(Integer type){
+        //如果今天没有签到
+        if (type!=null&&!todaysign){
+            this.todaysign=true;
+            this.weeksign+=1;
+        }
+        return null;
+    }
 }

@@ -66,7 +66,13 @@ public class PlayerUpdate {
     /**玩家获取自己vip相关信息
      * 不能使用get方法作为普通方法
      * */
+    @Dispather(value = "getvip")
     public JSONObject getvip(MethodModel model) {
         return model.getSession().getPlayerData().getvipInfo();
+    }
+    @Dispather(value = "sign")
+    public Boolean sign(MethodModel model) {
+        Integer type = model.getData().getInteger("type");
+        return model.getSession().getPlayerData().sign(type);
     }
 }
