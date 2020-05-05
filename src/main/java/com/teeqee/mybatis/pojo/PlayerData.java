@@ -245,7 +245,7 @@ public class PlayerData {
             Integer d = jsonObject.getInteger("d");
             Integer t = jsonObject.getInteger("t");
             Integer n = jsonObject.getInteger("n");
-            Taskdata taskdata = new Taskdata(t, n, d;
+            Taskdata taskdata = new Taskdata(t, n, d);
             returnArray.add(JSON.toJSON(taskdata));
         }
         JSONObject jsonObject = new JSONObject();
@@ -336,12 +336,10 @@ public class PlayerData {
                 Integer d = task.getD();
                 Integer n = task.getN();
                 Integer t = task.getT();
-                Integer m = task.getM();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("d",d );
                 jsonObject.put("n",n );
                 jsonObject.put("t",t );
-                jsonObject.put("m",m );
                 jsonArray.add(jsonObject);
             }
             //转成json对象
