@@ -57,4 +57,14 @@ public class PlayerUpdate {
     public Boolean opensound(MethodModel model){
         return model.getSession().getPlayerData().opensound();
     }
+
+    /**玩家获取活跃度相关*/
+    @Dispather(value = "getactive")
+    public JSONObject getactive(MethodModel model){
+        return model.getSession().getPlayerData().getactive();
+    }
+    /**玩家获取自己vip相关信息*/
+    public JSONObject getvip(MethodModel model) {
+        return model.getSession().getPlayerData().getvip();
+    }
 }

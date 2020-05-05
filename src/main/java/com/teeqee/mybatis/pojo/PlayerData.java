@@ -6,10 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 
-import com.teeqee.spring.dispatcher.servlet.entity.Animaldata;
-import com.teeqee.spring.dispatcher.servlet.entity.BuildingData;
-import com.teeqee.spring.dispatcher.servlet.entity.Site;
-import com.teeqee.spring.dispatcher.servlet.entity.Taskdata;
+import com.teeqee.spring.dispatcher.servlet.entity.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -38,14 +35,18 @@ public class PlayerData {
     private Integer biggestanimalid;
     /**vip的等级*/
     private Integer viplv;
+    /**今天有没有领取vip奖励*/
+    private Integer vipreward;
+    /**vip点数*/
+    private Integer vip;
+    /**玩家当前VIP邀请人数*/
+    private Integer invitevip;
     /**今日是否签到*/
     private Boolean todaysign;
     /**玩家总共签到次数*/
     private Integer weeksign;
     /**关卡数*/
     private Integer rounds;
-    /**今天有没有领取vip奖励*/
-    private Integer vipreward;
     /**世界打榜剩余挑战次数*/
     private Integer rankchallengenum;
     /**世界打榜换一批的次数*/
@@ -400,20 +401,22 @@ public class PlayerData {
         return null;
     }
 
-}
+    /**玩家获取活跃度相关*/
+    public JSONObject getactive(){
+            return null;
+    }
 
-/**
- * 不用看了 我是幸运转盘
- */
-@Data
-class Dartboard{
-    private int amount1;
-    private int amount2;
-    private int amount3;
-    private int amount4;
-    private int amount5;
-    private int amount6;
-    private int amount7;
-    private int amount8;
-    private int dartnum;
+    /**玩家获取自己vip相关信息*/
+    public  JSONObject getvip(){
+        JSONObject jsonObject = new JSONObject(4);
+        //玩家当前VIP等级
+        jsonObject.put("viplv", viplv);
+        //玩家当前VIP点数
+        jsonObject.put("vip", vip);
+        //玩家当前VIP邀请人数
+        jsonObject.put("invitevip", invitevip);
+        //玩家今日是否领取vip奖励
+        jsonObject.put("vipreward", vipreward);
+        return jsonObject;
+    }
 }

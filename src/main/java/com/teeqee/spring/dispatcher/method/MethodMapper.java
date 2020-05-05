@@ -17,8 +17,6 @@ import java.util.function.Function;
 
 @Component
 public class MethodMapper implements CommandLineRunner{
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     /**login push*/
     @Resource
     private Login login;
@@ -66,5 +64,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.CLOSE_SOUND,map->playerUpdate.closesound(map));
         /**更新新手引导步数*/
         map.put(DispatcherCmd.OPEN_SOUND,map->playerUpdate.opensound(map));
+        /**玩家获取活跃度相关*/
+        map.put(DispatcherCmd.GET_ACTIVE,map->playerUpdate.getactive(map));
+        /**玩家获取自己vip相关信息*/
+        map.put(DispatcherCmd.GET_VIP,map->playerUpdate.getvip(map));
     }
 }
