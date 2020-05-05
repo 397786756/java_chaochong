@@ -395,4 +395,5 @@ class Dartboard{
     private int amount6;
     private int amount7;
     private int amount8;
+    private int dartnum;
 }
