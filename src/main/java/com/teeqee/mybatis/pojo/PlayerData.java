@@ -407,7 +407,7 @@ public class PlayerData {
     }
 
     /**玩家获取自己vip相关信息*/
-    public  JSONObject getvip(){
+    public  JSONObject getvipInfo(){
         JSONObject jsonObject = new JSONObject(4);
         //玩家当前VIP等级
         jsonObject.put("viplv", viplv);

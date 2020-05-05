@@ -63,8 +63,10 @@ public class PlayerUpdate {
     public JSONObject getactive(MethodModel model){
         return model.getSession().getPlayerData().getactive();
     }
-    /**玩家获取自己vip相关信息*/
+    /**玩家获取自己vip相关信息
+     * 不能使用get方法作为普通方法
+     * */
     public JSONObject getvip(MethodModel model) {
-        return model.getSession().getPlayerData().getvip();
+        return model.getSession().getPlayerData().getvipInfo();
     }
 }
