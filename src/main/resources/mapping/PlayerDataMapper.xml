@@ -77,7 +77,7 @@
     data.dartnum ,
     data.buildingdata ,
     data.step,
-    data.missnum
+    data.missnum,
     info.avatar ,
     info.nickname
     from
