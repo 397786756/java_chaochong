@@ -50,4 +50,6 @@ public class DispatcherCmd {
     public static final String REWARD_VIP = "rewardvip";
     /**玩家观看视频增加vip等级*/
     public static final String VIDEO_FOR_VIP = "videoforvip";
+    /**世界排行榜*/
+    public static final String TOP_LIST = "toplist";
 }

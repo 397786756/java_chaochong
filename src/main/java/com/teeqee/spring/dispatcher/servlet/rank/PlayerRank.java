@@ -21,7 +21,35 @@ public class PlayerRank  {
 
      @Resource
      private RedisService redisService;
-     
+
+    /**世界排行榜 */
+    @Dispather(value = "toplist")
+    public JSONObject toplist(MethodModel model) {
+        PlayerInfo playerInfo = model.getSession().getPlayerInfo();
+        //获取渠道id
+        Integer channelid = playerInfo.getChannelid();
+        JSONObject jsonObject = new JSONObject(2);
+        String  toplistdata ="toplistdata";
+        String  yourrank ="yourrank";
+        String openId = model.getSession().getOpenId();
+        JSONArray rankList = new JSONArray(48);
+        TopRankInfo topRankInfo;
+        if (channelid!=null){
+            //世界排名为1
+            int topListType=1;
+            List<TopRankInfo> topList = redisService.getRankList(channelid, topListType);
+            if (topList!=null&&topList.size()>0){
+                jsonObject.put(toplistdata,topList) ;
+            }
+             topRankInfo = redisService.getMyTopRankInfo(channelid, topListType, openId);
+        }else {
+            topRankInfo = new TopRankInfo();
+            topRankInfo.init();
+        }
+        jsonObject.put(yourrank,topRankInfo);
+        jsonObject.put(toplistdata,rankList);
+        return jsonObject;
+    }
 
     /**飞镖手残排行榜 */
     @Dispather(value = "toplistmissnum")

@@ -30,4 +30,8 @@ public class TopRankInfo {
 
     public TopRankInfo() {
     }
+    public void init(){
+        this.rounds=0;
+        this.runknum=0L;
+    }
 }
