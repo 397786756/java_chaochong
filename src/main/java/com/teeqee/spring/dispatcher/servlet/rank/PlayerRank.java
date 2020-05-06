@@ -11,6 +11,7 @@ import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +33,7 @@ public class PlayerRank  {
             int missTopType=2;
             String toplistmissnum="toplistmissnum";
             List<TopRankInfo> missList = redisService.getRankList(channelid, missTopType);
-            if (missList.size()>0){
+            if (missList!=null&&missList.size()>0){
                 JSONArray jsonArray = updateTopMissToJsonObject(missList);
                 jsonObject.put(toplistmissnum,jsonArray);
             }else {
