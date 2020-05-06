@@ -81,7 +81,8 @@ public class PlayerData {
     private String buildingdata;
     /**引导步数*/
     private Integer step=0;
-
+    /**miss次数*/
+    private Integer missnum;
     /**头像*/
     private String avatar="";
     /**昵称*/
@@ -117,6 +118,7 @@ public class PlayerData {
         this.phonefare=0;
         this.phonefarenumber=0;
         this.lasttime=new Date();
+        this.missnum=0;
     }
 
 
