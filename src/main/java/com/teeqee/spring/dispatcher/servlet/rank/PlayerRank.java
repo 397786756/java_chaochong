@@ -21,7 +21,7 @@ public class PlayerRank  {
      @Resource
      private RedisService redisService;
 
-    /**飞镖手残排行榜*/
+    /**飞镖手残排行榜 */
     @Dispather(value = "toplistmissnum")
     public JSONObject toplistmissnum(MethodModel model) {
         PlayerInfo playerInfo = model.getSession().getPlayerInfo();
