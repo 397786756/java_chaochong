@@ -22,9 +22,17 @@ public class Session<T>  {
     /**因为超宠是登录后再传openId的*/
     private String openid;
     /**平台*/
-    private Integer pingTai;
+    private Integer channelid;
     /**channel*/
     private Channel channel;
+
+    public Integer getChannelid() {
+        return channelid;
+    }
+
+    public void setChannelid(Integer channelid) {
+        this.channelid = channelid;
+    }
 
     public Channel getChannel() {
         return channel;

@@ -24,8 +24,9 @@ import java.util.Date;
 @DataSourceType("login")
 @Service
 public class PlayerLogin {
+    /**测试服*/
+    private static final int TEST_SERVER=1000;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     /**playerData dao*/
     @Resource
     private PlayerDataMapper playerDataMapper;
@@ -47,13 +48,16 @@ public class PlayerLogin {
                 if (openid != null) {
                     //修改为已经登录
                     session.isLogin(openid);
+                    session.setChannelid(TEST_SERVER);
                     //TODO 平台
                     //获取数据
                     playerData = localLogin(openid);
                     session.add(PlayerCmd.PLAYER_DATA,playerData);
                     session.add(PlayerCmd.PLAYER_LOG, createPlayerLog(openid));
-                    session.add(PlayerCmd.PLAYER_INFO,  createPlayerInfo(openid));
+                    session.add(PlayerCmd.PLAYER_INFO,createPlayerInfo(openid,TEST_SERVER));
                     return playerData.loginPush();
+                }else {
+                    //调用http接口
                 }
             }
         }else {
@@ -175,17 +179,22 @@ public class PlayerLogin {
     }
     /**
      * @param openId 用户的id
+     * @param channelId 平台组
      * @return 返回用户的数据源
      */
-    private PlayerInfo createPlayerInfo(String openId) {
+    private PlayerInfo createPlayerInfo(String openId,Integer channelId) {
         PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(openId);
         if (playerInfo==null){
             playerInfo=new PlayerInfo();
             playerInfo.setOpenid(openId);
             //设置个渠道
-            playerInfo.setChannelid(1000);
+            playerInfo.setChannelid(channelId);
             playerInfo.setCreatetime(new Date());
             playerInfoMapper.insertSelective(playerInfo);
+        }else {
+            if (playerInfo.getChannelid()==null){
+                playerInfo.setChannelid(channelId);
+            }
         }
         return playerInfo;
     }
