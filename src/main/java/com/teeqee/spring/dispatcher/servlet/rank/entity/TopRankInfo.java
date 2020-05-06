@@ -12,6 +12,9 @@ public class TopRankInfo {
     /**用户的uid*/
     private Integer uid;
 
+    /**用户的uid*/
+    private String openid;
+
     private String nickname;
 
     private String avatar;

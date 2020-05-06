@@ -398,6 +398,7 @@
   <select id="initTopRank"  resultType="com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo">
    select
    info.uid as uid,
+   info.openid as openid,
    info.nickname as nickname,
    info.avatar as avatar,
    data.rounds as rounds,

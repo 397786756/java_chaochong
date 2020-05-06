@@ -184,13 +184,20 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
         serverInfoMap.forEach((k,v)->{
             Integer channelId = v.getChannelId();
             List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
+            for (TopRankInfo topRankInfo : roundsList) {
+                addRank(channelId, ROUNDS_TYPE, topRankInfo.getOpenid(),topRankInfo.getRounds().doubleValue());
+            }
             List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
+            for (TopRankInfo topRankInfo : missList) {
+                addRank(channelId, MISSNUM_TYPE, topRankInfo.getOpenid(),topRankInfo.getRounds().doubleValue());
+            }
             logger.info("server id:{},roundsListSize:{}",channelId,roundsList.size());
             logger.info("server id:{},missListSize:{}",channelId,missList.size());
             missRankMap.put(channelId,missList);
             roundsRankMap.put(channelId,roundsList);
         });
     }
+
 
     /**更新排行榜*/
     private void  updateRank(){
@@ -216,14 +223,14 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
 
     /**更新打榜*/
     private List<TopRankInfo> updateTopRankInfo(String redisZSetKey, Long size){
-         List<TopRankInfo> list = new ArrayList<>(50);
-         if (size==0){
-             return list;
-         }
-         int maxNum=50;
-         if (size>=maxNum){
-             size=50L;
-         }
+        List<TopRankInfo> list = new ArrayList<>(50);
+        if (size==0){
+            return list;
+        }
+        int maxNum=50;
+        if (size>=maxNum){
+            size=50L;
+        }
         Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().reverseRangeWithScores(redisZSetKey, 0, size);
         if (set!=null&&set.size()>0){
             int top=1;
