@@ -31,6 +31,9 @@ public class TopRankInfo {
     public TopRankInfo() {
     }
     public void init(){
+        this.uid=1;
+        this.nickname="";
+        this.avatar="";
         this.rounds=0;
         this.runknum=0L;
     }
