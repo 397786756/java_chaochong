@@ -40,7 +40,12 @@ public class ChannelSupervise {
     public static void removeSession(Channel channel) {
         GlobalGroup.remove(channel);
     }
-
+    /**
+     * 移除用户的会话
+     */
+    public static void clean() {
+        GlobalGroup.clear();
+    }
     /**
      * 全局发送消息
      */
