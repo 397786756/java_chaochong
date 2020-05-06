@@ -43,6 +43,8 @@ public class PlayerRank  {
                 jsonObject.put(toplistdata,topList) ;
             }
              topRankInfo = redisService.getMyTopRankInfo(channelid, topListType, openId);
+             topRankInfo.setNickname(playerInfo.getMyNickName());
+             topRankInfo.setAvatar(playerInfo.getMyAvatar());
         }else {
             topRankInfo = new TopRankInfo();
             topRankInfo.init();
