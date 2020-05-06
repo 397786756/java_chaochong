@@ -29,16 +29,14 @@ public class PlayerRank  {
         //获取渠道id
         Integer channelid = playerInfo.getChannelid();
         JSONObject jsonObject = new JSONObject();
-        if (channelid!=null&&channelid>0){
+        String toplistmissnum="toplistmissnum";
+        if (channelid!=null){
             int missTopType=2;
-            String toplistmissnum="toplistmissnum";
             List<TopRankInfo> missList = redisService.getRankList(channelid, missTopType);
-            if (missList!=null&&missList.size()>0){
-                JSONArray jsonArray = updateTopMissToJsonObject(missList);
-                jsonObject.put(toplistmissnum,jsonArray);
-            }else {
-                jsonObject.put(toplistmissnum,missList);
-            }
+            JSONArray jsonArray = updateTopMissToJsonObject(missList);
+            jsonObject.put(toplistmissnum,jsonArray);
+        }else {
+            jsonObject.put(toplistmissnum,new ArrayList<>());
         }
         return jsonObject;
     }
@@ -46,14 +44,19 @@ public class PlayerRank  {
 
     /**修改下玩家的默认排行榜变为miss排行榜*/
     private JSONArray updateTopMissToJsonObject( List<TopRankInfo> list){
-        JSONArray jsonArray = new JSONArray(list.size());
-        for (TopRankInfo topRankInfo : list) {
-            Integer rounds = topRankInfo.getRounds();
-            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(topRankInfo));
-            jsonObject.remove("rounds");
-            jsonObject.remove("openid");
-            jsonObject.put("missnum",rounds);
-            jsonArray.add(jsonObject);
+        JSONArray jsonArray =null;
+        if (list!=null&&list.size()>0){
+            jsonArray= new JSONArray(list.size());
+            for (TopRankInfo topRankInfo : list) {
+                Integer rounds = topRankInfo.getRounds();
+                JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(topRankInfo));
+                jsonObject.remove("rounds");
+                jsonObject.remove("openid");
+                jsonObject.put("missnum",rounds);
+                jsonArray.add(jsonObject);
+            }
+        }else {
+           jsonArray=new JSONArray(0);
         }
         return jsonArray;
     }
