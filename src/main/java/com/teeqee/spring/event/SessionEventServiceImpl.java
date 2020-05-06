@@ -28,6 +28,7 @@ public class SessionEventServiceImpl implements SessionEventService {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**方法映射*/
     @Resource
     private MethodMapper methodMapper;
     @Resource
@@ -69,7 +70,7 @@ public class SessionEventServiceImpl implements SessionEventService {
 
     @Override
     public void exceptionCaught(Session session) {
-        //记录错误日志
+        //记录错误日志，然后次数达到就关闭
         logger.info("client exceptionCaught ={}", session.getId());
     }
 

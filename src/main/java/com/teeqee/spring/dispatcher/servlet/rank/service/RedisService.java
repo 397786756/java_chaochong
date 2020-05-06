@@ -14,29 +14,24 @@ public interface RedisService {
 
     /**
      * @param channelId 平台id
+     * @param type      排行榜的类型
      * @return 返回排行榜
      */
-    List<TopRankInfo> getRankList(Integer channelId, String redisKey);
+    List<TopRankInfo> getRankList(Integer channelId, Integer type);
 
-
-    /**
-     * @param channelId 平台id
-     * @return 返回世界排行榜
-     */
-    List<TopRankInfo> getTopRankList(Integer channelId, String redisKey);
 
     /**
      * @param channelId 平台id
      * @return 返回我的个人排名
      */
-    TopRankInfo getMyTopRankInfo(Integer channelId, String redisKey, String openId);
+    TopRankInfo getMyTopRankInfo(Integer channelId, Integer type, String openId);
 
     /**
-     * @param channelId  平台id
-     * @param redisKey redis的Key
-     * @param openId   玩家的openId
-     * @param score    分数
+     * @param channelId 平台id
+     * @param type  排行榜的类型
+     * @param openId    玩家的openId
+     * @param score     分数
      * @return 返回是否加入成功
      */
-    Boolean addRank(Integer channelId, String redisKey, String openId, Double score);
+    Boolean addRank(Integer channelId,Integer type, String openId, Double score);
 }

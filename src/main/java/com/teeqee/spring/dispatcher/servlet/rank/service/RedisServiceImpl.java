@@ -52,73 +52,80 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     /**未名中的排行榜Map*/
     private ConcurrentHashMap<Integer,List<TopRankInfo>> missRankMap=new ConcurrentHashMap<>(16);
     /**打榜的排行榜Map*/
-    private ConcurrentHashMap<Integer,List<TopRankInfo>> topRankMap=new ConcurrentHashMap<>(16);
+    private ConcurrentHashMap<Integer,List<TopRankInfo>> roundsRankMap=new ConcurrentHashMap<>(16);
     /**serverMap*/
     private ConcurrentHashMap<Integer, ServerInfo> serverInfoMap=new ConcurrentHashMap<>(16);
-    /**player info dao*/
-
+    /**打榜*/
+    private static final String ROUNDS = "rounds";
+    /**miss*/
+    private static final String MISSNUM = "missnum";
+    /**rank type*/
+    public static final int ROUNDS_TYPE=1;
+    /**miss 排行榜*/
+    public static final int MISSNUM_TYPE=2;
     /**
      * @param channelId  平台id
-     * @param redisKey 排行榜的key
-     * @return 返回未命中排行榜的List
+     * @param type 排行榜的key
+     * @return 返回排行榜
      */
     @Override
-    public List<TopRankInfo> getRankList(Integer channelId, String redisKey) {
+    public List<TopRankInfo> getRankList(Integer channelId, Integer type) {
         //合并的key
-        String addRedisKey=channelId+"_"+redisKey;
-        List<TopRankInfo> missRankInfos = missRankMap.get(addRedisKey);
-        if (missRankInfos==null){
-
+        if (type==ROUNDS_TYPE){
+            return roundsRankMap.get(channelId);
+        }else if (type==MISSNUM_TYPE){
+            return missRankMap.get(channelId);
         }
-        return missRankInfos;
+        return new ArrayList<>();
     }
 
     /**
      * @param channelId  平台id
-     * @param redisKey 排行榜的key
-     * @return 返回排行榜的List
-     */
-    @Override
-    public List<TopRankInfo> getTopRankList(Integer channelId, String redisKey) {
-        return null;
-    }
-    /**
-     * @param channelId  平台id
-     * @param redisKey 排行榜的key
+     * @param type 排行榜的类型
      * @param openId 玩家的openId
      * @return 返回个人排名
      */
     @Override
-    public TopRankInfo getMyTopRankInfo(Integer channelId, String redisKey, String openId) {
-        String redisAddKey = getRedisZSetKey(channelId, redisKey);
-        Double score = redisTemplate.opsForZSet().score(redisAddKey, openId);
-        Long myRank=0L;
+    public TopRankInfo getMyTopRankInfo(Integer channelId, Integer type, String openId) {
+        String redisAddKey = getRedisZSetKey(channelId, type);
+        Double score;
+        long myRank=0L;
+        score = redisTemplate.opsForZSet().score(redisAddKey, openId);
         if (score!=null){
             Long aLong = redisTemplate.opsForZSet().reverseRank(redisAddKey, openId);
             if (aLong!=null){
-                myRank=aLong;
+                //排行榜第一名是0
+                myRank=aLong+1;
             }
+        }else {
+            score=0D;
         }
-        return new TopRankInfo(score != null ? score.intValue() : 0, myRank);
+        TopRankInfo topRankInfo = new TopRankInfo();
+        topRankInfo.setRounds(score.intValue());
+        topRankInfo.setRunknum(myRank);
+        return topRankInfo;
     }
 
 
     /**
      * @param channelId 平台id
-     * @param redisKey  redis的Key
+     * @param type 排行榜的类型
      * @param openId    玩家的openId
      * @param score     分数
-     * @return
+     * @return 返回添加结果
      */
     @Override
-    public Boolean addRank(Integer channelId, String redisKey, String openId,Double score) {
-        return false;
+    public Boolean addRank(Integer channelId,Integer type, String openId,Double score) {
+        String redisZSetKey = getRedisZSetKey(channelId, type);
+        redisTemplate.opsForZSet().incrementScore(redisZSetKey,openId,score);
+        return true;
     }
 
 
     /**玩家排行榜的热更新*/
     @Scheduled(cron = "0/60 * * * * ?")
     public void task(){
+        initServerInfo();
         updateRank();
     }
 
@@ -126,8 +133,14 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     /**
      * @return 返回一个redisZset的key
      */
-    private String getRedisZSetKey(Integer channelId, String redisKey){
-        return channelId+"_"+redisKey;
+    private String getRedisZSetKey(Integer channelId, Integer type){
+        Integer serverId = serverInfoMap.get(channelId).getChannelId();
+        if (type==ROUNDS_TYPE){
+            return serverId+"_"+ROUNDS;
+        }else if (type==MISSNUM_TYPE){
+            return serverId+"_"+MISSNUM;
+        }
+        throw new RuntimeException("this rank type not exit "+type);
     }
 
     /**
@@ -136,6 +149,14 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     @Override
     public void destroy() throws Exception {
         logger.info("delete redis zSet info");
+        int type=2;
+        serverInfoMap.forEach((k,v)->{
+            for (int i = 1; i <= type; i++) {
+                String redisZSetKey = getRedisZSetKey(v.getChannelId(), i);
+                logger.info("delete redis rank key:{}",redisZSetKey);
+                redisTemplate.delete(redisZSetKey);
+            }
+        });
     }
 
     /**
@@ -144,7 +165,7 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     @Override
     public void run(String... args) throws Exception {
         initServerInfo();
-        initRankInfo();
+        initMysqlRankInfo();
     }
 
     /**初始化服务器*/
@@ -158,39 +179,16 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
     }
 
     /**初始化排行榜*/
-    private void initRankInfo(){
+    private void initMysqlRankInfo(){
         logger.info("init redis zSet info");
-        List<TopRankInfo> list = new ArrayList<>(16);
-        TopRankInfo missRankInfo = new TopRankInfo( 20, 1L);
-        missRankInfo.setNickname("测试玩家");
-        list.add(missRankInfo);
-        //排行榜
-        missRankMap.put(10001,list);
-        topRankMap.put(10001,list);
-        //0 rounds 1 missnum
-        List<String> rankOrderByNameList = new ArrayList<>(2);
-        String rounds="rounds";
-        String missnum="missnum";
-        rankOrderByNameList.add(rounds);
-        rankOrderByNameList.add(missnum);
         serverInfoMap.forEach((k,v)->{
-            for (String orderByName : rankOrderByNameList) {
-                List<TopRankInfo> topList = playerDataMapper.initTopRank(k, orderByName);
-                if (topList!=null&&topList.size()>0){
-                    //先排好序
-                    int top=1;
-                    for (TopRankInfo topRankInfo : topList) {
-                        topRankInfo.setRounds(top);
-                        top++;
-                    }
-                    if (orderByName.equals(rounds)){
-                        //打榜
-
-                    }else {
-                        //miss
-                    }
-                }
-            }
+            Integer channelId = v.getChannelId();
+            List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
+            List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
+            logger.info("server id:{},roundsListSize:{}",channelId,roundsList.size());
+            logger.info("server id:{},missListSize:{}",channelId,missList.size());
+            missRankMap.put(channelId,missList);
+            roundsRankMap.put(channelId,roundsList);
         });
     }
 
@@ -199,10 +197,18 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
         logger.info("update redis zSet info");
         serverInfoMap.forEach((k,v)->{
             Integer channelId = v.getChannelId();
-            String missRankKey = v.getMissRankKey();
-            //获取排行榜的redisKey
-            String redisZSetKey = getRedisZSetKey(channelId, missRankKey);
-            Long size = redisTemplate.opsForZSet().size(redisZSetKey);
+            String rounsdKey = getRedisZSetKey(channelId, ROUNDS_TYPE);
+            Long roundsSize = redisTemplate.opsForZSet().size(rounsdKey);
+            if (roundsSize==null){
+                roundsSize=0L;
+            }
+            roundsRankMap.put(channelId,updateTopRankInfo(rounsdKey,roundsSize));
+            String missKey = getRedisZSetKey(channelId, MISSNUM_TYPE);
+            Long missSize = redisTemplate.opsForZSet().size(missKey);
+            if (missSize==null){
+                missSize=0L;
+            }
+            missRankMap.put(channelId,updateTopRankInfo(missKey,missSize));
         });
     }
 
@@ -226,6 +232,7 @@ public class RedisServiceImpl implements RedisService , CommandLineRunner , Disp
                 String openId = (String) tuple.getValue();
                 if (score!=null){
                     TopRankInfo topRankInfo = new TopRankInfo(top, score.longValue());
+                    //获取头像昵称
                     PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(openId);
                     if (playerInfo!=null){
                         String avatar = playerInfo.getMyAvatar();

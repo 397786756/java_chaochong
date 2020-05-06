@@ -29,11 +29,30 @@ public class PlayerRank  {
         Integer channelid = playerInfo.getChannelid();
         JSONObject jsonObject = new JSONObject();
         if (channelid!=null&&channelid>0){
-            String toplistmissnum1 = "toplistmissnum";
-            List<TopRankInfo> toplistmissnum = redisService.getRankList(channelid, toplistmissnum1);
-            JSONArray jsonArray = JSONArray.parseArray(JSON.toJSONString(toplistmissnum));
-            jsonObject.put(toplistmissnum1,jsonArray);
+            int missTopType=2;
+            String toplistmissnum="toplistmissnum";
+            List<TopRankInfo> missList = redisService.getRankList(channelid, missTopType);
+            if (missList.size()>0){
+                JSONArray jsonArray = updateTopMissToJsonObject(missList);
+                jsonObject.put(toplistmissnum,jsonArray);
+            }else {
+                jsonObject.put(toplistmissnum,missList);
+            }
         }
         return jsonObject;
+    }
+
+
+    /**修改下玩家的默认排行榜变为miss排行榜*/
+    private JSONArray updateTopMissToJsonObject( List<TopRankInfo> list){
+        JSONArray jsonArray = new JSONArray(list.size());
+        for (TopRankInfo topRankInfo : list) {
+            Integer rounds = topRankInfo.getRounds();
+            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(topRankInfo));
+            jsonObject.remove("rounds");
+            jsonObject.put("missnum",rounds);
+            jsonArray.add(jsonObject);
+        }
+        return jsonArray;
     }
 }
