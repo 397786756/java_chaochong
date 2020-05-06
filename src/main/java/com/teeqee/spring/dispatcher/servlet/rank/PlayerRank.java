@@ -50,6 +50,7 @@ public class PlayerRank  {
             Integer rounds = topRankInfo.getRounds();
             JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(topRankInfo));
             jsonObject.remove("rounds");
+            jsonObject.remove("openid");
             jsonObject.put("missnum",rounds);
             jsonArray.add(jsonObject);
         }
