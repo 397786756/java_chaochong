@@ -21,6 +21,7 @@ public class PlayerRank  {
 
      @Resource
      private RedisService redisService;
+     
 
     /**飞镖手残排行榜 */
     @Dispather(value = "toplistmissnum")
@@ -44,7 +45,7 @@ public class PlayerRank  {
 
     /**修改下玩家的默认排行榜变为miss排行榜*/
     private JSONArray updateTopMissToJsonObject( List<TopRankInfo> list){
-        JSONArray jsonArray =null;
+        JSONArray jsonArray;
         if (list!=null&&list.size()>0){
             jsonArray= new JSONArray(list.size());
             for (TopRankInfo topRankInfo : list) {
