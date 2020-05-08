@@ -4,7 +4,7 @@ import lombok.Data;
 
 /**
  * @Description: 打榜排行榜
- * @Author: zhengsongjie
+ * @Author:  zhengsongjie
  * @Software: IntelliJ IDEA
  */
 @Data
