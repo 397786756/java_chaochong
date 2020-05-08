@@ -1,7 +1,7 @@
 #微信小程序开发
 wx:
   miniapp:
-    appid: wxb34ae4090652a792     #微信小程序的appid
+    appid: wxb34ae4090652a792     #微信小 程序的appid
     secret: 77f9060c56c93b13000a6fcd59bab521   #微信小程序的Secret
     token:
     aesKey:
