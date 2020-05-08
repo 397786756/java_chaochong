@@ -11,6 +11,7 @@
   <sql id="Base_Column_List" >
     uuid, channel_id, chinese_name, open_time, video_time
   </sql>
+ <!--拉取所有服务器-->
   <select id="serverInfoList" resultMap="BaseResultMap" >
     select 
     <include refid="Base_Column_List" />
