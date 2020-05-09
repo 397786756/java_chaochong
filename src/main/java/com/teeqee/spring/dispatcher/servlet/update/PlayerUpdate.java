@@ -105,7 +105,7 @@ public class PlayerUpdate {
     public JSONObject videoforvip(MethodModel model) {
         return model.getSession().getPlayerData().videoforvip();
     }
-    
+
     /**玩家视频增加飞镖数 (玩家看视频, 不管剩余几个飞镖, 飞镖个数直接变为5)*/
     @Dispather(value = "videofordartnum")
     public Integer videofordartnum(MethodModel model) {
