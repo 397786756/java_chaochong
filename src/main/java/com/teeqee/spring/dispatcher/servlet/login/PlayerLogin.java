@@ -109,6 +109,7 @@ public class PlayerLogin {
     @Dispather(value = "userinfor")
     public boolean userinfor(MethodModel model){
         Session session = model.getSession();
+        //TODO code
         String openId = session.getOpenId();
         if (openId!=null){
             PlayerInfo playerInfo = session.getPlayerInfo();
@@ -141,7 +142,6 @@ public class PlayerLogin {
      * @param openId 用户的openId
      * @return 登录的信息
      */
-
     private PlayerData localLogin(String openId) {
             PlayerData playerData = playerDataMapper.selectByPrimaryKey(openId);
             //没有则直接创建

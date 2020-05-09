@@ -22,16 +22,19 @@ public interface RedisService {
 
     /**
      * @param channelId 平台id
+     * @param type      排行榜的类型
+     * @param openId    玩家的openId
      * @return 返回我的个人排名
      */
     TopRankInfo getMyTopRankInfo(Integer channelId, Integer type, String openId);
 
     /**
      * @param channelId 平台id
-     * @param type  排行榜的类型
+     * @param type      排行榜的类型
      * @param openId    玩家的openId
      * @param score     分数
+     * @param siCover   是否覆盖
      * @return 返回是否加入成功
      */
-    Boolean addRank(Integer channelId,Integer type, String openId, Double score);
+    Boolean addRank(Integer channelId, Integer type, String openId, Double score, boolean siCover);
 }

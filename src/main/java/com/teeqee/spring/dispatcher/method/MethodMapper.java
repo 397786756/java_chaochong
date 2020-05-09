@@ -91,5 +91,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.VIDEO_FOR_DARTNUM,map->playerUpdate.videofordartnum(map));
         /**飞镖没射中, 发给后端纪录次数*/
         map.put(DispatcherCmd.ADD_MISS_NUM,map->playerUpdate.addmissnum(map));
+        /**使用飞镖*/
+        map.put(DispatcherCmd.USE_DART,map->playerUpdate.useDart(map));
     }
 }

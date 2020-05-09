@@ -56,4 +56,6 @@ public class DispatcherCmd {
     public static final String VIDEO_FOR_DARTNUM = "videofordartnum";
     /**飞镖没射中, 发给后端纪录次数*/
     public static final String ADD_MISS_NUM = "addmissnum";
+    /**使用飞镖*/
+    public static final String USE_DART = "useDart";
 }

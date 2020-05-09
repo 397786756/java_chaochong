@@ -23,7 +23,7 @@ public class PlayerRank  {
      private RedisService redisService;
 
 
-    /**世界排行榜 */
+    /**世界排行榜*/
     @Dispather(value = "toplist")
     public JSONObject toplist(MethodModel model) {
         PlayerInfo playerInfo = model.getSession().getPlayerInfo();

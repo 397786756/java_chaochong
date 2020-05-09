@@ -6,10 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 import com.teeqee.spring.dispatcher.servlet.entity.*;
+import com.teeqee.spring.result.SpecialResult;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +52,7 @@ public class PlayerData {
     /**玩家总共签到次数*/
     private Integer weeksign;
     /**关卡数*/
-    private Integer rounds;
+    private Integer rounds=1;
     /**世界打榜剩余挑战次数*/
     private Integer rankchallengenum;
     /**世界打榜换一批的次数*/
@@ -117,11 +121,9 @@ public class PlayerData {
         this.rankpermission=0;
         this.phonefare=0;
         this.phonefarenumber=0;
-        this.lasttime=new Date();
         this.missnum=0;
+        this.lasttime=new Date();
     }
-
-
     /**
      * @return 返回用户登录需要的数据
      */
@@ -155,6 +157,27 @@ public class PlayerData {
         data.put("rounds", rounds);
         jsonObject.put(PlayerCmd.PLAYER_DATA, data);
         return jsonObject;
+    }
+
+    /**日更新数据*/
+    public void dailyUpdate(){
+           if (lasttime==null||(isYesterday(lasttime,new Date()))){
+                  logger.info("openId:{} last login is yesterday",openid);
+           }
+    }
+
+
+    /**
+     * @param oldTime 上次登录的时间
+     * @param newTime 现在的时间
+     * @return 判断上次登录时间是否为昨天
+     */
+    private boolean isYesterday(Date oldTime,Date newTime)  {
+        Calendar oldCal = Calendar.getInstance();
+        Calendar newCal = Calendar.getInstance();
+        oldCal.setTime(oldTime);
+        newCal.setTime(newTime);
+        return Math.abs(newCal.get(Calendar.DAY_OF_YEAR) - oldCal.get(Calendar.DAY_OF_YEAR)) == 1;
     }
 
 
@@ -404,13 +427,13 @@ public class PlayerData {
     }
 
     /**更新新手引导*/
-    public Boolean endofguide(Integer step){
+    public Boolean  endofguide(Integer step){
         if (step>0){
             if (step>this.step){
                 this.step=step;
             }
         }
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
     /**玩家视频增加飞镖数 (玩家看视频, 不管剩余几个飞镖, 飞镖个数直接变为5)*/
     public Integer videofordartnum(){
@@ -419,25 +442,37 @@ public class PlayerData {
     }
     /**飞镖没射中, 发给后端纪录次数*/
     public Integer addmissnum(){
-       this.missnum+=1;
-       return null;
+        if (missnum==null){
+            missnum=1;
+        }else {
+            missnum+=1;
+        }
+        return SpecialResult.NULL_INTEGER;
     }
-
+    /**使用飞镖*/
+    public Boolean useDart(){
+        if (dartnum==null){
+            dartnum=0;
+        }else if (dartnum>0){
+            dartnum--;
+        }
+        return false;
+    }
     /**开启声音*/
     public Boolean opensound(){
         this.sound=1;
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
 
     /**关闭声音*/
     public Boolean closesound(){
         this.sound=0;
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
 
     /**玩家获取活跃度相关*/
     public JSONObject getactive(){
-            return null;
+        return SpecialResult.NULL_JSON_OBJECT;
     }
 
     /**玩家获取自己vip相关信息*/
@@ -467,14 +502,14 @@ public class PlayerData {
 
 
     /**通关统计(爬塔)*/
-    public JSONObject rounds(JSONObject jsonObject){
-        if (jsonObject!=null&&jsonObject.size()>0){
+    public JSONObject rounds(JSONObject data){
+        if (data!=null&&data.size()>0){
             //是否顺利通关 0代表未通关 1代表通关
-            Integer success = jsonObject.getInteger("success");
+            Integer success = data.getInteger("success");
             //获取的金币数量
-            Integer gold = jsonObject.getInteger("gold");
-            if (success==1){
-                this.sound+=1;
+            Integer gold = data.getInteger("gold");
+            if (success!=null&&success>0){
+                this.rounds+=1;
             }
             if (gold!=null&&gold>0){
                 this.gold+=gold;
@@ -482,7 +517,7 @@ public class PlayerData {
             //返回金币和钻石
           return goldAndDiamondInfo();
         }
-        return null;
+        return SpecialResult.NULL_JSON_OBJECT;
     }
 
     /**签到*/
@@ -492,7 +527,7 @@ public class PlayerData {
             this.todaysign=true;
             this.weeksign+=1;
         }
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
 
     /**增加话费 话费是double*/
@@ -500,12 +535,12 @@ public class PlayerData {
         if (addphonefarenumber!=null&&addphonefarenumber>0){
             this.phonefarenumber+=addphonefarenumber.intValue();
         }
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
 
     /**更新玩家显示领取话费*/
     public Integer updatephonefare(){
-        return null;
+        return SpecialResult.NULL_INTEGER;
     }
 
     /**更新玩家显示领取话费*/
@@ -520,7 +555,7 @@ public class PlayerData {
         if (vipreward==0){
             vipreward=1;
         }
-        return null;
+        return SpecialResult.NULL_BOOLEAN;
     }
 
     /**玩家观看视频增加vip等级*/
