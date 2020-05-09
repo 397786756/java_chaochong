@@ -52,4 +52,8 @@ public class DispatcherCmd {
     public static final String VIDEO_FOR_VIP = "videoforvip";
     /**世界排行榜*/
     public static final String TOP_LIST = "toplist";
+    /**玩家视频增加飞镖数 (玩家看视频, 不管剩余几个飞镖, 飞镖个数直接变为5)*/
+    public static final String VIDEO_FOR_DARTNUM = "videofordartnum";
+    /**飞镖没射中, 发给后端纪录次数*/
+    public static final String ADD_MISS_NUM = "addmissnum";
 }

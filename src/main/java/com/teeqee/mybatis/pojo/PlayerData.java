@@ -75,7 +75,7 @@ public class PlayerData {
     private String animaldata;
     /**玩家的任务信息*/
     private String taskdata;
-    /**当前玩家玩转盘的次数*/
+    /**当前玩家现有的飞镖数量*/
     private Integer dartnum;
     /**建筑data*/
     private String buildingdata;
@@ -106,7 +106,7 @@ public class PlayerData {
         this.viplv=0;
         this.todaysign=false;
         this.weeksign=0;
-        this.rounds=0;
+        this.rounds=1;
         this.vipreward=0;
         this.rankchallengenum=10;
         this.refreshworldnum=3;
@@ -398,9 +398,8 @@ public class PlayerData {
     /**获取幸运转盘*/
     public JSONObject getdartboard(){
           String jsonKey="dartboard";
-        Dartboard dartboard = new Dartboard();
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(jsonKey, dartboard);
+        jsonObject.put(jsonKey, dartnum);
         return jsonObject;
     }
 
@@ -413,8 +412,16 @@ public class PlayerData {
         }
         return null;
     }
-
-
+    /**玩家视频增加飞镖数 (玩家看视频, 不管剩余几个飞镖, 飞镖个数直接变为5)*/
+    public Integer videofordartnum(){
+           dartnum=5;
+           return dartnum;
+    }
+    /**飞镖没射中, 发给后端纪录次数*/
+    public Integer addmissnum(){
+       this.missnum+=1;
+       return null;
+    }
 
     /**开启声音*/
     public Boolean opensound(){

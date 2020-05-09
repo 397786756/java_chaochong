@@ -87,5 +87,9 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.TOP_LIST,map->playerRank.toplist(map));
         /**玩家观看视频增加vip等级*/
         map.put(DispatcherCmd.VIDEO_FOR_VIP,map->playerUpdate.videoforvip(map));
+        /**玩家视频增加飞镖数*/
+        map.put(DispatcherCmd.VIDEO_FOR_DARTNUM,map->playerUpdate.videofordartnum(map));
+        /**飞镖没射中, 发给后端纪录次数*/
+        map.put(DispatcherCmd.ADD_MISS_NUM,map->playerUpdate.addmissnum(map));
     }
 }
