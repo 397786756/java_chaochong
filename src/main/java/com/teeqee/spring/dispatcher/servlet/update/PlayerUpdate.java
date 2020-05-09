@@ -32,8 +32,7 @@ public class PlayerUpdate {
      */
     @Dispather(value = "newheart")
     public JSONObject newheart(MethodModel model){
-        JSONObject data = model.getData();
-        return model.getSession().getPlayerData().newheart(data);
+        return model.getSession().getPlayerData().newheart(model.getData());
     }
 
 
@@ -48,9 +47,7 @@ public class PlayerUpdate {
     /**更新新手引导*/
     @Dispather(value = "endofguide")
     public Boolean endofguide(MethodModel model){
-        JSONObject data = model.getData();
-        Integer step = data.getInteger("step");
-        return model.getSession().getPlayerData().endofguide(step);
+        return model.getSession().getPlayerData().endofguide( model.getData().getInteger("step"));
     }
 
     /**关闭声音*/
@@ -77,8 +74,7 @@ public class PlayerUpdate {
     /**玩家领取离线奖励*/
     @Dispather(value = "sign")
     public Boolean sign(MethodModel model) {
-        Integer type = model.getData().getInteger("type");
-        return model.getSession().getPlayerData().sign(type);
+        return model.getSession().getPlayerData().sign( model.getData().getInteger("type"));
     }
     /**通关统计*/
     @Dispather(value = "rounds")
@@ -129,14 +125,12 @@ public class PlayerUpdate {
     /**飞镖没射中, 发给后端纪录次数*/
     @Dispather(value = "addmissnum")
     public Integer addmissnum(MethodModel model) {
-        Integer channelid = model.getSession().getChannelid();
         Session session = model.getSession();
+        Integer channelid = session.getChannelid();
         redisService.addRank(channelid, RedisServiceImpl.MISSNUM_TYPE, session.getOpenId(),1D,false);
         return model.getSession().getPlayerData().addmissnum();
     }
     /**使用飞镖*/
     @Dispather(value = "useDart")
-    public Boolean useDart(MethodModel model) {
-        return model.getSession().getPlayerData().useDart();
-    }
+    public Boolean useDart(MethodModel model) {return model.getSession().getPlayerData().useDart();}
 }
