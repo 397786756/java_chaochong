@@ -42,7 +42,7 @@ public class PlayerUpdate {
     @Dispather(value = "endofguide")
     public Boolean endofguide(MethodModel model){
         JSONObject data = model.getData();
-        Integer step = data.getInteger("step");
+        Double step = data.getDouble("step");
         return model.getSession().getPlayerData().endofguide(step);
     }
 

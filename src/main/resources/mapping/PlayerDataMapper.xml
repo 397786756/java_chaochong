@@ -33,7 +33,7 @@
     <result column="taskdata" property="taskdata" jdbcType="VARCHAR" />
     <result column="dartnum" property="dartnum" jdbcType="INTEGER" />
     <result column="buildingdata" property="buildingdata" jdbcType="VARCHAR" />
-    <result column="step" property="step" jdbcType="INTEGER" />
+    <result column="step" property="step" jdbcType="DOUBLE" />
     <result column="missnum" property="missnum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -287,7 +287,7 @@
         #{buildingdata,jdbcType=VARCHAR},
       </if>
       <if test="step != null" >
-        #{step,jdbcType=INTEGER},
+        #{step,jdbcType=DOUBLE},
       </if>
       <if test="missnum != null" >
         #{missnum,jdbcType=INTEGER},
@@ -385,7 +385,7 @@
         buildingdata = #{buildingdata,jdbcType=VARCHAR},
       </if>
       <if test="step != null" >
-        step = #{step,jdbcType=INTEGER},
+        step = #{step,jdbcType=DOUBLE},
       </if>
       <if test="missnum != null" >
         missnum = #{missnum,jdbcType=INTEGER},

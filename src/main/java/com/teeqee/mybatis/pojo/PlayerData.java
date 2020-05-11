@@ -85,7 +85,7 @@ public class PlayerData {
     /**建筑data*/
     private String buildingdata;
     /**引导步数*/
-    private Integer step=0;
+    private Double step=0D;
     /**miss次数*/
     private Integer missnum;
     /**头像*/
@@ -435,7 +435,7 @@ public class PlayerData {
     }
 
     /**更新新手引导*/
-    public Boolean  endofguide(Integer step){
+    public Boolean  endofguide(Double step){
         if (step>0){
             if (step>this.step){
                 this.step=step;
