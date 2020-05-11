@@ -94,12 +94,8 @@ public class PlayerData {
     /**任务List*/
     private List<Taskdata> taskdataList=new ArrayList<>();
     /**活跃度*/
-    private String activedata="[\n" +
-            "            {\n" +
-            "                \"kind\": 1,      \n" +
-            "                \"rewardid\": 0,  \n" +
-            "                \"rewarded\": 0 \n" +
-            "            }]";
+    private String activedata;
+
     public PlayerData() {
     }
     /**
