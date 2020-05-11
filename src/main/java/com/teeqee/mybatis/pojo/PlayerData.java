@@ -35,7 +35,7 @@ public class PlayerData {
     /**钻石数量*/
     private Integer diamond;
     /**新手引导步数*/
-    private Integer newgamer;
+    private Double newgamer=0D;
     /**是否开启声音    1-->开启    0-->不开启*/
     private Integer sound;
     /**最高级动物的等级*/
@@ -84,8 +84,6 @@ public class PlayerData {
     private Integer dartnum;
     /**建筑data*/
     private String buildingdata;
-    /**引导步数*/
-    private Double step=0D;
     /**miss次数*/
     private Integer missnum;
     /**头像*/
@@ -105,7 +103,7 @@ public class PlayerData {
         this.stock=10;
         this.gold=0;
         this.diamond=0;
-        this.newgamer=0;
+        this.newgamer=0D;
         this.sound=1;
         this.biggestanimalid=1;
         this.viplv=0;
@@ -437,8 +435,8 @@ public class PlayerData {
     /**更新新手引导*/
     public Boolean  endofguide(Double step){
         if (step>0){
-            if (step>this.step){
-                this.step=step;
+            if (step>this.newgamer){
+                this.newgamer=step;
             }
             return true;
         }else {

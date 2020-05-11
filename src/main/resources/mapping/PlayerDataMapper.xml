@@ -8,7 +8,7 @@
     <result column="stock" property="stock" jdbcType="INTEGER" />
     <result column="gold" property="gold" jdbcType="INTEGER" />
     <result column="diamond" property="diamond" jdbcType="INTEGER" />
-    <result column="newgamer" property="newgamer" jdbcType="INTEGER" />
+    <result column="newgamer" property="newgamer" jdbcType="DOUBLE" />
     <result column="sound" property="sound" jdbcType="INTEGER" />
     <result column="biggestanimalid" property="biggestanimalid" jdbcType="INTEGER" />
     <result column="viplv" property="viplv" jdbcType="INTEGER" />
@@ -33,7 +33,6 @@
     <result column="taskdata" property="taskdata" jdbcType="VARCHAR" />
     <result column="dartnum" property="dartnum" jdbcType="INTEGER" />
     <result column="buildingdata" property="buildingdata" jdbcType="VARCHAR" />
-    <result column="step" property="step" jdbcType="DOUBLE" />
     <result column="missnum" property="missnum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
@@ -41,7 +40,7 @@
     vipreward, vip, invitevip, todaysign, weeksign, rounds, rankchallengenum, refreshworldnum,
     speedincubate, lastweekrank, lastweekreward, totalincubate, lasttime, rankpermission,
     phonefare, phonefarenumber, sitedata, animaldata, taskdata, dartnum, buildingdata,
-    step,missnum
+    missnum
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -76,7 +75,6 @@
     data.taskdata,
     data.dartnum ,
     data.buildingdata ,
-    data.step,
     data.missnum,
     info.avatar ,
     info.nickname
@@ -185,9 +183,6 @@
       <if test="buildingdata != null" >
         buildingdata,
       </if>
-      <if test="step != null" >
-        step,
-      </if>
       <if test="missnum != null" >
         missnum,
       </if>
@@ -212,7 +207,7 @@
         #{diamond,jdbcType=INTEGER},
       </if>
       <if test="newgamer != null" >
-        #{newgamer,jdbcType=INTEGER},
+        #{newgamer,jdbcType=DOUBLE},
       </if>
       <if test="sound != null" >
         #{sound,jdbcType=INTEGER},
@@ -286,9 +281,6 @@
       <if test="buildingdata != null" >
         #{buildingdata,jdbcType=VARCHAR},
       </if>
-      <if test="step != null" >
-        #{step,jdbcType=DOUBLE},
-      </if>
       <if test="missnum != null" >
         #{missnum,jdbcType=INTEGER},
       </if>
@@ -310,7 +302,7 @@
         diamond = #{diamond,jdbcType=INTEGER},
       </if>
       <if test="newgamer != null" >
-        newgamer = #{newgamer,jdbcType=INTEGER},
+        newgamer = #{newgamer,jdbcType=DOUBLE},
       </if>
       <if test="sound != null" >
         sound = #{sound,jdbcType=INTEGER},
@@ -383,9 +375,6 @@
       </if>
       <if test="buildingdata != null" >
         buildingdata = #{buildingdata,jdbcType=VARCHAR},
-      </if>
-      <if test="step != null" >
-        step = #{step,jdbcType=DOUBLE},
       </if>
       <if test="missnum != null" >
         missnum = #{missnum,jdbcType=INTEGER},
