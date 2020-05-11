@@ -267,6 +267,10 @@ public class PlayerData {
             this.taskdata=StaticData.TASK_DATA;
         }
         JSONArray jsonArray = JSONArray.parseArray(taskdata);
+        int taskdataSize=10;
+        if (jsonArray.size()<taskdataSize){
+            jsonArray = JSONArray.parseArray(StaticData.TASK_DATA);
+        }
         JSONArray returnArray = new JSONArray();
         for (Object o : jsonArray) {
             JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
