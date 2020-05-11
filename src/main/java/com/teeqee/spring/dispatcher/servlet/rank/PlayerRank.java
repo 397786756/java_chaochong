@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.spring.dispatcher.model.MethodModel;
-import com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;

@@ -11,6 +11,7 @@ import lombok.ToString;
  */
 
 @ToString
+@Data
 public class Taskdata {
     @JSONField(name="taskid")
     private Integer t;
@@ -21,30 +22,6 @@ public class Taskdata {
     public Taskdata(Integer t, Integer n, Integer d) {
         this.t = t;
         this.n = n;
-        this.d = d;
-    }
-
-    public Integer getT() {
-        return t;
-    }
-
-    public void setT(Integer t) {
-        this.t = t;
-    }
-
-    public Integer getN() {
-        return n;
-    }
-
-    public void setN(Integer n) {
-        this.n = n;
-    }
-
-    public Integer getD() {
-        return d;
-    }
-
-    public void setD(Integer d) {
         this.d = d;
     }
 }

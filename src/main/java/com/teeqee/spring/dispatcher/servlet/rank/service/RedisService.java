@@ -1,7 +1,7 @@
 package com.teeqee.spring.dispatcher.servlet.rank.service;
 
 
-import com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 
 import java.util.List;
 

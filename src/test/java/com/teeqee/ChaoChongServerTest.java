@@ -4,7 +4,7 @@ package com.teeqee;
 
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
-import com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

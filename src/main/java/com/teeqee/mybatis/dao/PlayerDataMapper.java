@@ -1,7 +1,7 @@
 package com.teeqee.mybatis.dao;
 
 import com.teeqee.mybatis.pojo.PlayerData;
-import com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

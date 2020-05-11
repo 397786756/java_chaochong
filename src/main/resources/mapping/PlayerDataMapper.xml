@@ -395,7 +395,7 @@
   </update>
 
   <!--初始化排行榜-->
-  <select id="initTopRank"  resultType="com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo">
+  <select id="initTopRank"  resultType="com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo">
    select
    info.uid as uid,
    info.openid as openid,

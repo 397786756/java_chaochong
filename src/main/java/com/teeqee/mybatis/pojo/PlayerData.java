@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -91,10 +92,10 @@ public class PlayerData {
     private String avatar="";
     /**昵称*/
     private String nickname="未授权的玩家";
-
+    /**任务List*/
+    private List<Taskdata> taskdataList=new ArrayList<>();
     public PlayerData() {
     }
-
     /**
      * @param openid 构造函数
      */
@@ -271,17 +272,18 @@ public class PlayerData {
         if (jsonArray.size()<taskdataSize){
             jsonArray = JSONArray.parseArray(StaticData.TASK_DATA);
         }
-        JSONArray returnArray = new JSONArray();
+        List<Taskdata> list = new ArrayList<Taskdata>();
         for (Object o : jsonArray) {
             JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
             Integer d = jsonObject.getInteger("d");
             Integer t = jsonObject.getInteger("t");
             Integer n = jsonObject.getInteger("n");
             Taskdata taskdata = new Taskdata(t, n, d);
-            returnArray.add(JSON.toJSON(taskdata));
+            list.add(taskdata);
         }
+        this.taskdataList=list;
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(PlayerCmd.TASK_DATA, returnArray);
+        jsonObject.put(PlayerCmd.TASK_DATA, list);
         return jsonObject;
     }
 
@@ -438,8 +440,10 @@ public class PlayerData {
             if (step>this.step){
                 this.step=step;
             }
+            return true;
+        }else {
+            return false;
         }
-        return SpecialResult.NULL_BOOLEAN;
     }
     /**玩家视频增加飞镖数 (玩家看视频, 不管剩余几个飞镖, 飞镖个数直接变为5)*/
     public Integer videofordartnum(){
@@ -461,13 +465,14 @@ public class PlayerData {
             dartnum=0;
         }else if (dartnum>0){
             dartnum--;
+            return true;
         }
         return false;
     }
     /**开启声音*/
     public Boolean opensound(){
         this.sound=1;
-        return SpecialResult.NULL_BOOLEAN;
+        return true;
     }
 
     /**关闭声音*/

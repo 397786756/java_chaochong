@@ -5,7 +5,7 @@ import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.ServerInfo;
-import com.teeqee.spring.dispatcher.servlet.rank.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;

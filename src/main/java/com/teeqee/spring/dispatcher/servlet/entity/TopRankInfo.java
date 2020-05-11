@@ -1,4 +1,4 @@
-package com.teeqee.spring.dispatcher.servlet.rank.entity;
+package com.teeqee.spring.dispatcher.servlet.entity;
 
 import lombok.Data;
 
