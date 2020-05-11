@@ -34,7 +34,7 @@ public class PlayerData {
     private Integer gold;
     /**钻石数量*/
     private Integer diamond;
-    /**新手引导步数*/
+    /**新手引导步数 替代step*/
     private Double newgamer=0D;
     /**是否开启声音    1-->开启    0-->不开启*/
     private Integer sound;
@@ -343,24 +343,27 @@ public class PlayerData {
     }
 
     /**修改建筑data*/
-    //TODO 和登录获取的建筑data数据类型不一样
-    //原 {
-    //                "buildingid": 6,    //建筑id    (孵化器)
-    //                "buildinglv": 1,    //建筑等级
-    //                "successodds": 0,   //升级祭坛的成功率
-    //            }
-    //现在
-    //         {
-    //          "dataid"://本条数据唯一标识
-    //          "uid"://玩家uid
-    //          "buildingid"://建筑id
-    //          "buildinglv"://能力等级
-    //          }
     private void updateBuildingdata(JSONArray buildingdata) {
-        if (buildingdata.size()>0){
+        if (buildingdata != null&&buildingdata.size()>0){
             int size = buildingdata.size();
+            JSONArray jsonArray = new JSONArray(size);
+            for (int i = 0; i <size; i++) {
+                JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(buildingdata.get(i)));
+                JSONObject data = new JSONObject();
+                Integer lv = jsonObject.getInteger("buildinglv");
+                data.put("lv", lv);
+                Integer id = jsonObject.getInteger("buildingid");
+                data.put("id", id);
+                if (i==size-1){
+                    Integer ss = jsonObject.getInteger("successodds");
+                    data.put("ss", ss);
+                }
+               jsonArray.add(data);
+            }
+            this.buildingdata=jsonArray.toJSONString();
         }
     }
+
 
     /**
      * @param animaldata 修改玩家的animaldata
