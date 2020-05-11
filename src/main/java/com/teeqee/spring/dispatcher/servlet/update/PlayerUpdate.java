@@ -1,16 +1,11 @@
 package com.teeqee.spring.dispatcher.servlet.update;
 
 import com.alibaba.fastjson.JSONObject;
-import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 
-import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
-import com.teeqee.spring.dispatcher.servlet.rank.service.RedisServiceImpl;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.spring.mode.annotation.Dispather;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * @Description: 用户修改数据
@@ -21,18 +16,17 @@ import javax.annotation.Resource;
 @DataSourceType("update")
 @Service
 public class PlayerUpdate {
-    /**
-     * 排行榜dao
-     */
-    @Resource
-    private RedisService redisService;
+
+
+
     /**
      * 据说这是一个心跳,因为上个后端的原因所有数据都是客户端储存的
      * 根据文档有很多需要存的
      */
     @Dispather(value = "newheart")
     public JSONObject newheart(MethodModel model){
-        return model.getSession().getPlayerData().newheart(model.getData());
+        JSONObject data = model.getData();
+        return model.getSession().getPlayerData().newheart(data);
     }
 
 
@@ -47,7 +41,9 @@ public class PlayerUpdate {
     /**更新新手引导*/
     @Dispather(value = "endofguide")
     public Boolean endofguide(MethodModel model){
-        return model.getSession().getPlayerData().endofguide( model.getData().getInteger("step"));
+        JSONObject data = model.getData();
+        Integer step = data.getInteger("step");
+        return model.getSession().getPlayerData().endofguide(step);
     }
 
     /**关闭声音*/
@@ -61,6 +57,7 @@ public class PlayerUpdate {
     public Boolean opensound(MethodModel model){
         return model.getSession().getPlayerData().opensound();
     }
+
     /**玩家获取活跃度相关*/
     @Dispather(value = "getactive")
     public JSONObject getactive(MethodModel model){
@@ -74,25 +71,18 @@ public class PlayerUpdate {
     /**玩家领取离线奖励*/
     @Dispather(value = "sign")
     public Boolean sign(MethodModel model) {
-        return model.getSession().getPlayerData().sign( model.getData().getInteger("type"));
+        Integer type = model.getData().getInteger("type");
+        return model.getSession().getPlayerData().sign(type);
     }
     /**通关统计*/
     @Dispather(value = "rounds")
     public JSONObject rounds(MethodModel model) {
-        JSONObject data = model.getData();
-        Integer success = data.getInteger("success");
-        if (success!=null){
-            Integer channelid = model.getSession().getChannelid();
-            Session session = model.getSession();
-            redisService.addRank(channelid, RedisServiceImpl.ROUNDS_TYPE, session.getOpenId(),success.doubleValue(),true);
-        }
-        return model.getSession().getPlayerData().rounds(data);
+        return model.getSession().getPlayerData().rounds(model.getData());
     }
     /**话费增加*/
     @Dispather(value = "updatephonefarenumber")
     public Boolean updatephonefarenumber(MethodModel model) {
-        Double addphonefarenumber = model.getData().getDouble("addphonefarenumber");
-        return model.getSession().getPlayerData().updatephonefarenumber(addphonefarenumber);
+        return model.getSession().getPlayerData().updatephonefarenumber(model.getData().getDouble("addphonefarenumber"));
     }
     /**更新玩家显示领取话费*/
     @Dispather(value = "updatephonefare")
@@ -124,13 +114,7 @@ public class PlayerUpdate {
 
     /**飞镖没射中, 发给后端纪录次数*/
     @Dispather(value = "addmissnum")
-    public Integer addmissnum(MethodModel model) {
-        Session session = model.getSession();
-        Integer channelid = session.getChannelid();
-        redisService.addRank(channelid, RedisServiceImpl.MISSNUM_TYPE, session.getOpenId(),1D,false);
+    public Object addmissnum(MethodModel model) {
         return model.getSession().getPlayerData().addmissnum();
     }
-    /**使用飞镖*/
-    @Dispather(value = "useDart")
-    public Boolean useDart(MethodModel model) {return model.getSession().getPlayerData().useDart();}
 }
