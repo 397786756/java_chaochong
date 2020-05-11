@@ -3,6 +3,7 @@ package com.teeqee.mybatis.pojo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.Feature;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.cmd.StaticData;
 import com.teeqee.spring.dispatcher.servlet.entity.*;
@@ -92,6 +93,13 @@ public class PlayerData {
     private String nickname="未授权的玩家";
     /**任务List*/
     private List<Taskdata> taskdataList=new ArrayList<>();
+    /**活跃度*/
+    private String activedata="[\n" +
+            "            {\n" +
+            "                \"kind\": 1,      \n" +
+            "                \"rewardid\": 0,  \n" +
+            "                \"rewarded\": 0 \n" +
+            "            }]";
     public PlayerData() {
     }
     /**
@@ -484,7 +492,47 @@ public class PlayerData {
 
     /**玩家获取活跃度相关*/
     public JSONObject getactive(){
-        return SpecialResult.NULL_JSON_OBJECT;
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray;
+        if (activedata==null){
+            jsonArray= initActive();
+        }else {
+            jsonArray= retrunActive();
+        }
+        jsonObject.put("activedata",jsonArray);
+        return jsonObject;
+    }
+
+    /**初始化活动*/
+    private JSONArray retrunActive(){
+        return JSONArray.parseArray(activedata);
+    }
+
+    public static void main(String[] args) {
+        new PlayerData().retrunActive();
+    }
+
+    /**初始化活动*/
+    private JSONArray initActive(){
+        JSONArray jsonArray = new JSONArray();
+        int size = 10;
+        int rewardidIndex=0;
+        for (int i = 0; i < size; i++) {
+            Active active = new Active();
+            if (rewardidIndex>4){
+                rewardidIndex=0;
+            }
+            if (i>=5){
+                active.setK(1);
+            }else {
+                 active.setK(2);
+            }
+            active.setR(rewardidIndex);
+            active.setRe(0);
+            jsonArray.add(active);
+            rewardidIndex++;
+        }
+        return jsonArray;
     }
 
     /**玩家获取自己vip相关信息*/

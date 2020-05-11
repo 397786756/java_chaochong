@@ -137,7 +137,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      * @return 返回添加结果
      */
     @Override
-    public Boolean addRank(Integer channelId, Integer type, String openId, Double score, boolean isCover) {
+    public void addRank(Integer channelId, Integer type, String openId, Double score, boolean isCover) {
         if (channelId != null && type != null && openId != null && score != null && score > 0) {
             String redisZSetKey = getRedisZSetKey(channelId, type);
             if (isCover) {
@@ -145,9 +145,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             } else {
                 redisTemplate.opsForZSet().incrementScore(redisZSetKey, openId, score);
             }
-            return true;
         }
-        return false;
     }
 
 

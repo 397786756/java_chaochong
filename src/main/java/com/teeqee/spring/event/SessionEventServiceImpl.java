@@ -39,8 +39,8 @@ public class SessionEventServiceImpl implements SessionEventService {
     private PlayerInfoMapper playerInfoMapper;
 
     @Override
-    public void close(Session session) {
-        offLine(session);
+    public void close(Session session,boolean isClose) {
+        offLine(session,isClose);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class SessionEventServiceImpl implements SessionEventService {
 
 
     /**用户退出*/
-    private void offLine(Session session){
+    private void offLine(Session session,boolean isClose){
         logger.info("client close={}", session.getId());
         logger.info("update playerInfo");
         //存数据
@@ -94,7 +94,8 @@ public class SessionEventServiceImpl implements SessionEventService {
         if (playerInfo!=null){
             playerInfoMapper.updateByPrimaryKeySelective(playerInfo);
         }
-        ChannelSupervise.removeSession(session.getChannel());
-        //TODO 用户下线
+        if (isClose){
+            ChannelSupervise.removeSession(session.getChannel());
+        }
     }
 }

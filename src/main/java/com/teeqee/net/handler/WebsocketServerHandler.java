@@ -45,7 +45,7 @@ public class WebsocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) {
-        sessionEventService.close(ctx.channel().attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get());
+        sessionEventService.close(ctx.channel().attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get(),true);
     }
 
     @Override

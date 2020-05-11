@@ -1,5 +1,6 @@
 package com.teeqee.spring.dispatcher.servlet.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.ToString;
 
@@ -11,15 +12,15 @@ import lombok.ToString;
 @Data
 @ToString
 public class Active {
-    /**本条数据唯一标识*/
-    private int dataid;
     /**活跃度类型 1代表日活跃 2代表周活跃*/
-    private int kind;
-    /**活跃度*/
-    private int liveness;
-    /**奖励id （先后顺序）*/
-    private int rewardid;
+    @JSONField(name = "kind")
+    private int k;
+    /**奖励id*/
+    @JSONField(name = "rewardid")
+    private int r;
     /**奖励是否已经领取 0代表未领取 1代表已经领取*/
-    private int rewarded;
+    @JSONField(name = "rewarded")
+    private int re;
+
 }
 

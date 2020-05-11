@@ -1,14 +1,10 @@
 package com.teeqee.net.server;
 
 
-import com.teeqee.net.gm.ChannelSupervise;
-import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
-import com.teeqee.net.handler.Session;
 import com.teeqee.net.handler.WebsocketServerHandler;
 import com.teeqee.spring.event.SessionEventService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -23,19 +19,19 @@ import io.netty.handler.timeout.IdleStateHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
  * netty服务器
  */
 @Component("nettyServer")
+@Order(2)
 public class NettyServer implements CommandLineRunner, DisposableBean {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
@@ -60,16 +56,6 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     @Override
     public void run(String... args) throws Exception {
         bind();
-    }
-
-    /**
-     * 自动关闭当前server
-     */
-    private void closeServer() throws Exception{
-        if (serverChannel != null) {
-            destroy();
-            LOGGER.info("netty  gameserver close bye");
-        }
     }
 
     private void bind() throws InterruptedException {
@@ -138,19 +124,6 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
 
     @Override
     public void destroy() throws Exception {
-        playerDataUpdate();
         close();
-    }
-
-    /**处理用户数据*/
-    private void playerDataUpdate(){
-        ChannelGroup globalGroup = ChannelSupervise.getGlobalGroup();
-        for (Channel channel : globalGroup) {
-            Session session = channel.attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get();
-            if (session != null) {
-                sessionEventService.close(session);
-            }
-        }
-        ChannelSupervise.clean();
     }
 }

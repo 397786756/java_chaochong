@@ -12,7 +12,11 @@ import io.netty.handler.codec.http.FullHttpRequest;
  */
 public interface SessionEventService {
 
-    void close(Session session);
+    /**
+     * @param session 会话
+     * @param isClose 是否关闭
+     */
+    void close(Session session,boolean isClose);
 
     void send(String msg, Session session) throws Exception;
 

@@ -36,5 +36,5 @@ public interface RedisService {
      * @param siCover   是否覆盖
      * @return 返回是否加入成功
      */
-    Boolean addRank(Integer channelId, Integer type, String openId, Double score, boolean siCover);
+    void addRank(Integer channelId, Integer type, String openId, Double score, boolean siCover);
 }
