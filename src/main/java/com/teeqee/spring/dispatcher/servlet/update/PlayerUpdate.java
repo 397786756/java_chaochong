@@ -117,5 +117,8 @@ public class PlayerUpdate {
     public Object addmissnum(MethodModel model) {
         return model.getSession().getPlayerData().addmissnum();
     }
+    /**使用飞镖*/
+    @Dispather(value = "useDart")
+    public Boolean useDart(MethodModel model) {return model.getSession().getPlayerData().useDart();}
 
 }
