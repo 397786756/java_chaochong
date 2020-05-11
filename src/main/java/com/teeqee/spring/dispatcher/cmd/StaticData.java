@@ -40,7 +40,7 @@ public class StaticData {
     /**
      *拉取建筑
      */
-    public static final String BUILDING_DATA="[{\"lv\":1,\"id\":0},{\"lv\":1,\"id\":1},{\"lv\":1,\"id\":2},{\"lv\":1,\"id\":3},{\"lv\":1,\"id\":4},{\"lv\":1,\"id\":5},{\"ss\":0,\"lv\":1,\"id\":6}]";
+    public static final String BUILDING_DATA="[{\"lv\":0,\"id\":0},{\"lv\":0,\"id\":1},{\"lv\":0,\"id\":2},{\"lv\":0,\"id\":3},{\"lv\":0,\"id\":4},{\"lv\":0,\"id\":5},{\"ss\":0,\"lv\":0,\"id\":6}]";
 
 
 }
