@@ -36,25 +36,25 @@ public class PlayerData {
     /**钻石数量*/
     private Integer diamond;
     /**新手引导步数 替代step*/
-    private Double newgamer=0D;
+    private Double newgamer;
     /**是否开启声音    1-->开启    0-->不开启*/
     private Integer sound;
     /**最高级动物的等级*/
     private Integer biggestanimalid;
     /**vip的等级*/
-    private Integer viplv=0;
+    private Integer viplv;
     /**今天有没有领取vip奖励*/
-    private Integer vipreward=0;
+    private Integer vipreward;
     /**vip点数*/
-    private Integer vip=0;
+    private Integer vip;
     /**玩家当前VIP邀请人数*/
-    private Integer invitevip=0;
+    private Integer invitevip;
     /**今日是否签到*/
     private Boolean todaysign;
     /**玩家总共签到次数*/
     private Integer weeksign;
     /**关卡数*/
-    private Integer rounds=1;
+    private Integer rounds;
     /**世界打榜剩余挑战次数*/
     private Integer rankchallengenum;
     /**世界打榜换一批的次数*/
@@ -502,10 +502,6 @@ public class PlayerData {
     /**初始化活动*/
     private JSONArray retrunActive(){
         return JSONArray.parseArray(activedata);
-    }
-
-    public static void main(String[] args) {
-        new PlayerData().retrunActive();
     }
 
     /**初始化活动*/
