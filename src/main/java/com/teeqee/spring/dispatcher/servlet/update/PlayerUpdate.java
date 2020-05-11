@@ -113,7 +113,9 @@ public class PlayerUpdate {
     }
 
     /**飞镖没射中, 发给后端纪录次数*/
+    @Dispather(value = "addmissnum")
     public Object addmissnum(MethodModel model) {
         return model.getSession().getPlayerData().addmissnum();
     }
+
 }

@@ -399,7 +399,9 @@ public class PlayerData {
     public JSONObject getdartboard(){
           String jsonKey="dartboard";
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put(jsonKey, dartnum);
+        JSONObject dartnumJson = new JSONObject();
+        dartnumJson.put("dartnum",dartnum);
+        jsonObject.put(jsonKey, dartnumJson);
         return jsonObject;
     }
 
