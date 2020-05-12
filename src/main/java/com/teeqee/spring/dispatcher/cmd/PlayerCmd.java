@@ -12,6 +12,8 @@ public class PlayerCmd {
     public static final String PLAYER_INFO="playInfo";
     /**获取用户日志的记录*/
     public static final String PLAYER_LOG="playLog";
+    /**获取自己的排行记录*/
+    public static final String PLAYER_RANK = "playerRank";
 
     /**获取宠物的位置信息*/
     public static final String SITE_DATA= "sitedata";
@@ -21,4 +23,5 @@ public class PlayerCmd {
     public static final String TASK_DATA= "taskdata";
    /**拉取建筑*/
    public static final String BUILDING_DATA="buildingdata";
+
 }

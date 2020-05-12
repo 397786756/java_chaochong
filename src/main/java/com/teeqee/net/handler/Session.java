@@ -4,6 +4,7 @@ package com.teeqee.net.handler;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
+import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import io.netty.channel.Channel;
 
@@ -20,11 +21,15 @@ import java.util.Map;
 
 public class Session<T>  {
     /**因为超宠是登录后再传openId的*/
-    private String openid;
+    private Long uid;
     /**平台*/
     private Integer channelid;
     /**channel*/
     private Channel channel;
+    /** 是否已经传openId并且登录*/
+    private boolean loginStatus;
+    /**登录的时间*/
+    private Date loginTime=new Date();
 
     public Integer getChannelid() {
         return channelid;
@@ -42,10 +47,7 @@ public class Session<T>  {
         this.channel = channel;
     }
 
-    /** 是否已经传openId并且登录*/
-    private boolean loginStatus;
-    /**登录的时间*/
-    private Date loginTime=new Date();
+
 
     public Date getLoginTime() {
         return loginTime;
@@ -58,16 +60,16 @@ public class Session<T>  {
     /**存对象*/
     private Map<String, Object> keyToAttrs = new HashMap<>();
 
-  public String getId(){
-      return openid;
+  public Long getId(){
+      return uid;
   }
 
     /**
-     * @param openid 玩家的openid 标记着已经登录了
+     * @param uid
      */
-    public void isLogin(String openid){
-        if (this.openid==null){
-            this.openid=openid;
+    public void isLogin(Long uid){
+        if (this.uid==null){
+            this.uid=uid;
             loginStatus=true;
         }
     }
@@ -81,16 +83,12 @@ public class Session<T>  {
         this.loginStatus = loginStatus;
     }
 
-    public String getOpenid() {
-        return openid;
+    public Long getUid() {
+        return uid;
     }
 
-    public void setOpenid(String openid) {
-        this.openid = openid;
-    }
-
-    public String getOpenId() {
-        return openid;
+    public void setUid(Long uid) {
+        this.uid = uid;
     }
 
     public Map<String, Object> getMap() {
@@ -131,5 +129,11 @@ public class Session<T>  {
      */
     public PlayerLog getPlayerLog(){
         return (PlayerLog) keyToAttrs.get(PlayerCmd.PLAYER_LOG);
+    }
+    /**
+     * @return 返回用户的playerLog
+     */
+    public PlayerRank getPlayerRank(){
+        return (PlayerRank) keyToAttrs.get(PlayerCmd.PLAYER_RANK);
     }
 }

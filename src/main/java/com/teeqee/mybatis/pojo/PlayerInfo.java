@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 public class PlayerInfo {
-    private Integer uid;
+    private Long uid;
 
     private String openid;
 
@@ -32,8 +32,9 @@ public class PlayerInfo {
 
     private Date createtime;
 
-    public PlayerInfo(String openid) {
+    public PlayerInfo(String openid,Long uid) {
         this.openid = openid;
+        this.uid=uid;
     }
 
     public PlayerInfo() {

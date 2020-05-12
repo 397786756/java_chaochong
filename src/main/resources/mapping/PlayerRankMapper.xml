@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teeqee.mybatis.dao.PlayerRankMapper" >
+  <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerRank" >
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="opponent1" property="opponent1" jdbcType="BIGINT" />
+    <result column="opponent2" property="opponent2" jdbcType="BIGINT" />
+    <result column="opponent3" property="opponent3" jdbcType="BIGINT" />
+    <result column="opponent4" property="opponent4" jdbcType="BIGINT" />
+    <result column="opponent5" property="opponent5" jdbcType="BIGINT" />
+    <result column="opponent6" property="opponent6" jdbcType="BIGINT" />
+    <result column="isopponent" property="isopponent" jdbcType="BIT" />
+    <result column="rank" property="rank" jdbcType="BIGINT" />
+    <result column="ranktotal" property="ranktotal" jdbcType="INTEGER" />
+  </resultMap>
+  <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerRank" >
+    insert into player_rank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="opponent1 != null" >
+        opponent1,
+      </if>
+      <if test="opponent2 != null" >
+        opponent2,
+      </if>
+      <if test="opponent3 != null" >
+        opponent3,
+      </if>
+      <if test="opponent4 != null" >
+        opponent4,
+      </if>
+      <if test="opponent5 != null" >
+        opponent5,
+      </if>
+      <if test="opponent6 != null" >
+        opponent6,
+      </if>
+      <if test="isopponent != null" >
+        isopponent,
+      </if>
+      <if test="rank != null" >
+        rank,
+      </if>
+      <if test="ranktotal != null" >
+        ranktotal,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="opponent1 != null" >
+        #{opponent1,jdbcType=BIGINT},
+      </if>
+      <if test="opponent2 != null" >
+        #{opponent2,jdbcType=BIGINT},
+      </if>
+      <if test="opponent3 != null" >
+        #{opponent3,jdbcType=BIGINT},
+      </if>
+      <if test="opponent4 != null" >
+        #{opponent4,jdbcType=BIGINT},
+      </if>
+      <if test="opponent5 != null" >
+        #{opponent5,jdbcType=BIGINT},
+      </if>
+      <if test="opponent6 != null" >
+        #{opponent6,jdbcType=BIGINT},
+      </if>
+      <if test="isopponent != null" >
+        #{isopponent,jdbcType=BIT},
+      </if>
+      <if test="rank != null" >
+        #{rank,jdbcType=BIGINT},
+      </if>
+      <if test="ranktotal != null" >
+        #{ranktotal,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.teeqee.mybatis.pojo.PlayerRank" >
+    update player_rank
+    <set >
+      <if test="opponent1 != null" >
+        opponent1= #{opponent1,jdbcType=BIGINT},
+      </if>
+      <if test="opponent2 != null" >
+        opponent2= #{opponent2,jdbcType=BIGINT},
+      </if>
+      <if test="opponent3 != null" >
+        opponent3= #{opponent3,jdbcType=BIGINT},
+      </if>
+      <if test="opponent4 != null" >
+        opponent4= #{opponent4,jdbcType=BIGINT},
+      </if>
+      <if test="opponent5 != null" >
+        opponent5= #{opponent5,jdbcType=BIGINT},
+      </if>
+      <if test="opponent6 != null" >
+        opponent6= #{opponent6,jdbcType=BIGINT},
+      </if>
+      <if test="isopponent != null" >
+        isopponent= #{isopponent,jdbcType=BIT},
+      </if>
+      <if test="rank != null" >
+        rank= #{rank,jdbcType=BIGINT},
+      </if>
+      <if test="ranktotal != null" >
+        ranktotal= #{ranktotal,jdbcType=INTEGER},
+      </if>
+    </set>
+    where
+    uid = #{uid,jdbcType=BIGINT}
+  </update>
+  <!--查询机器人-->
+  <select id="findChannelIdRobotRankNum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(*) from
+    player_rank rank ,
+    player_info info
+    where
+    rank.uid =info.uid
+    and
+    info.channelid=#{channelid,jdbcType=INTEGER}
+  </select>
+  <!--删除小于这个的uid-->
+  <delete id="deleteByScopeUid">
+    delete from player_rank
+    where
+    uid &lt;= #{scopeUidStart,jdbcType=INTEGER}
+    and
+    uid &gt;= #{scopeUidEnd,jdbcType=INTEGER}
+  </delete>
+</mapper>

@@ -2,8 +2,10 @@ package com.teeqee.spring.dispatcher.servlet.rank.service;
 
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
+import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
 import com.teeqee.mybatis.pojo.PlayerInfo;
+import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.slf4j.Logger;
@@ -15,9 +17,11 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,42 +50,32 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     private Integer rankTask;
     @Resource
     private RedisTemplate redisTemplate;
-    /**
-     * server dao
-     */
+    /**serverInfo dao*/
     @Resource
     private ServerInfoMapper serverInfoMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
     @Resource
     private PlayerDataMapper playerDataMapper;
-    /**
-     * 未名中的排行榜Map
-     */
+    @Resource
+    private PlayerRankMapper playerRankMapper;
+    /**未名中的排行榜Map*/
     private ConcurrentHashMap<Integer, List<TopRankInfo>> missRankMap = new ConcurrentHashMap<>(16);
-    /**
-     * 打榜的排行榜Map
-     */
+    /**打榜的排行榜Map*/
     private ConcurrentHashMap<Integer, List<TopRankInfo>> roundsRankMap = new ConcurrentHashMap<>(16);
-    /**
-     * serverMap
-     */
+    /**serverMap*/
     private ConcurrentHashMap<Integer, ServerInfo> serverInfoMap = new ConcurrentHashMap<>(16);
-    /**
-     * 打榜
-     */
+    /**打榜*/
     private static final String ROUNDS = "rounds";
-    /**
-     * miss
-     */
+    /**miss*/
     private static final String MISSNUM = "missnum";
-    /**
-     * rank type
-     */
+    /**守卫者*/
+    private static final String  SHOU_WEI_ZHE = "守卫者";
+    /**rank size*/
+    private static final long MAX_NUM=20;
+    /**rank type*/
     public static final int ROUNDS_TYPE = 1;
-    /**
-     * miss 排行榜
-     */
+    /**miss 排行榜*/
     public static final int MISSNUM_TYPE = 2;
 
     /**
@@ -103,17 +97,17 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**
      * @param channelId 平台id
      * @param type      排行榜的类型
-     * @param openId    玩家的openId
+     * @param uid    玩家的uid
      * @return 返回个人排名
      */
     @Override
-    public TopRankInfo getMyTopRankInfo(Integer channelId, Integer type, String openId) {
+    public TopRankInfo getMyTopRankInfo(Integer channelId, Integer type,Long uid) {
         String redisAddKey = getRedisZSetKey(channelId, type);
         Double score;
         long myRank = 0L;
-        score = redisTemplate.opsForZSet().score(redisAddKey, openId);
+        score = redisTemplate.opsForZSet().score(redisAddKey, uid);
         if (score != null) {
-            Long aLong = redisTemplate.opsForZSet().reverseRank(redisAddKey, openId);
+            Long aLong = redisTemplate.opsForZSet().reverseRank(redisAddKey, uid);
             if (aLong != null) {
                 //排行榜第一名是0
                 myRank = aLong + 1;
@@ -123,7 +117,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         }
         TopRankInfo topRankInfo = new TopRankInfo();
         topRankInfo.setRounds(score.intValue());
-        topRankInfo.setRunknum(myRank);
+        topRankInfo.setRankunm(myRank);
         return topRankInfo;
     }
 
@@ -131,19 +125,19 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**
      * @param channelId 平台id
      * @param type      排行榜的类型
-     * @param openId    玩家的openId
+     * @param uid    玩家的uid
      * @param score     分数
      * @param isCover   是否覆盖
      * @return 返回添加结果
      */
     @Override
-    public void addRank(Integer channelId, Integer type, String openId, Double score, boolean isCover) {
-        if (channelId != null && type != null && openId != null && score != null && score > 0) {
+    public void addRank(Integer channelId, Integer type, Long uid, Double score, boolean isCover) {
+        if (channelId != null && type != null && uid != null && score != null && score > 0) {
             String redisZSetKey = getRedisZSetKey(channelId, type);
             if (isCover) {
-                redisTemplate.opsForZSet().add(redisZSetKey, openId, score);
+                redisTemplate.opsForZSet().add(redisZSetKey, uid, score);
             } else {
-                redisTemplate.opsForZSet().incrementScore(redisZSetKey, openId, score);
+                redisTemplate.opsForZSet().incrementScore(redisZSetKey, uid, score);
             }
         }
     }
@@ -195,13 +189,48 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     public void run(String... args) throws Exception {
         initServerInfo();
         initMysqlRankInfo();
+        initServerRobot();
     }
+
+    /**生成机器人*/
+    private void initServerRobot(){
+        logger.info("检测机器人生成情况");
+        int robotMaxSize=100;
+        serverInfoMap.forEach((k,v)->{
+            Integer channelIdRobotRankNum = playerRankMapper.findChannelIdRobotRankNum(k);
+            if (channelIdRobotRankNum==null||channelIdRobotRankNum<robotMaxSize){
+                //阶乘
+                int channelRideHundred = k * 100;
+                //删除排行榜范围区间
+                playerRankMapper.deleteByScopeUid(channelRideHundred,(channelRideHundred*2)-1);
+                //删除用户的uuid
+                playerInfoMapper.deleteByScopeUid(channelRideHundred,(channelRideHundred*2)-1);
+                for (int i = 0; i < robotMaxSize; i++) {
+                    PlayerRank playerRank = new PlayerRank();
+                    playerRank.setUid((long)channelRideHundred);
+                    playerRank.setIsopponent(false);
+                    playerRank.setRanktotal(0);
+                    playerRank.setRank((long)i+1);
+                    playerRankMapper.insertSelective(playerRank);
+                    PlayerInfo playerInfo = new PlayerInfo();
+                    playerInfo.setUid((long)channelRideHundred);
+                    playerInfo.setChannelid(k);
+                    playerInfo.setOpenid(channelRideHundred+"");
+                    playerInfo.setCreatetime(new Date());
+                    playerInfo.setNickname(SHOU_WEI_ZHE);
+                    playerInfoMapper.insertSelective(playerInfo);
+                    channelRideHundred++;
+                }
+            }
+        });
+    }
+
 
     /**
      * 初始化服务器
      */
     private void initServerInfo() {
-        logger.info("init server info");
+        logger.info("init gameserver info");
         List<ServerInfo> serverList = serverInfoMapper.serverInfoList();
         serverList.forEach(server -> serverInfoMap.put(server.getChannelId(), server));
     }
@@ -215,14 +244,14 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             Integer channelId = v.getChannelId();
             List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
             for (TopRankInfo topRankInfo : roundsList) {
-                addRank(channelId, ROUNDS_TYPE, topRankInfo.getOpenid(), topRankInfo.getRounds().doubleValue(),true);
+                addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
             for (TopRankInfo topRankInfo : missList) {
-                addRank(channelId, MISSNUM_TYPE, topRankInfo.getOpenid(), topRankInfo.getRounds().doubleValue(),true);
+                addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
-            logger.info("server id:{},roundsListSize:{}", channelId, roundsList.size());
-            logger.info("server id:{},missListSize:{}", channelId, missList.size());
+            logger.info("gameserver id:{},roundsListSize:{}", channelId, roundsList.size());
+            logger.info("gameserver id:{},missListSize:{}", channelId, missList.size());
             missRankMap.put(channelId, missList);
             roundsRankMap.put(channelId, roundsList);
         });
@@ -241,6 +270,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             Long roundsSize = redisTemplate.opsForZSet().size(rounsdKey);
             if (roundsSize == null) {
                 roundsSize = 0L;
+            }else {
+                roundsSize=MAX_NUM;
             }
             roundsRankMap.put(channelId, updateTopRankInfo(rounsdKey, roundsSize));
             //第二个排行榜
@@ -248,6 +279,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             Long missSize = redisTemplate.opsForZSet().size(missKey);
             if (missSize == null) {
                 missSize = 0L;
+            }else {
+                missSize=MAX_NUM;
             }
             missRankMap.put(channelId, updateTopRankInfo(missKey, missSize));
         });
@@ -262,20 +295,16 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         if (size == 0) {
             return list;
         }
-        int maxNum = 50;
-        if (size >= maxNum) {
-            size = 50L;
-        }
         Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().reverseRangeWithScores(redisZSetKey, 0, size);
         if (set != null && set.size() > 0) {
             int top = 1;
             for (ZSetOperations.TypedTuple<Object> tuple : set) {
                 Double score = tuple.getScore();
-                String openId = (String) tuple.getValue();
+                Long uid = (Long) tuple.getValue();
                 if (score != null) {
                     TopRankInfo topRankInfo = new TopRankInfo(top, score.longValue());
                     //获取头像昵称
-                    PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(openId);
+                    PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(uid);
                     if (playerInfo != null) {
                         String avatar = playerInfo.getMyAvatar();
                         String nickName = playerInfo.getMyNickName();

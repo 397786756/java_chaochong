@@ -10,10 +10,7 @@ import lombok.Data;
 @Data
 public class TopRankInfo {
     /**用户的uid*/
-    private Integer uid;
-
-    /**用户的uid*/
-    private String openid;
+    private Long uid;
 
     private String nickname;
 
@@ -21,20 +18,20 @@ public class TopRankInfo {
     /**分数*/
     private Integer rounds;
     /**排名*/
-    private Long runknum;
+    private Long rankunm;
 
-    public TopRankInfo( Integer rounds, Long runknum) {
+    public TopRankInfo( Integer rounds, Long rankunm) {
         this.rounds = rounds;
-        this.runknum = runknum;
+        this.rankunm = rankunm;
     }
 
     public TopRankInfo() {
     }
     public void init(){
-        this.uid=1;
+        this.uid=1L;
         this.nickname="";
         this.avatar="";
         this.rounds=0;
-        this.runknum=0L;
+        this.rankunm=0L;
     }
 }

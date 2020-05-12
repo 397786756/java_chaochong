@@ -18,10 +18,10 @@ public interface PlayerDataMapper {
 
     int insertSelective(PlayerData record);
 
-    PlayerData selectByPrimaryKey(String openid);
+    PlayerData selectByPrimaryKey(Long uid);
+
 
     int updateByPrimaryKeySelective(PlayerData record);
-
 
     /**
      * @param channelid 渠道

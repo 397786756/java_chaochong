@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.teeqee.mybatis.dao.PlayerDataMapper" >
   <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerData" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <id column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="isrobot" property="isrobot" jdbcType="BIT" />
     <result column="stockmax" property="stockmax" jdbcType="INTEGER" />
     <result column="stock" property="stock" jdbcType="INTEGER" />
     <result column="gold" property="gold" jdbcType="INTEGER" />
@@ -37,16 +37,16 @@
     <result column="activedata" property="activedata" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    uid, openid, stockmax, stock, gold, diamond, newgamer, sound, biggestanimalid, viplv,
+    uid, isrobot, stockmax, stock, gold, diamond, newgamer, sound, biggestanimalid, viplv,
     vipreward, vip, invitevip, todaysign, weeksign, rounds, rankchallengenum, refreshworldnum,
     speedincubate, lastweekrank, lastweekreward, totalincubate, lasttime, rankpermission,
     phonefare, phonefarenumber, sitedata, animaldata, taskdata, dartnum, buildingdata,
     missnum, activedata
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
     data.uid,
-    data.openid,
+    data.isrobot,
     data.stockmax,
     data.stock,
     data.gold,
@@ -85,9 +85,9 @@
     left join
     player_info info
     on
-    data.openid=info.openid
+    data.uid=info.uid
     where
-    data.openid = #{openid,jdbcType=VARCHAR}
+    data.uid = #{uid,jdbcType=BIGINT}
   </select>
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerData" >
     insert into player_data
@@ -95,8 +95,8 @@
       <if test="uid != null" >
         uid,
       </if>
-      <if test="openid != null" >
-        openid,
+      <if test="isrobot != null" >
+        isrobot,
       </if>
       <if test="stockmax != null" >
         stockmax,
@@ -194,10 +194,10 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uid != null" >
-        #{uid,jdbcType=INTEGER},
+        #{uid,jdbcType=BIGINT},
       </if>
-      <if test="openid != null" >
-        #{openid,jdbcType=VARCHAR},
+      <if test="isrobot != null" >
+        #{isrobot,jdbcType=BIT},
       </if>
       <if test="stockmax != null" >
         #{stockmax,jdbcType=INTEGER},
@@ -297,6 +297,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.teeqee.mybatis.pojo.PlayerData" >
     update player_data
     <set >
+      <if test="isrobot != null" >
+        isrobot = #{isrobot,jdbcType=BIT},
+      </if>
       <if test="stockmax != null" >
         stockmax = #{stockmax,jdbcType=INTEGER},
       </if>
@@ -391,14 +394,12 @@
         activedata = #{activedata,jdbcType=VARCHAR},
       </if>
     </set>
-    where openid = #{openid,jdbcType=VARCHAR}
+    where uid = #{uid,jdbcType=BIGINT}
   </update>
-
   <!--初始化排行榜-->
   <select id="initTopRank"  resultType="com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo">
    select
    info.uid as uid,
-   info.openid as openid,
    info.nickname as nickname,
    info.avatar as avatar,
    data.rounds as rounds,
@@ -408,7 +409,7 @@
    left join
    player_info info
    on
-   data.openid=info.openid
+   data.uid=info.uid
    where
    info.channelid=#{channelid,jdbcType=INTEGER}
    order by data.${orderByName}

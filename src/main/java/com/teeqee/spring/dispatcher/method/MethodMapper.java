@@ -3,7 +3,7 @@ package com.teeqee.spring.dispatcher.method;
 import com.teeqee.spring.dispatcher.cmd.DispatcherCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.login.PlayerLogin;
-import com.teeqee.spring.dispatcher.servlet.rank.PlayerRank;
+import com.teeqee.spring.dispatcher.servlet.rank.PlayerRankEntrance;
 import com.teeqee.spring.dispatcher.servlet.update.PlayerUpdate;
 import com.teeqee.spring.result.Result;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +24,7 @@ public class MethodMapper implements CommandLineRunner{
     private PlayerUpdate playerUpdate;
     /**rank*/
     @Resource
-    private PlayerRank playerRank;
+    private PlayerRankEntrance playerRankEntrance;
     /**method map*/
     private ConcurrentHashMap<String, Function<MethodModel, Object>> map=new ConcurrentHashMap<>(1024);
 
@@ -82,9 +82,9 @@ public class MethodMapper implements CommandLineRunner{
         /**玩家领取vip*/
         map.put(DispatcherCmd.REWARD_VIP,map->playerUpdate.rewardvip(map));
         /**未命中排行榜*/
-        map.put(DispatcherCmd.TOP_LISTMISSNUM,map->playerRank.toplistmissnum(map));
+        map.put(DispatcherCmd.TOP_LISTMISSNUM,map-> playerRankEntrance.toplistmissnum(map));
         /**世界排行榜*/
-        map.put(DispatcherCmd.TOP_LIST,map->playerRank.toplist(map));
+        map.put(DispatcherCmd.TOP_LIST,map-> playerRankEntrance.toplist(map));
         /**玩家观看视频增加vip等级*/
         map.put(DispatcherCmd.VIDEO_FOR_VIP,map->playerUpdate.videoforvip(map));
         /**玩家视频增加飞镖数*/
@@ -93,5 +93,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.ADD_MISS_NUM,map->playerUpdate.addmissnum(map));
         /**使用飞镖*/
         map.put(DispatcherCmd.USE_DART,map->playerUpdate.useDart(map));
+        /**使用飞镖*/
+        map.put(DispatcherCmd.GET_WORLD_RANK,map-> playerRankEntrance.getworldrank(map));
     }
 }

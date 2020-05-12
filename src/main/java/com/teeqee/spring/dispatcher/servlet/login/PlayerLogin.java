@@ -7,25 +7,27 @@ import com.teeqee.mybatis.dao.PlayerLogMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
-import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
+import com.teeqee.utils.IdWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
 
 
 @DataSourceType("login")
-@Service
+@Service("playerLogin")
 public class PlayerLogin {
     /**测试服*/
-    private static final int TEST_SERVER=1000;
+    private static final int TOURIST=1000;
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**playerData dao*/
     @Resource
@@ -37,36 +39,45 @@ public class PlayerLogin {
     private PlayerInfoMapper playerInfoMapper;
 
     @Dispather(value = "login")
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject login(MethodModel model) {
         Session session = model.getSession();
-        //判断是否有重复登录
         PlayerData playerData = session.getPlayerData();
         if (playerData ==null){
             JSONObject data = model.getData();
             if (data != null && data.size() > 0) {
                 String openid = data.getString("openid");
                 if (openid != null) {
-                    //修改为已经登录
-                    session.isLogin(openid);
-                    session.setChannelid(TEST_SERVER);
-                    //TODO 平台
-                    //获取数据
-                    playerData = localLogin(openid);
-                    session.add(PlayerCmd.PLAYER_DATA,playerData);
-                    session.add(PlayerCmd.PLAYER_LOG, createPlayerLog(openid));
-                    session.add(PlayerCmd.PLAYER_INFO,createPlayerInfo(openid,TEST_SERVER));
-                    return playerData.loginPush();
+                    //登录传过来的openid
+                    tourist(session,openid,TOURIST);
                 }else {
                     //调用http接口
                 }
             }
+            return session.getPlayerData().loginPush();
         }else {
-            //直接返回
             return playerData.loginPush();
         }
-        return null;
     }
-
+    /**
+     * @param openid 玩家的openid
+     * @param channelid 渠道id
+     */
+    private void tourist(Session session, String openid, int channelid){
+        //初始化用户隐私信息
+        PlayerInfo playerInfo = createPlayerInfo(openid, channelid);
+        Long uid = playerInfo.getUid();
+        //初始化用户数据信息
+        //初始化用户日志数据
+        PlayerLog playerLog = createPlayerLog(uid);
+        //不初始化排行榜
+        PlayerData playerData = localLogin(uid);
+        //开启游客模式
+        playerData.isTourist(openid);
+        session.add(PlayerCmd.PLAYER_DATA,playerData);
+        session.add(PlayerCmd.PLAYER_LOG, playerLog);
+        session.add(PlayerCmd.PLAYER_INFO,playerInfo);
+    }
     /**
      * @param model 数据源
      * @return 拉取建筑
@@ -110,21 +121,11 @@ public class PlayerLogin {
     public boolean userinfor(MethodModel model){
         Session session = model.getSession();
         //TODO code
-        String openId = session.getOpenId();
-        if (openId!=null){
+        Long uid = session.getUid();
+        if (uid!=null){
             PlayerInfo playerInfo = session.getPlayerInfo();
             if (playerInfo!=null){
                 return playerInfo.updateUserInfo(model.getData());
-            }else {
-                //这边可以直接不查询sql
-                //TODO
-                PlayerInfo playerInfoMysql = playerInfoMapper.selectByPrimaryKey(openId);
-                if (playerInfoMysql==null){
-                    playerInfoMysql=new PlayerInfo(openId);
-                    playerInfoMapper.insertSelective(playerInfoMysql);
-                }
-                session.add(PlayerCmd.PLAYER_INFO, playerInfoMysql);
-                return playerInfoMysql.updateUserInfo(model.getData()) ;
             }
         }
         return false;
@@ -139,38 +140,38 @@ public class PlayerLogin {
     }
 
     /**
-     * @param openId 用户的openId
+     * @param uid 玩家的uid
      * @return 登录的信息
      */
-    private PlayerData localLogin(String openId) {
-            PlayerData playerData = playerDataMapper.selectByPrimaryKey(openId);
+    private PlayerData localLogin(Long uid) {
+            PlayerData playerData = playerDataMapper.selectByPrimaryKey(uid);
             //没有则直接创建
             if (playerData == null) {
-                playerData = createPlayData(openId);
+                playerData = createPlayData(uid);
             }
            return playerData;
     }
 
 
     /**
-     * @param openId 用户的id
+     * @param uid 用户的id
      * @return 返回用户的数据源
      */
-    private PlayerData createPlayData(String openId) {
-        PlayerData playerData = new PlayerData(openId);
+    private PlayerData createPlayData(Long uid) {
+        PlayerData playerData = new PlayerData(uid);
         playerDataMapper.insertSelective(playerData);
         return playerData;
     }
     /**
-     * @param openId 用户的id
+     * @param uid 用户的id
      * @return 返回用户的数据源
      */
-    private PlayerLog createPlayerLog(String openId) {
-        PlayerLog playerLog = playerLogMapper.selectByTimeLog(openId, new Date());
+    private PlayerLog createPlayerLog(Long uid) {
+        PlayerLog playerLog = playerLogMapper.selectByTimeLog(uid, new Date());
         if (playerLog==null){
-            playerLog=new PlayerLog(openId,new Date());
+            playerLog=new PlayerLog(uid,new Date());
             playerLogMapper.insertSelective(playerLog);
-            logger.info("create player openid:{}", openId);
+            logger.info("create playerLog uid:{}", uid);
         }else {
             //登录次数+1
             playerLog.loginTotalAdd();
@@ -183,9 +184,11 @@ public class PlayerLogin {
      * @return 返回用户的数据源
      */
     private PlayerInfo createPlayerInfo(String openId,Integer channelId) {
-        PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(openId);
+        PlayerInfo playerInfo = playerInfoMapper.selectByOpenid(openId);
         if (playerInfo==null){
             playerInfo=new PlayerInfo();
+            long uid = new IdWorker().nextId();
+            playerInfo.setUid(uid);
             playerInfo.setOpenid(openId);
             //设置个渠道
             playerInfo.setChannelid(channelId);

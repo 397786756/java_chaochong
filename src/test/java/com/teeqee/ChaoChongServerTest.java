@@ -3,8 +3,11 @@ package com.teeqee;
 
 
 import com.teeqee.mybatis.dao.PlayerDataMapper;
+import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
+import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.PlayerRankEntrance;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,16 +21,14 @@ import java.util.List;
 public class ChaoChongServerTest {
 
    @Resource
-   private ServerInfoMapper serverInfoMapper;
-    @Resource
-    private PlayerDataMapper playerDataMapper;
-
+   private PlayerRankMapper playerRankMapper;
+   @Resource
+   private PlayerRankEntrance playerRankEntrance;
 
     @Test
     public void  test() throws Exception {
-        List<TopRankInfo> list = playerDataMapper.initTopRank(10001, "rounds");
-        for (TopRankInfo simpleTop : list) {
-            System.out.println(simpleTop);
-        }
+        PlayerRank playerRank = new PlayerRank();
+        playerRank.setUid(222L);
+        playerRankEntrance.initPlayerWorldrank(playerRank,1);
     }
 }

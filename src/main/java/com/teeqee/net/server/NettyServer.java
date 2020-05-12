@@ -50,9 +50,6 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
 
     @Resource
     private WebsocketServerHandler websocketServerHandler;
-    @Resource
-    private SessionEventService sessionEventService;
-
     @Override
     public void run(String... args) throws Exception {
         bind();
@@ -98,8 +95,8 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         future.addListener(fl -> {
             if (fl.isSuccess()) {
                 serverChannel = future.channel();
-                LOGGER.info("Netty server start");
-                LOGGER.info("server port = {}",socketPort);
+                LOGGER.info("Netty gameserver start");
+                LOGGER.info("gameserver port = {}",socketPort);
             }
         });
         future.channel().closeFuture().addListener(fl -> {
@@ -119,7 +116,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         if (workerGroup != null) {
             workerGroup.shutdownGracefully();
         }
-        LOGGER.info("Netty server byeBye");
+        LOGGER.info("Netty gameserver byeBye");
     }
 
     @Override

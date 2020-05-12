@@ -17,7 +17,7 @@ import xyz.noark.game.bootstrap.BaseServerBootstrap;
 public class GameServerBootstrap extends BaseServerBootstrap {
     @Override
     protected String getServerName() {
-        return "chaoChong-server";
+        return "chaoChong-gameserver";
     }
 
 }

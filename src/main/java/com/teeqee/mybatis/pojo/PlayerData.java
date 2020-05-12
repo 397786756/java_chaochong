@@ -11,6 +11,8 @@ import com.teeqee.spring.result.SpecialResult;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.noark.core.util.DateUtils;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,8 +23,8 @@ import java.util.List;
 public class PlayerData {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**玩家的uid*/
-    private Integer uid;
-    /**渠道的用户id*/
+    private Long uid;
+    /**玩家的openid*/
     private String openid;
     /**孵化器最大库存*/
     private Integer stockmax;
@@ -92,14 +94,29 @@ public class PlayerData {
     private List<Taskdata> taskdataList=new ArrayList<>();
     /**活跃度*/
     private String activedata;
+    /**是否为机器人*/
+    private Boolean isrobot;
 
     public PlayerData() {
+
+    }
+    /**是否为机器人*/
+    public boolean isrobot(){
+        if (isrobot==null){
+            return false;
+        }
+        return isrobot;
+    }
+
+    /**开启游客模式*/
+    public void isTourist(String openid){
+        this.openid=openid;
     }
     /**
-     * @param openid 构造函数
+     * @param uid 构造函数
      */
-    public PlayerData(String openid) {
-        this.openid=openid;
+    public PlayerData(Long uid) {
+        this.uid=uid;
         this.stockmax=10;
         this.stock=10;
         this.gold=0;
@@ -124,10 +141,24 @@ public class PlayerData {
         this.missnum=0;
         this.lasttime=new Date();
     }
+
+    /**需要初始化的数据*/
+    private void loginInitData(){
+        //判断是否为同一天
+        if (lasttime==null){
+            lasttime=new Date();
+        }
+        boolean sameDay = DateUtils.isSameDay(lasttime, new Date());
+            int maxWeekSign=7;
+            if (weeksign==maxWeekSign&&!sameDay){
+                weeksign=7;
+            }
+    }
     /**
      * @return 返回用户登录需要的数据
      */
     public JSONObject loginPush(){
+        loginInitData();
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         data.put("rankpermission", rankpermission);
@@ -162,7 +193,7 @@ public class PlayerData {
     /**日更新数据*/
     public void dailyUpdate(){
            if (lasttime==null||(isYesterday(lasttime,new Date()))){
-                  logger.info("openId:{} last login is yesterday",openid);
+                  logger.info("uid:{} last login is yesterday",uid);
            }
     }
 

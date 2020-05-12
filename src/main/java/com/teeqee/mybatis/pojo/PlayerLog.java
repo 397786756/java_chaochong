@@ -11,10 +11,10 @@ import java.util.Date;
  */
 @Data
 public class PlayerLog {
-    /**日志的uuid*/
-    private Integer uid;
-    /**用户的openId*/
-    private String openid;
+    /**日志的id*/
+    private Integer id;
+    /**玩家id*/
+    private Long uid;
     /**用户登录时间记录日*/
     private Date loginTime;
     /**登录的次数*/
@@ -32,8 +32,8 @@ public class PlayerLog {
     public PlayerLog() {
     }
 
-    public PlayerLog(String openid, Date loginTime) {
-        this.openid = openid;
+    public PlayerLog(Long uid, Date loginTime) {
+        this.uid = uid;
         this.loginTime = loginTime;
     }
 

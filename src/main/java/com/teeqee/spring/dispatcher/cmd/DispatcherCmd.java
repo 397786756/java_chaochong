@@ -58,4 +58,6 @@ public class DispatcherCmd {
     public static final String ADD_MISS_NUM = "addmissnum";
     /**使用飞镖*/
     public static final String USE_DART = "useDart";
+    /**获取打榜对战列表*/
+    public static final String GET_WORLD_RANK = "getworldrank";
 }

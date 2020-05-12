@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.teeqee.mybatis.dao.PlayerLogMapper" >
   <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerLog" >
-    <id column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="openid" property="openid" jdbcType="VARCHAR" />
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
     <result column="login_time" property="loginTime" jdbcType="DATE" />
     <result column="login_total" property="loginTotal" jdbcType="INTEGER" />
     <result column="online_time" property="onlineTime" jdbcType="INTEGER" />
@@ -11,42 +11,16 @@
     <result column="message_num" property="messageNum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    uid, openid, login_time, login_total, online_time, video_num, message_num
+    id, uid, login_time, login_total, online_time, video_num, message_num
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select
-    <include refid="Base_Column_List" />
-    from player_log
-    where uid = #{uid,jdbcType=INTEGER}
-  </select>
-  <!--用户登录获取日志-->
-  <select id="selectByTimeLog" resultMap="BaseResultMap">
-    select * from  player_log
-    where
-    openid = #{openid,jdbcType=VARCHAR}
-    and
-    login_time = #{loginTime,jdbcType=DATE}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from player_log
-    where uid = #{uid,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.teeqee.mybatis.pojo.PlayerLog" >
-    insert into player_log (uid, openid, login_time,
-      login_total, online_time, video_num,
-      message_num)
-    values (#{uid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{loginTime,jdbcType=DATE},
-      #{loginTotal,jdbcType=INTEGER}, #{onlineTime,jdbcType=INTEGER}, #{videoNum,jdbcType=INTEGER},
-      #{messageNum,jdbcType=INTEGER})
-  </insert>
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerLog" >
     insert into player_log
     <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
       <if test="uid != null" >
         uid,
-      </if>
-      <if test="openid != null" >
-        openid,
       </if>
       <if test="loginTime != null" >
         login_time,
@@ -65,11 +39,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="uid != null" >
-        #{uid,jdbcType=INTEGER},
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
       </if>
-      <if test="openid != null" >
-        #{openid,jdbcType=VARCHAR},
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
       </if>
       <if test="loginTime != null" >
         #{loginTime,jdbcType=DATE},
@@ -91,9 +65,6 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.teeqee.mybatis.pojo.PlayerLog" >
     update player_log
     <set >
-      <if test="openid != null" >
-        openid = #{openid,jdbcType=VARCHAR},
-      </if>
       <if test="loginTotal != null" >
         login_total = #{loginTotal,jdbcType=INTEGER},
       </if>
@@ -108,18 +79,15 @@
       </if>
     </set>
     where
-    openid = #{openid,jdbcType=VARCHAR}
+    uid = #{uid,jdbcType=BIGINT}
     and
     login_time = #{loginTime,jdbcType=DATE}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.teeqee.mybatis.pojo.PlayerLog" >
-    update player_log
-    set openid = #{openid,jdbcType=VARCHAR},
-      login_time = #{loginTime,jdbcType=DATE},
-      login_total = #{loginTotal,jdbcType=INTEGER},
-      online_time = #{onlineTime,jdbcType=INTEGER},
-      video_num = #{videoNum,jdbcType=INTEGER},
-      message_num = #{messageNum,jdbcType=INTEGER}
-    where uid = #{uid,jdbcType=INTEGER}
-  </update>
+  <select id="selectByTimeLog" resultMap="BaseResultMap">
+    select * from  player_log
+    where
+    uid = #{uid,jdbcType=BIGINT}
+    and
+    login_time = #{loginTime,jdbcType=DATE}
+  </select>
 </mapper>
