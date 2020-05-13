@@ -325,7 +325,7 @@ public class PlayerRankEntrance  {
                 logger.info(iswin==WIN?"victory":"defeated");
                 if (iswin==WIN){
                     //如果我赢了并且敌人的名次大于我的名次
-                     if (rank2>rank1){
+                     if (rank2<rank1){
                          rank1=rank2;
                          rank2=rank1;
                          logger.info("original rank:{},now rank:{},default rank:{}", rank1,rank2,rank1);
