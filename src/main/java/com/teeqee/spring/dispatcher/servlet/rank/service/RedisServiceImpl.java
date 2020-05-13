@@ -147,8 +147,10 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**
      * 玩家排行榜的热更新
      */
-    @Scheduled(cron = "0 * */1 * * ?")
+    //@Scheduled(cron = "0 * */1 * * ?")
+    @Scheduled(cron = "0 0/3 * * * ?")
     public void task() {
+        logger.info("serverInfo and rank task........");
         initServerInfo();
         updateRank();
     }
@@ -245,12 +247,12 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             Integer channelId = v.getChannelId();
             List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
             for (TopRankInfo topRankInfo : roundsList) {
-                logger.info("channelid:{},uid:{},rounds:{},rank:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
+                logger.info("channelid:{},uid:{},rounds:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
             for (TopRankInfo topRankInfo : missList) {
-                logger.info("channelid:{},uid:{},miss:{},rank:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
+                logger.info("channelid:{},uid:{},miss:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             logger.info("gameserver id:{},roundsListSize:{}", channelId, roundsList.size());
@@ -311,8 +313,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                     if (playerInfo != null) {
                         String avatar = playerInfo.getMyAvatar();
                         String nickName = playerInfo.getMyNickName();
-                        topRankInfo.setNickname(nickName);
-                        topRankInfo.setAvatar(avatar);
+                        topRankInfo.setNickname(nickName==null?"未授权玩家":nickName);
+                        topRankInfo.setAvatar(avatar==null?"":avatar);
                     } else {
                         topRankInfo.setNickname("未授权玩家");
                         topRankInfo.setAvatar("");

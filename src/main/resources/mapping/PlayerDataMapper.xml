@@ -411,6 +411,7 @@
    data.uid=info.uid
    where
    info.channelid=#{channelid,jdbcType=INTEGER}
+   and data.${orderByName}>0
    order by data.${orderByName}
    limit 50
   </select>

@@ -12,9 +12,9 @@ public class TopRankInfo {
     /**用户的uid*/
     private Long uid;
 
-    private String nickname;
+    private String nickname="未授权的玩家";
 
-    private String avatar;
+    private String avatar="";
     /**分数*/
     private Integer rounds;
     /**排名*/
