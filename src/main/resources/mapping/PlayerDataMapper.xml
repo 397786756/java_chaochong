@@ -402,7 +402,6 @@
    info.uid as uid,
    info.nickname as nickname,
    info.avatar as avatar,
-   data.rounds as rounds,
    data.${orderByName} as rounds
    from
    player_data data

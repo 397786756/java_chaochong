@@ -245,10 +245,12 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             Integer channelId = v.getChannelId();
             List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
             for (TopRankInfo topRankInfo : roundsList) {
+                logger.info("channelid:{},uid:{},rounds:{},rank:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
             for (TopRankInfo topRankInfo : missList) {
+                logger.info("channelid:{},uid:{},miss:{},rank:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             logger.info("gameserver id:{},roundsListSize:{}", channelId, roundsList.size());
