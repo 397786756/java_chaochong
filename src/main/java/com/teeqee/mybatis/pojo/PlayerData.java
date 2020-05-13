@@ -81,7 +81,7 @@ public class PlayerData {
     /**玩家的任务信息*/
     private String taskdata;
     /**当前玩家现有的飞镖数量*/
-    private Integer dartnum;
+    private Integer dartnum=5;
     /**建筑data*/
     private String buildingdata;
     /**miss次数*/
@@ -459,7 +459,7 @@ public class PlayerData {
 
     /**获取幸运转盘*/
     public JSONObject getdartboard(){
-          String jsonKey="dartboard";
+        String jsonKey="dartboard";
         JSONObject jsonObject = new JSONObject();
         JSONObject dartnumJson = new JSONObject();
         dartnumJson.put("dartnum",dartnum);

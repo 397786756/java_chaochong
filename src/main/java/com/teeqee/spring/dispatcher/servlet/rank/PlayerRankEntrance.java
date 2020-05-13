@@ -8,6 +8,7 @@ import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.net.handler.Session;
+import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
@@ -43,12 +44,13 @@ public class PlayerRankEntrance  {
     /**获取我的session*/
     private JSONObject getworldrankJson( Session session){
        PlayerRank playerRank = session.getPlayerRank();
-       JSONObject jsonObject = new JSONObject();
        if (playerRank==null){
-           playerRank=new PlayerRank(session.getUid());
-           playerRank.initData(0,false);
+           playerRank=new PlayerRank();
+           playerRank.setUid(session.getUid());
+           playerRank.setIsopponent(false);
+           session.add(PlayerCmd.PLAYER_RANK, playerRank);
        }
-       return jsonObject;
+       return initPlayerWorldrank(playerRank,session.getChannelid());
     }
 
 
@@ -142,6 +144,9 @@ public class PlayerRankEntrance  {
            }else {
                int randomInt = RandomUtils.getRandomInt(1, (int) B);
                index-=randomInt;
+           }
+           if (rank==index){
+               index+=1;
            }
            Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,index);
            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(opponent, SerializerFeature.WriteNullListAsEmpty,

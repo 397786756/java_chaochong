@@ -14,6 +14,10 @@
     <result column="ranktotal" property="ranktotal" jdbcType="INTEGER" />
     <result column="animal" property="animal" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+    select * from player_rank where uid=#{uid,jdbcType=BIGINT}
+  </select>
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerRank" >
     insert into player_rank
     <trim prefix="(" suffix=")" suffixOverrides="," >

@@ -2,6 +2,7 @@ package com.teeqee.mybatis.dao;
 
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
+import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,8 +18,9 @@ public interface PlayerRankMapper {
 
     Integer findChannelIdRobotRankNum(Integer channelid);
 
-    int updateByPrimaryKeySelective(PlayerRank record);
+    PlayerRank selectByPrimaryKey(@Param("uid") Long uid);
 
+    int updateByPrimaryKeySelective(PlayerRank record);
 
     /**
      * @param scopeUidStart 开始的区间

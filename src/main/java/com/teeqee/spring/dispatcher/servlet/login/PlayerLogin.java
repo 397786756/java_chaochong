@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerLogMapper;
+import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
+import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
@@ -26,17 +28,18 @@ import java.util.Date;
 @Service("playerLogin")
 public class PlayerLogin {
     /**测试服*/
-    private static final int TOURIST=1000;
+    private static final int TOURIST=1;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    /**playerData dao*/
+    /**dao*/
     @Resource
     private PlayerDataMapper playerDataMapper;
-    /**playerLog dao*/
     @Resource
     private PlayerLogMapper playerLogMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
+    @Resource
+    private PlayerRankMapper playerRankMapper;
 
     @Dispather(value = "login")
     @Transactional(rollbackFor = Exception.class)
@@ -69,11 +72,15 @@ public class PlayerLogin {
         Long uid = playerInfo.getUid();
         //初始化用户数据信息
         //初始化用户日志数据
+        session.setUid(uid);
+        session.setChannelid(channelid);
         PlayerLog playerLog = createPlayerLog(uid);
         //不初始化排行榜
         PlayerData playerData = localLogin(uid);
         //开启游客模式
         playerData.isTourist(openid);
+        PlayerRank playerRank = createPlayerRank(uid);
+        session.add(PlayerCmd.PLAYER_RANK,playerRank);
         session.add(PlayerCmd.PLAYER_DATA,playerData);
         session.add(PlayerCmd.PLAYER_LOG, playerLog);
         session.add(PlayerCmd.PLAYER_INFO,playerInfo);
@@ -200,5 +207,19 @@ public class PlayerLogin {
             }
         }
         return playerInfo;
+    }
+    /**
+     * @param uid 用户的id
+     * @return 返回用户的数据源
+     */
+    private PlayerRank createPlayerRank(Long uid) {
+        PlayerRank playerRank = playerRankMapper.selectByPrimaryKey(uid);
+        if (playerRank==null){
+            playerRank=new PlayerRank();
+            playerRank.setIsopponent(false);
+            playerRank.setUid(uid);
+            playerRankMapper.insertSelective(playerRank);
+        }
+        return playerRank;
     }
 }
