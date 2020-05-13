@@ -120,5 +120,8 @@ public class PlayerUpdate {
     /**使用飞镖*/
     @Dispather(value = "useDart")
     public Boolean useDart(MethodModel model) {return model.getSession().getPlayerData().useDart();}
+    /**使用飞镖*/
+    @Dispather(value = "worldrankstart")
+    public JSONObject worldrankstart(MethodModel model) {return model.getSession().getPlayerData().worldrankstart();}
 
 }

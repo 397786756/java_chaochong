@@ -196,8 +196,15 @@ public class PlayerData {
                   logger.info("uid:{} last login is yesterday",uid);
            }
     }
-
-
+    /**世界打榜次数会减一*/
+    public JSONObject worldrankstart() {
+         if (rankchallengenum<0){
+             rankchallengenum=0;
+         }else if (rankchallengenum>0){
+             rankchallengenum--;
+         }
+         return goldAndDiamondInfo();
+    }
     /**
      * @param oldTime 上次登录的时间
      * @param newTime 现在的时间
@@ -651,4 +658,5 @@ public class PlayerData {
         jsonObject.put("vipreward", vipreward);
         return jsonObject;
     }
+
 }
