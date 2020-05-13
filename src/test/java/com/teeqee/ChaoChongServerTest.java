@@ -2,6 +2,7 @@ package com.teeqee;
 
 
 
+import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
@@ -14,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.alibaba.fastjson.serializer.SerializerFeature.WriteMapNullValue;
 
 
 @RunWith(SpringRunner.class)
@@ -29,6 +32,8 @@ public class ChaoChongServerTest {
     public void  test() throws Exception {
         PlayerRank playerRank = new PlayerRank();
         playerRank.setUid(222L);
-        playerRankEntrance.initPlayerWorldrank(playerRank,1);
+        playerRank.setRank(6L);
+        JSONObject jsonObject = playerRankEntrance.initPlayerWorldrank(playerRank, 1);
+        System.out.println(jsonObject.toJSONString());
     }
 }

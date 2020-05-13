@@ -30,6 +30,8 @@ public class PlayerRank {
 
     private Integer ranktotal;
 
+    private String animal;
+
     public PlayerRank(Long uid) {
     }
 
