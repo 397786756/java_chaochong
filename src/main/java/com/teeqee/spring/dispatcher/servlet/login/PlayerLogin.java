@@ -79,8 +79,9 @@ public class PlayerLogin {
         PlayerData playerData = localLogin(uid);
         //开启游客模式
         playerData.isTourist(openid);
-        PlayerRank playerRank = createPlayerRank(uid);
-        session.add(PlayerCmd.PLAYER_RANK,playerRank);
+        //TODO 排行榜手动取消
+        //PlayerRank playerRank = createPlayerRank(uid);
+        //session.add(PlayerCmd.PLAYER_RANK,playerRank);
         session.add(PlayerCmd.PLAYER_DATA,playerData);
         session.add(PlayerCmd.PLAYER_LOG, playerLog);
         session.add(PlayerCmd.PLAYER_INFO,playerInfo);

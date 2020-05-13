@@ -40,18 +40,16 @@ public class PlayerRankEntrance  {
        return getworldrankJson(method.getSession());
     }
 
-
-
     /**获取我的session*/
     private JSONObject getworldrankJson( Session session){
-       PlayerRank playerRank = session.getPlayerRank();
-       if (playerRank==null){
-           playerRank=new PlayerRank();
-           playerRank.setUid(session.getUid());
-           playerRank.setIsopponent(false);
-           session.add(PlayerCmd.PLAYER_RANK, playerRank);
-       }
-       return initPlayerWorldrank(playerRank,session.getChannelid());
+        //因为现在的打榜是存到数据库中的,所以玩家去拉取只能拉取到这个
+        PlayerRank playerRank = playerRankMapper.selectByPrimaryKey(session.getUid());
+        if (playerRank==null){
+            playerRank=new PlayerRank();
+            playerRank.setUid(session.getUid());
+            playerRankMapper.insertSelective(playerRank);
+        }
+        return initPlayerWorldrank(playerRank,session.getChannelid());
     }
 
 
@@ -204,7 +202,7 @@ public class PlayerRankEntrance  {
     private synchronized Long getMyRank(PlayerRank playerRank,Integer channelid){
        Integer rankNum = playerRankMapper.findChannelIdRobotRankNum(channelid);
        //服务器需要维持一个人数id
-       logger.info("玩家获取排名,同步到数据库中");
+       logger.info("get playerRank rank:{}",rankNum+1);
        playerRank.setRank(rankNum.longValue()+1);
        playerRankMapper.updateByPrimaryKeySelective(playerRank);
        return (rankNum.longValue()+1);
@@ -299,6 +297,7 @@ public class PlayerRankEntrance  {
             Long rank1 = worldRankEnd.getRank();
             Long rank2 = worldRankEnd.getOpponentrank();
             if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
+                logger.info(iswin==WIN?"victory":"defeated");
                 if (iswin==WIN){
                   //打赢了
                     updateWorldRank(uid1,rank1, uid2, rank2, animal, animal2);
@@ -328,7 +327,7 @@ public class PlayerRankEntrance  {
         playerRank2.setUid(uid2);
         playerRank2.setRank(rank2);
         playerRank2.setAnimal(animal2);
-        logger.info("修改playerRank1:{},动物阵容:{},排名:{},修改playerRank2:{},动物阵容:{},排名:{}",uid1,animal1,rank1,uid2,animal2,rank2);
+        logger.info("update playerRank1:{},animal:{},rank:{},update playerRank2:{},animal:{},rank:{}",uid1,animal1,rank1,uid2,animal2,rank2);
         playerRankMapper.updateByPrimaryKeySelective(playerRank1);
         playerRankMapper.updateByPrimaryKeySelective(playerRank2);
     }
