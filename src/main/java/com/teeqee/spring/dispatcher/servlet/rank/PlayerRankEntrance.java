@@ -323,8 +323,16 @@ public class PlayerRankEntrance  {
             Long rank2 = worldRankEnd.getOpponentrank();
             if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
                 logger.info(iswin==WIN?"victory":"defeated");
+                if (iswin==WIN){
+                    //如果我赢了并且敌人的名次大于我的名次
+                     if (rank2>rank1){
+                         rank1=rank2;
+                         rank2=rank1;
+                         logger.info("original rank:{},now rank:{},default rank:{}", rank1,rank2,rank1);
+                     }
+                }
                   //打赢了
-                    updateWorldRank(iswin,uid1,rank1, uid2, rank2, animal, animal2);
+                 updateWorldRank(iswin,uid1,rank1, uid2, rank2, animal, animal2);
                 return getworldrank(methodModel);
             }
         }
