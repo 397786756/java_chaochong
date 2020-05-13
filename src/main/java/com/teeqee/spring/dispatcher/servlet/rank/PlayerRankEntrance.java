@@ -88,6 +88,7 @@ public class PlayerRankEntrance  {
 
     /**获取6个挑战者*/
     private JSONArray  getMaxSixOpponenter(Integer channelid,PlayerRank playerRank){
+        playerRank.setIsopponent(true);
         JSONArray jsonArray = new JSONArray(6);
         int rankPlayerSize=6;
         //获取我的排名
@@ -103,35 +104,43 @@ public class PlayerRankEntrance  {
                     SerializerFeature.WriteNullStringAsEmpty,
                     SerializerFeature.WriteNullNumberAsZero,
                     SerializerFeature.WriteNullBooleanAsFalse,
-                    SerializerFeature.WriteMapNullValue,
-                    SerializerFeature.PrettyFormat));
+                    SerializerFeature.WriteMapNullValue));
             jsonArray.add(jsonObject);
             if (opponent!=null){
                 Long uid = opponent.getUid();
-                if (i==0){
-                    playerRank.setOpponent1(uid);
-                }else if (i==1){
-                    playerRank.setOpponent2(uid);
-                }else if (i==2){
-                    playerRank.setOpponent3(uid);
-                }else if (i==3){
-                    playerRank.setOpponent4(uid);
-                }else if (i==4){
-                    playerRank.setOpponent5(uid);
-                }else {
-                    playerRank.setOpponent6(uid);
-                }
+                updatePlayerRankOppoent(i,uid,playerRank);
             }
         }
         return jsonArray;
     }
 
 
+    /**
+     * @param i 位置
+     * @param uid 玩家的uid
+     * @param playerRank 修改的数据
+     */
+    private void updatePlayerRankOppoent(int i,Long uid,PlayerRank playerRank){
+        if (i==0){
+            playerRank.setOpponent1(uid);
+        }else if (i==1){
+            playerRank.setOpponent2(uid);
+        }else if (i==2){
+            playerRank.setOpponent3(uid);
+        }else if (i==3){
+            playerRank.setOpponent4(uid);
+        }else if (i==4){
+            playerRank.setOpponent5(uid);
+        }else {
+            playerRank.setOpponent6(uid);
+        }
+    }
 
 
 
    /**获取6个挑战者*/
    private JSONArray  getSixOpponenter(Integer channelid,PlayerRank playerRank){
+       playerRank.setIsopponent(true);
        JSONArray jsonArray = new JSONArray(6);
        Long rank = playerRank.getRank();
        long B = getRankRandom(rank);
@@ -153,24 +162,11 @@ public class PlayerRankEntrance  {
                    SerializerFeature.WriteNullStringAsEmpty,
                    SerializerFeature.WriteNullNumberAsZero,
                    SerializerFeature.WriteNullBooleanAsFalse,
-                   SerializerFeature.WriteMapNullValue,
-                   SerializerFeature.PrettyFormat));
+                   SerializerFeature.WriteMapNullValue));
            jsonArray.add(jsonObject);
            if (opponent!=null){
                Long uid = opponent.getUid();
-               if (i==0){
-                   playerRank.setOpponent1(uid);
-               }else if (i==1){
-                   playerRank.setOpponent2(uid);
-               }else if (i==2){
-                   playerRank.setOpponent3(uid);
-               }else if (i==3){
-                   playerRank.setOpponent4(uid);
-               }else if (i==4){
-                   playerRank.setOpponent5(uid);
-               }else {
-                   playerRank.setOpponent6(uid);
-               }
+               updatePlayerRankOppoent(i,uid,playerRank);
            }
        }
        return jsonArray;

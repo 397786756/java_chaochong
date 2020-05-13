@@ -201,7 +201,9 @@ public class PlayerLogin {
             playerInfo.setChannelid(channelId);
             playerInfo.setCreatetime(new Date());
             playerInfoMapper.insertSelective(playerInfo);
+            logger.info("服务器中没有这个玩家:{},需要进行创建",openId);
         }else {
+            logger.info("服务器中有这个玩家:{},直接拉取",openId);
             if (playerInfo.getChannelid()==null){
                 playerInfo.setChannelid(channelId);
             }

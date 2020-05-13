@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerLogMapper;
+import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
+import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.method.MethodMapper;
@@ -37,6 +39,8 @@ public class SessionEventServiceImpl implements SessionEventService {
     private PlayerLogMapper playerLogMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
+    @Resource
+    private PlayerRankMapper playerRankMapper;
 
     @Override
     public void close(Session session,boolean isClose) {
@@ -93,6 +97,11 @@ public class SessionEventServiceImpl implements SessionEventService {
         PlayerInfo playerInfo = session.getPlayerInfo();
         if (playerInfo!=null){
             playerInfoMapper.updateByPrimaryKeySelective(playerInfo);
+        }
+        //排行榜
+        PlayerRank playerRank = session.getPlayerRank();
+        if (playerRank!=null){
+            playerRankMapper.updateByPrimaryKeySelective(playerRank);
         }
         if (isClose){
             ChannelSupervise.removeSession(session.getChannel());
