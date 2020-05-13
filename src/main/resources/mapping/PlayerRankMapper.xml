@@ -137,6 +137,7 @@
     rank.uid =info.uid
     and
     info.channelid=#{channelid,jdbcType=INTEGER}
+    and rank.rank is not null
   </select>
   <!--删除小于这个的uid-->
   <delete id="deleteByScopeUid">
