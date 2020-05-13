@@ -18,11 +18,11 @@ public class TopRankInfo {
     /**分数*/
     private Integer rounds;
     /**排名*/
-    private Long rankunm;
+    private Long ranknum;
 
-    public TopRankInfo( Integer rounds, Long rankunm) {
+    public TopRankInfo( Integer rounds, Long ranknum) {
         this.rounds = rounds;
-        this.rankunm = rankunm;
+        this.ranknum = ranknum;
     }
 
     public TopRankInfo() {
@@ -32,6 +32,6 @@ public class TopRankInfo {
         this.nickname="";
         this.avatar="";
         this.rounds=0;
-        this.rankunm=0L;
+        this.ranknum=0L;
     }
 }
