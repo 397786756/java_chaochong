@@ -93,7 +93,11 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.ADD_MISS_NUM,map->playerUpdate.addmissnum(map));
         /**使用飞镖*/
         map.put(DispatcherCmd.USE_DART,map->playerUpdate.useDart(map));
-        /**使用飞镖*/
+        /**获取世界打榜*/
         map.put(DispatcherCmd.GET_WORLD_RANK,map-> playerRankEntrance.getworldrank(map));
+        /**刷新世界打榜*/
+        map.put(DispatcherCmd.REFRESH_WORLD_RANK,map-> playerRankEntrance.getworldrank(map));
+        /**刷新世界排行榜*/
+        map.put(DispatcherCmd.WORLD_RANK_END,map-> playerRankEntrance.worldrankend(map));
     }
 }

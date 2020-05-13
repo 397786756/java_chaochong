@@ -12,6 +12,7 @@ import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.entity.WorldRankEnd;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
@@ -22,8 +23,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 
 @Service
 @DataSourceType("redisRank")
@@ -41,6 +40,8 @@ public class PlayerRankEntrance  {
        return getworldrankJson(method.getSession());
     }
 
+
+
     /**获取我的session*/
     private JSONObject getworldrankJson( Session session){
        PlayerRank playerRank = session.getPlayerRank();
@@ -57,7 +58,7 @@ public class PlayerRankEntrance  {
     /**
      * @param playerRank 玩家的排行榜 初始化6个敌人
      */
-    public JSONObject initPlayerWorldrank(PlayerRank playerRank,Integer channelid){
+    private JSONObject initPlayerWorldrank(PlayerRank playerRank,Integer channelid){
         JSONObject jsonObject = new JSONObject(2);
         Boolean isopponent = playerRank.getIsopponent();
         JSONArray jsonArray = null;
@@ -279,4 +280,56 @@ public class PlayerRankEntrance  {
         return jsonArray;
     }
 
+    /**
+     * 赢了为1
+     */
+    private static final int WIN=1;
+
+    /**打榜结算gameover*/
+    @Dispather(value = "worldrankend")
+    public JSONObject worldrankend(MethodModel methodModel) {
+        JSONObject data = methodModel.getData();
+        WorldRankEnd worldRankEnd = data.toJavaObject(WorldRankEnd.class);
+        if (worldRankEnd!=null){
+            Integer iswin = worldRankEnd.getIswin();
+            Long uid2 = worldRankEnd.getOpponentuid();
+            Long uid1 = methodModel.getSession().getUid();
+            String animal = worldRankEnd.getAnimal();
+            String animal2 = worldRankEnd.getOpponentanimal();
+            Long rank1 = worldRankEnd.getRank();
+            Long rank2 = worldRankEnd.getOpponentrank();
+            if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
+                if (iswin==WIN){
+                  //打赢了
+                    updateWorldRank(uid1,rank1, uid2, rank2, animal, animal2);
+                }else {
+                    updateWorldRank(uid1,null, uid2, null, animal, animal2);
+                }
+                return getworldrank(methodModel);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param uid1 玩家1
+     * @param rank1 需要替换玩家1的排名
+     * @param uid2 玩家2
+     * @param rank2 需要替换玩家2的排名
+     * @param animal1 玩家1需要修改的数据
+     * @param animal2 玩家2需要修改的数据
+     */
+    private synchronized void updateWorldRank(Long uid1,Long rank1,Long uid2,Long rank2,String animal1,String animal2 ){
+        PlayerRank playerRank1 = new PlayerRank();
+        playerRank1.setUid(uid1);
+        playerRank1.setRank(rank1);
+        playerRank1.setAnimal(animal1);
+        PlayerRank playerRank2 = new PlayerRank();
+        playerRank2.setUid(uid2);
+        playerRank2.setRank(rank2);
+        playerRank2.setAnimal(animal2);
+        logger.info("修改playerRank1:{},动物阵容:{},排名:{},修改playerRank2:{},动物阵容:{},排名:{}",uid1,animal1,rank1,uid2,animal2,rank2);
+        playerRankMapper.updateByPrimaryKeySelective(playerRank1);
+        playerRankMapper.updateByPrimaryKeySelective(playerRank2);
+    }
 }

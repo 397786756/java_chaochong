@@ -60,4 +60,8 @@ public class DispatcherCmd {
     public static final String USE_DART = "useDart";
     /**获取打榜对战列表*/
     public static final String GET_WORLD_RANK = "getworldrank";
+    /**刷新排行榜*/
+    public static final String REFRESH_WORLD_RANK = "refreshworldrank";
+    /**获取打榜战报*/
+    public static final String WORLD_RANK_END = "worldrankend";
 }

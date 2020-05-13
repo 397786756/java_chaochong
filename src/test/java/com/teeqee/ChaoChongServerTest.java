@@ -30,10 +30,6 @@ public class ChaoChongServerTest {
 
     @Test
     public void  test() throws Exception {
-        PlayerRank playerRank = new PlayerRank();
-        playerRank.setUid(222L);
-        playerRank.setRank(6L);
-        JSONObject jsonObject = playerRankEntrance.initPlayerWorldrank(playerRank, 1);
-        System.out.println(jsonObject.toJSONString());
+
     }
 }
