@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teeqee.mybatis.dao.PlayerRankLogMapper" >
+  <resultMap id="BaseResultMap" type="com.teeqee.mybatis.pojo.PlayerRankLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="uid" property="uid" jdbcType="BIGINT" />
+    <result column="uid2" property="uid2" jdbcType="BIGINT" />
+    <result column="iswin" property="iswin" jdbcType="INTEGER" />
+    <result column="beforerank" property="beforerank" jdbcType="BIGINT" />
+    <result column="afterrank" property="afterrank" jdbcType="BIGINT" />
+    <result column="datatime" property="datatime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, uid, uid2, iswin, beforerank, afterrank, datatime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    ranklog.iswin as iswin,
+    ranklog.beforerank as beforerank,
+    ranklog.afterrank as afterrank,
+    ranklog.datatime as datatime,
+	info.nickname as opponentnickname,
+	info.avatar as opponentavatar
+    from
+    player_rank_log ranklog
+		left join player_info info
+		on ranklog.uid2=info.uid
+    where
+    ranklog.uid = #{uid,jdbcType=BIGINT}
+    order by ranklog.datatime desc limit 1
+  </select>
+
+  <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerRankLog" >
+    insert into player_rank_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="uid != null" >
+        uid,
+      </if>
+      <if test="uid2 != null" >
+        uid2,
+      </if>
+      <if test="iswin != null" >
+        iswin,
+      </if>
+      <if test="beforerank != null" >
+        beforerank,
+      </if>
+      <if test="afterrank != null" >
+        afterrank,
+      </if>
+      <if test="datatime != null" >
+        datatime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uid != null" >
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="uid2 != null" >
+        #{uid2,jdbcType=BIGINT},
+      </if>
+      <if test="iswin != null" >
+        #{iswin,jdbcType=INTEGER},
+      </if>
+      <if test="beforerank != null" >
+        #{beforerank,jdbcType=BIGINT},
+      </if>
+      <if test="afterrank != null" >
+        #{afterrank,jdbcType=BIGINT},
+      </if>
+      <if test="datatime != null" >
+        #{datatime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.teeqee.mybatis.pojo.PlayerRankLog" >
+    update player_rank_log
+    <set >
+      <if test="uid != null" >
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="uid2 != null" >
+        uid2 = #{uid2,jdbcType=BIGINT},
+      </if>
+      <if test="iswin != null" >
+        iswin = #{iswin,jdbcType=INTEGER},
+      </if>
+      <if test="beforerank != null" >
+        beforerank = #{beforerank,jdbcType=BIGINT},
+      </if>
+      <if test="afterrank != null" >
+        afterrank = #{afterrank,jdbcType=BIGINT},
+      </if>
+      <if test="datatime != null" >
+        datatime = #{datatime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

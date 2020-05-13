@@ -62,6 +62,8 @@ public class DispatcherCmd {
     public static final String GET_WORLD_RANK = "getworldrank";
     /**刷新排行榜*/
     public static final String REFRESH_WORLD_RANK = "refreshworldrank";
-    /**获取打榜战报*/
+    /**打榜结算gameover*/
     public static final String WORLD_RANK_END = "worldrankend";
+    /**获取打榜战报*/
+    public static final String GET_RANK_REPORT = "getrankreport";
 }

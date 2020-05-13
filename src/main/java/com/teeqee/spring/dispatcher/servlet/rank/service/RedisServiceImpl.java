@@ -118,6 +118,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         TopRankInfo topRankInfo = new TopRankInfo();
         topRankInfo.setRounds(score.intValue());
         topRankInfo.setRankunm(myRank);
+        topRankInfo.setUid(uid);
         return topRankInfo;
     }
 

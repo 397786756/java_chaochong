@@ -39,8 +39,8 @@ public class SessionEventServiceImpl implements SessionEventService {
     private PlayerLogMapper playerLogMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
-    @Resource
-    private PlayerRankMapper playerRankMapper;
+    // @Resource
+    // private PlayerRankMapper playerRankMapper;
 
     @Override
     public void close(Session session,boolean isClose) {

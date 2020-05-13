@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.teeqee.mybatis.dao.PlayerRankLogMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerRank;
+import com.teeqee.mybatis.pojo.PlayerRankLog;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
@@ -22,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,6 +36,17 @@ public class PlayerRankEntrance  {
      private RedisService redisService;
      @Resource
      private PlayerRankMapper playerRankMapper;
+     @Resource
+     private PlayerRankLogMapper playerRankLogMapper;
+
+    /**获取打榜战报*/
+    @Dispather(value = "getrankreport")
+    public JSONObject getrankreport(MethodModel method) {
+        PlayerRankLog playerRankLog = playerRankLogMapper.selectByPrimaryKey(method.getSession().getUid());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("reportlist", playerRankLog);
+        return jsonObject;
+    }
 
     /**世界排行榜*/
     @Dispather(value = "getworldrank")
@@ -298,12 +312,8 @@ public class PlayerRankEntrance  {
             Long rank2 = worldRankEnd.getOpponentrank();
             if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
                 logger.info(iswin==WIN?"victory":"defeated");
-                if (iswin==WIN){
                   //打赢了
-                    updateWorldRank(uid1,rank1, uid2, rank2, animal, animal2);
-                }else {
-                    updateWorldRank(uid1,null, uid2, null, animal, animal2);
-                }
+                    updateWorldRank(iswin,uid1,rank1, uid2, rank2, animal, animal2);
                 return getworldrank(methodModel);
             }
         }
@@ -311,6 +321,7 @@ public class PlayerRankEntrance  {
     }
 
     /**
+     * @param iswin 是否胜利
      * @param uid1 玩家1
      * @param rank1 需要替换玩家1的排名
      * @param uid2 玩家2
@@ -318,7 +329,7 @@ public class PlayerRankEntrance  {
      * @param animal1 玩家1需要修改的数据
      * @param animal2 玩家2需要修改的数据
      */
-    private synchronized void updateWorldRank(Long uid1,Long rank1,Long uid2,Long rank2,String animal1,String animal2 ){
+    private synchronized void updateWorldRank(Integer iswin,Long uid1,Long rank1,Long uid2,Long rank2,String animal1,String animal2 ){
         PlayerRank playerRank1 = new PlayerRank();
         playerRank1.setUid(uid1);
         playerRank1.setRank(rank1);
@@ -330,5 +341,13 @@ public class PlayerRankEntrance  {
         logger.info("update playerRank1:{},animal:{},rank:{},update playerRank2:{},animal:{},rank:{}",uid1,animal1,rank1,uid2,animal2,rank2);
         playerRankMapper.updateByPrimaryKeySelective(playerRank1);
         playerRankMapper.updateByPrimaryKeySelective(playerRank2);
+        PlayerRankLog playerRankLog = new PlayerRankLog();
+        playerRankLog.setIswin(iswin);
+        playerRankLog.setBeforerank(rank1);
+        playerRankLog.setAfterrank(rank2);
+        playerRankLog.setDatatime(new Date());
+        playerRankLog.setUid(uid1);
+        playerRankLog.setUid2(uid2);
+        playerRankLogMapper.insertSelective(playerRankLog);
     }
 }
