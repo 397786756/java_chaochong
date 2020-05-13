@@ -84,16 +84,16 @@ public class PlayerRankEntrance  {
         JSONObject jsonObject = new JSONObject(2);
         Boolean isopponent = playerRank.getIsopponent();
         JSONArray jsonArray = null;
+        Long rank = playerRank.getRank();
+        int rankPlayerSize=6;
        //如果没有挑战过
        if (isopponent==null||!isopponent){
            Long opponent1 = playerRank.getOpponent1();
            Long opponent6 = playerRank.getOpponent6();
            if (opponent1==null||opponent6==null){
-               Long rank = playerRank.getRank();
                if (rank==null){
                    rank=getMyRank( playerRank,channelid);
                }
-               int rankPlayerSize=6;
               if (rank<=rankPlayerSize){
                   //拉取前五个
                   jsonArray= getMaxSixOpponenter(channelid,playerRank);
@@ -102,7 +102,11 @@ public class PlayerRankEntrance  {
               }
            }
        }else {
-           jsonArray= getSixOpponenter(channelid,playerRank);
+           if (rank<=rankPlayerSize){
+               jsonArray= getMaxSixOpponenter(channelid,playerRank);
+           }else {
+               jsonArray= getSixOpponenter(channelid,playerRank);
+           }
        }
        jsonObject.put("yourrank", playerRank.getRank());
        jsonObject.put("opponentlist",jsonArray);
@@ -111,6 +115,7 @@ public class PlayerRankEntrance  {
 
     /**获取6个挑战者*/
     private JSONArray  getMaxSixOpponenter(Integer channelid,PlayerRank playerRank){
+        logger.info("max size opponenter");
         playerRank.setIsopponent(true);
         JSONArray jsonArray = new JSONArray(6);
         int rankPlayerSize=6;
@@ -194,8 +199,6 @@ public class PlayerRankEntrance  {
        }
        return jsonArray;
    }
-
-
 
     private static final int RANK250=250;
     private static final int RANK50=50;
