@@ -289,11 +289,12 @@ public class PlayerRankEntrance  {
         if (list!=null&&list.size()>0){
             jsonArray= new JSONArray(list.size());
             for (TopRankInfo topRankInfo : list) {
-                Integer rounds = topRankInfo.getRounds();
-                JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(topRankInfo));
-                jsonObject.remove("rounds");
-                jsonObject.remove("openid");
-                jsonObject.put("missnum",rounds);
+                JSONObject jsonObject = new JSONObject();
+                String nickname = topRankInfo.getNickname();
+                jsonObject.put("nickname", nickname==null?"未授权的玩家":nickname);
+                String avatar = topRankInfo.getAvatar();
+                jsonObject.put("avatar", avatar==null?"":avatar);
+                jsonObject.put("missnum", topRankInfo.getRounds());
                 jsonArray.add(jsonObject);
             }
         }else {
