@@ -12,6 +12,7 @@ import com.teeqee.mybatis.pojo.PlayerRankLog;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
+import com.teeqee.spring.dispatcher.servlet.entity.Animal;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.WorldRankEnd;
@@ -340,6 +341,19 @@ public class PlayerRankEntrance  {
             }
         }
         return null;
+    }
+
+    /**
+     * @param animal 动物的json
+     * @return 返回成优化好的json 字符串
+     */
+    private String  checkAnimalJosn(String animal){
+        if (animal!=null){
+            List<Animal> list = JSONArray.parseArray(animal, Animal.class);
+            JSONArray jsonArray = new JSONArray();
+
+        }
+        return animal;
     }
 
     /**
