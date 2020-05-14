@@ -307,6 +307,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             }
             for (TopRankInfo topRankInfo : roundsList) {
                 logger.info("channelid:{},uid:{},rounds:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
+                topRankInfo.setAvatar(topRankInfo.getAvatar()==null?"":topRankInfo.getAvatar());
+                topRankInfo.setNickname(topRankInfo.getNickname()==null?"":topRankInfo.getNickname());
                 addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM,pastDate);
@@ -315,6 +317,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             }
             for (TopRankInfo topRankInfo : missList) {
                 logger.info("channelid:{},uid:{},miss:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
+                topRankInfo.setAvatar(topRankInfo.getAvatar()==null?"":topRankInfo.getAvatar());
+                topRankInfo.setNickname(topRankInfo.getNickname()==null?"":topRankInfo.getNickname());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
             logger.info("gameserver id:{},roundsListSize:{}", channelId, roundsList.size());
