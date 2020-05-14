@@ -123,13 +123,12 @@ public class PlayerRankEntrance  {
         int rankPlayerSize=6;
         //获取我的排名
         Long rank = playerRank.getRank();
-        for (int i = 0; i < rankPlayerSize; i++) {
-            long index=(long)(i+1);
+        for (int i = 1; i <= rankPlayerSize; i++) {
             //防止拉取到自己
-            if (rank==index){
-                index+=1;
+            if (rank==i){
+                rank+=1;
             }
-            Opponent opponent = selectChannelidPlayerRank(channelid, index);
+            Opponent opponent = selectChannelidPlayerRank(channelid, rank);
             if (opponent!=null){
                 Long uid = opponent.getUid();
                 updatePlayerRankOppoent(i,uid,playerRank);
