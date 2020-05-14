@@ -4,10 +4,12 @@ import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
 import com.teeqee.mybatis.dao.ServerInfoMapper;
+import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
+import com.teeqee.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -20,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -147,24 +146,80 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**
      * 玩家排行榜的热更新
      */
-    //@Scheduled(cron = "0 * */1 * * ?")
-    @Scheduled(cron = "0 0/3 * * * ?")
-    public void task() {
+    @Scheduled(cron = "0 * */1 * * ?")
+    public void hotTask() {
         logger.info("serverInfo and rank task........");
         initServerInfo();
         updateRank();
     }
+
+    //@Scheduled(cron = "0 0 0 ? * SUN")
+    @Scheduled(cron = "0/20 * * * * ?")
+    public void weekTask() {
+        logger.info("sunday  rank task");
+        checkRank();
+    }
+
+
+    private void checkRank() {
+        logger.info("Check the server for players who haven't logged in for seven days");
+        serverInfoMap.forEach((k,v)->{
+            Date pastDate = DateUtils.getPastDate(7);
+            String roundsRedisKey = getRedisZSetKey(k, ROUNDS_TYPE);
+            int deleteRoundsSize = deleteNotLoginDay(roundsRedisKey, pastDate);
+            String missRedisKey = getRedisZSetKey(k, MISSNUM_TYPE);
+            int deleteMissSize = deleteNotLoginDay(missRedisKey, pastDate);
+            logger.info("remove channelid:{} ,rounds size:{},miss size:{}", k,deleteRoundsSize,deleteMissSize);
+        });
+    }
+
+
+    /**
+     * @param redisKey redisKEY
+     * @param pastDate 检查的日期
+     */
+    private int deleteNotLoginDay(String redisKey,Date pastDate){
+        Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisKey, 0, -1);
+        int removeSize=0;
+        if (set!=null&&set.size()>0){
+            for (ZSetOperations.TypedTuple<Object> tuple : set) {
+                Object value = tuple.getValue();
+                if (value!=null){
+                    long uid = (long) value;
+                    PlayerData playerData = playerDataMapper.selectByPrimaryKey(uid);
+                    boolean isRemove=true;
+                    if (playerData!=null){
+                        Date lasttime = playerData.getLasttime();
+                        if (lasttime!=null){
+                           if ((pastDate.getTime()-lasttime.getTime())<7*86400){
+                               isRemove=false;
+                           }
+                        }
+                    }
+                    if (isRemove){
+                        removeSize++;
+                        redisTemplate.opsForZSet().remove(redisKey, value);
+                    }
+                }
+            }
+        }
+        return removeSize;
+    }
+
 
 
     /**
      * @return 返回一个redisZset的key
      */
     private String getRedisZSetKey(Integer channelId, Integer type) {
-        Integer serverId = serverInfoMap.get(channelId).getChannelId();
-        if (type == ROUNDS_TYPE) {
-            return serverId + "_" + ROUNDS;
-        } else if (type == MISSNUM_TYPE) {
-            return serverId + "_" + MISSNUM;
+        ServerInfo serverInfo = serverInfoMap.get(channelId);
+        if (serverInfo!=null){
+            Integer serverId = serverInfo.getChannelId();
+            if (type == ROUNDS_TYPE) {
+                return serverId + "_" + ROUNDS;
+            } else if (type == MISSNUM_TYPE) {
+                return serverId + "_" + MISSNUM;
+            }
         }
         throw new RuntimeException("this rank type not exit " + type);
     }
@@ -243,14 +298,16 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      */
     private void initMysqlRankInfo() {
         logger.info("init redis zSet info");
+        //获取七天登录过的玩家
+        Date pastDate = DateUtils.getPastDate(7);
         serverInfoMap.forEach((k, v) -> {
             Integer channelId = v.getChannelId();
-            List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS);
+            List<TopRankInfo> roundsList = playerDataMapper.initTopRank(channelId, ROUNDS,pastDate);
             for (TopRankInfo topRankInfo : roundsList) {
                 logger.info("channelid:{},uid:{},rounds:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
-            List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM);
+            List<TopRankInfo> missList = playerDataMapper.initTopRank(channelId, MISSNUM,pastDate);
             for (TopRankInfo topRankInfo : missList) {
                 logger.info("channelid:{},uid:{},miss:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);

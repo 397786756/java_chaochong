@@ -5,6 +5,7 @@ import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,5 +29,5 @@ public interface PlayerDataMapper {
      * @param orderByName 需要排行的name
      * @return 返回初始化的数据用于排行榜
      */
-    List<TopRankInfo> initTopRank(@Param("channelid") Integer channelid, @Param("orderByName") String orderByName);
+    List<TopRankInfo> initTopRank(@Param("channelid") Integer channelid, @Param("orderByName") String orderByName,@Param("lasttime") Date pastDate);
 }

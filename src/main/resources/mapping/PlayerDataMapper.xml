@@ -396,7 +396,7 @@
     </set>
     where uid = #{uid,jdbcType=BIGINT}
   </update>
-  <!--初始化排行榜-->
+  <!--初始化排行榜 查询七天登录的玩家-->
   <select id="initTopRank"  resultType="com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo">
    select
    info.uid as uid,
@@ -411,7 +411,10 @@
    data.uid=info.uid
    where
    info.channelid=#{channelid,jdbcType=INTEGER}
-   and data.${orderByName}>0
+   and
+   data.${orderByName}>0
+   and
+   data.lasttime>#{lasttime,jdbcType=TIMESTAMP}
    order by data.${orderByName}
    limit 50
   </select>
