@@ -32,7 +32,8 @@ public class ChaoChongServerTest {
 
     @Test
     public void  test() throws Exception {
-        Opponent opponent = playerRankEntrance.selectChannelidPlayerRank(1, 2);
-        System.out.println(JSONObject.toJSONString(opponent));
+        String s = playerRankEntrance.checkAnimalJosn("[{\"animalid\":8,\"lv\":0,\"blood\":432,\"attack\":232,\"defense\":78},{\"animalid\":4,\"lv\":0,\"blood\":368,\"attack\":345,\"defense\":65},{\"animalid\":3,\"lv\":2,\"blood\":880,\"attack\":283,\"defense\":93},{\"animalid\":3,\"lv\":2,\"blood\":880,\"attack\":283,\"defense\":93},{\"animalid\":1,\"lv\":4,\"blood\":1440,\"attack\":160,\"defense\":126}]");
+        System.out.println(JSONObject.toJSONString(s));
+        System.out.println(playerRankEntrance.selectChannelidPlayerRank(1, 2));
     }
 }

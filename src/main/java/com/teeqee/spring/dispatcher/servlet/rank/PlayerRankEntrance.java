@@ -175,12 +175,12 @@ public class PlayerRankEntrance  {
             JSONArray jsonArray = new JSONArray(6);
             int size = list.size();
             for (int i = 0; i < size; i++) {
-                JSONObject jsonObject = list.getJSONObject(i);
-                Integer id = jsonObject.getInteger("id");
-                Integer lv = jsonObject.getInteger("lv");
-                Integer attack = jsonObject.getInteger("atk");
-                Integer defense = jsonObject.getInteger("def");
-                Long blood = jsonObject.getLong("hp");
+                JSONArray animalJsonArrayBean = list.getJSONArray(i);
+                Integer id = animalJsonArrayBean.getInteger(0);
+                Integer lv = animalJsonArrayBean.getInteger(1);
+                Integer blood = animalJsonArrayBean.getInteger(2);
+                Integer attack = animalJsonArrayBean.getInteger(3);
+                Integer defense = animalJsonArrayBean.getInteger(4);
                 Animal animal = new Animal(id, lv, blood, attack, defense);
                 jsonArray.add(animal);
             }
@@ -371,20 +371,17 @@ public class PlayerRankEntrance  {
      * @param animalStringJson 动物的json
      * @return 返回成优化好的json 字符串
      */
-    private String  checkAnimalJosn(String animalStringJson){
+    public String  checkAnimalJosn(String animalStringJson){
         String animalJson=null;
         if (animalStringJson!=null&&!"".equals(animalStringJson)){
             List<Animal> list = JSONArray.parseArray(animalStringJson, Animal.class);
             if (list!=null&&list.size()>0){
                 JSONArray jsonArray = new JSONArray();
                 for (Animal animal : list) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("id", animal.getId());
-                    jsonObject.put("lv", animal.getLv());
-                    jsonObject.put("hp", animal.getHp());
-                    jsonObject.put("atk", animal.getAtk());
-                    jsonObject.put("def", animal.getDef());
-                    jsonArray.add(jsonObject);
+                    //将json对象转成
+                    String json = JSON.toJSONString(animal, SerializerFeature.BeanToArray);
+                    JSONArray parseArray = JSONArray.parseArray(json);
+                    jsonArray.add(parseArray);
                 }
                 animalJson=jsonArray.toJSONString();
             }
