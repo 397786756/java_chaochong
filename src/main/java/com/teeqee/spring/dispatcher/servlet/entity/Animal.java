@@ -19,11 +19,22 @@ public class Animal {
     private Integer lv;
     /**宠物血量*/
     @JSONField(name = "blood")
-    private Long blood;
+    private Long hp;
     /**宠物攻击力*/
     @JSONField(name = "attack")
-    private Integer attack;
+    private Integer atk;
     /**宠物防御力*/
     @JSONField(name = "defense")
-    private Integer defense;
+    private Integer def;
+
+    public Animal() {
+    }
+
+    public Animal(Integer id, Integer lv, Long hp, Integer atk, Integer def) {
+        this.id = id;
+        this.lv = lv;
+        this.hp = hp;
+        this.atk = atk;
+        this.def = def;
+    }
 }

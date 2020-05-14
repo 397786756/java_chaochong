@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,22 +124,22 @@ public class PlayerRankEntrance  {
         //获取我的排名
         Long rank = playerRank.getRank();
         for (int i = 0; i < rankPlayerSize; i++) {
-            long selectRank=(long)(i+1);
+            long index=(long)(i+1);
             //防止拉取到自己
-            if (rank==selectRank){
-                selectRank+=1;
+            if (rank==index){
+                index+=1;
             }
-            Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,selectRank );
+            Opponent opponent = selectChannelidPlayerRank(channelid, index);
+            if (opponent!=null){
+                Long uid = opponent.getUid();
+                updatePlayerRankOppoent(i,uid,playerRank);
+            }
             JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(opponent, SerializerFeature.WriteNullListAsEmpty,
                     SerializerFeature.WriteNullStringAsEmpty,
                     SerializerFeature.WriteNullNumberAsZero,
                     SerializerFeature.WriteNullBooleanAsFalse,
                     SerializerFeature.WriteMapNullValue));
             jsonArray.add(jsonObject);
-            if (opponent!=null){
-                Long uid = opponent.getUid();
-                updatePlayerRankOppoent(i,uid,playerRank);
-            }
         }
         return jsonArray;
     }
@@ -165,6 +166,29 @@ public class PlayerRankEntrance  {
         }
     }
 
+    /**将动物转成客户端是json串*/
+    public Opponent selectChannelidPlayerRank(Integer channelid,long index){
+        Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,index);
+        String animalString = opponent.getAnimal();
+        if (animalString!=null&&!"".equals(animalString)){
+            JSONArray list = JSONArray.parseArray(animalString);
+            JSONArray jsonArray = new JSONArray(6);
+            int size = list.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject jsonObject = list.getJSONObject(i);
+                Integer id = jsonObject.getInteger("id");
+                Integer lv = jsonObject.getInteger("lv");
+                Integer attack = jsonObject.getInteger("atk");
+                Integer defense = jsonObject.getInteger("def");
+                Long blood = jsonObject.getLong("hp");
+                Animal animal = new Animal(id, lv, blood, attack, defense);
+                jsonArray.add(animal);
+            }
+            opponent.setAnimal(jsonArray.toJSONString());
+        }
+        return opponent;
+    }
+
 
 
    /**获取6个挑战者*/
@@ -186,7 +210,7 @@ public class PlayerRankEntrance  {
            if (rank==index){
                index+=1;
            }
-           Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,index);
+           Opponent opponent = selectChannelidPlayerRank(channelid, index);
            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(opponent, SerializerFeature.WriteNullListAsEmpty,
                    SerializerFeature.WriteNullStringAsEmpty,
                    SerializerFeature.WriteNullNumberAsZero,
@@ -344,16 +368,26 @@ public class PlayerRankEntrance  {
     }
 
     /**
-     * @param animal 动物的json
+     * @param animalStringJson 动物的json
      * @return 返回成优化好的json 字符串
      */
-    private String  checkAnimalJosn(String animal){
-        if (animal!=null){
-            List<Animal> list = JSONArray.parseArray(animal, Animal.class);
+    private String  checkAnimalJosn(String animalStringJson){
+        String animalJson=null;
+        if (animalStringJson!=null){
+            List<Animal> list = JSONArray.parseArray(animalStringJson, Animal.class);
             JSONArray jsonArray = new JSONArray();
-
+            for (Animal animal : list) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", animal.getId());
+                jsonObject.put("lv", animal.getLv());
+                jsonObject.put("hp", animal.getHp());
+                jsonObject.put("atk", animal.getAtk());
+                jsonObject.put("def", animal.getDef());
+                jsonArray.add(jsonObject);
+            }
+            animalJson=jsonArray.toJSONString();
         }
-        return animal;
+        return animalJson;
     }
 
     /**
@@ -366,6 +400,8 @@ public class PlayerRankEntrance  {
      * @param animal2 玩家2需要修改的数据
      */
     private synchronized void updateWorldRank(Integer iswin,Long uid1,Long rank1,Long uid2,Long rank2,String animal1,String animal2 ){
+        animal1=checkAnimalJosn(animal1);
+        animal2=checkAnimalJosn(animal2);
         PlayerRank playerRank1 = new PlayerRank();
         playerRank1.setUid(uid1);
         playerRank1.setRank(rank1);
