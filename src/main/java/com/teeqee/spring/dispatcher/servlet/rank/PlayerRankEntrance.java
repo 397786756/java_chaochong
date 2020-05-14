@@ -284,8 +284,8 @@ public class PlayerRankEntrance  {
         }else {
             topRankInfo = new TopRankInfo();
             topRankInfo.init();
+            jsonObject.put(yourrank,topRankInfo);
         }
-        jsonObject.put(yourrank,topRankInfo);
         jsonObject.put(toplistdata,rankList);
         return jsonObject;
     }
