@@ -269,23 +269,22 @@ public class PlayerRankEntrance  {
         String  toplistdata ="toplistdata";
         String  yourrank ="yourrank";
         Long uid = model.getSession().getUid();
-        JSONArray rankList = new JSONArray(48);
+        JSONArray rankList;
         TopRankInfo topRankInfo;
         if (channelid!=null){
             //世界排名为1
             int topListType=1;
-            List<TopRankInfo> topList = redisService.getRankList(channelid, topListType);
-            if (topList!=null&&topList.size()>0){
-                jsonObject.put(toplistdata,topList) ;
-            }
+             List<TopRankInfo> topList = redisService.getRankList(channelid, topListType);
+             rankList= JSONArray.parseArray(JSON.toJSONString(topList));
              topRankInfo = redisService.getMyTopRankInfo(channelid, topListType, uid);
              topRankInfo.setNickname(playerInfo.getMyNickName());
              topRankInfo.setAvatar(playerInfo.getMyAvatar());
         }else {
             topRankInfo = new TopRankInfo();
             topRankInfo.init();
-            jsonObject.put(yourrank,topRankInfo);
+            rankList=new JSONArray();
         }
+        jsonObject.put(yourrank,topRankInfo);
         jsonObject.put(toplistdata,rankList);
         return jsonObject;
     }
