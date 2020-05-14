@@ -22,8 +22,8 @@ import java.util.Map;
 public class Session<T>  {
     /**因为超宠是登录后再传openId的*/
     private Long uid;
-    /**平台*/
-    private Integer channelid;
+    /**平台默认本地服务器*/
+    private Integer channelid=1;
     /**channel*/
     private Channel channel;
     /** 是否已经传openId并且登录*/

@@ -28,7 +28,8 @@ public class PlayerInfo {
 
     private String language;
 
-    private Integer channelid;
+    /**渠道为空默认本地服务器*/
+    private Integer channelid=1;
 
     private Date createtime;
 
