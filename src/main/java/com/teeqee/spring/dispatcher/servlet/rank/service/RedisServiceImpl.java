@@ -153,8 +153,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         updateRank();
     }
 
-    //@Scheduled(cron = "0 0 0 ? * SUN")
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0 0 0 ? * SUN")
     public void weekTask() {
         logger.info("sunday  rank task");
         checkRank();
