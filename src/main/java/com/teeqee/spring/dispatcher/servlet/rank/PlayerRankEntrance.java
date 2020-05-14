@@ -373,19 +373,21 @@ public class PlayerRankEntrance  {
      */
     private String  checkAnimalJosn(String animalStringJson){
         String animalJson=null;
-        if (animalStringJson!=null){
+        if (animalStringJson!=null&&!"".equals(animalStringJson)){
             List<Animal> list = JSONArray.parseArray(animalStringJson, Animal.class);
-            JSONArray jsonArray = new JSONArray();
-            for (Animal animal : list) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", animal.getId());
-                jsonObject.put("lv", animal.getLv());
-                jsonObject.put("hp", animal.getHp());
-                jsonObject.put("atk", animal.getAtk());
-                jsonObject.put("def", animal.getDef());
-                jsonArray.add(jsonObject);
+            if (list!=null&&list.size()>0){
+                JSONArray jsonArray = new JSONArray();
+                for (Animal animal : list) {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("id", animal.getId());
+                    jsonObject.put("lv", animal.getLv());
+                    jsonObject.put("hp", animal.getHp());
+                    jsonObject.put("atk", animal.getAtk());
+                    jsonObject.put("def", animal.getDef());
+                    jsonArray.add(jsonObject);
+                }
+                animalJson=jsonArray.toJSONString();
             }
-            animalJson=jsonArray.toJSONString();
         }
         return animalJson;
     }
