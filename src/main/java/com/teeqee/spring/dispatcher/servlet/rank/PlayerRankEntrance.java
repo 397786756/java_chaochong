@@ -10,13 +10,13 @@ import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.mybatis.pojo.PlayerRankLog;
 import com.teeqee.net.handler.Session;
-import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 import com.teeqee.spring.dispatcher.servlet.entity.Animal;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.WorldRankEnd;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
+import com.teeqee.spring.dispatcher.servlet.rank.service.RedisServiceImpl;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.utils.RandomUtils;
@@ -24,10 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @DataSourceType("redisRank")
@@ -40,6 +40,8 @@ public class PlayerRankEntrance  {
      private PlayerRankMapper playerRankMapper;
      @Resource
      private PlayerRankLogMapper playerRankLogMapper;
+
+     private ConcurrentHashMap<Long,PlayerRank> playerRankMap=new ConcurrentHashMap<>(1024);
 
     /**获取打榜战报*/
     @Dispather(value = "getrankreport")
@@ -60,7 +62,7 @@ public class PlayerRankEntrance  {
         return jsonObject;
     }
 
-    /**世界排行榜*/
+    /**获取打榜对战列表*/
     @Dispather(value = "getworldrank")
     public JSONObject getworldrank(MethodModel method) {
        return getworldrankJson(method.getSession());
@@ -70,19 +72,13 @@ public class PlayerRankEntrance  {
     private JSONObject getworldrankJson( Session session){
         //因为现在的打榜是存到数据库中的,所以玩家去拉取只能拉取到这个
         PlayerRank playerRank = playerRankMapper.selectByPrimaryKey(session.getUid());
-        if (playerRank==null){
-            playerRank=new PlayerRank();
-            playerRank.setUid(session.getUid());
-            playerRankMapper.insertSelective(playerRank);
-        }
-        return initPlayerWorldrank(playerRank,session.getChannelid());
+        return initPlayerWorldRank(playerRank,session.getChannelid());
     }
-
 
     /**
      * @param playerRank 玩家的排行榜 初始化6个敌人
      */
-    private JSONObject initPlayerWorldrank(PlayerRank playerRank,Integer channelid){
+    private JSONObject initPlayerWorldRank(PlayerRank playerRank,Integer channelid){
         JSONObject jsonObject = new JSONObject(2);
         Boolean isopponent = playerRank.getIsopponent();
         JSONArray jsonArray = null;
@@ -114,6 +110,92 @@ public class PlayerRankEntrance  {
        jsonObject.put("opponentlist",jsonArray);
        return jsonObject;
    }
+
+
+
+   public JSONObject initPlayerWorldrank(PlayerRank playerRank,Integer channelid){
+        //挑战的类型
+       int toplistType = RedisServiceImpl.TOPLIST_TYPE;
+       Boolean isopponent = playerRank.getIsopponent();
+       //返回的挑战人数
+       JSONArray jsonArray =new JSONArray(5);
+       //我的排名
+       Long yourrank=playerRank.getRank();
+       //返回的数据源
+       JSONObject jsonObject = new JSONObject(2);
+       Long aLong = redisService.rankPlayerSize(channelid, toplistType);
+       if (yourrank!=null&&yourrank>aLong){
+           logger.info("排行榜人数为:{},玩家的排名为:{}",aLong,yourrank);
+           playerRank.setRank(aLong+1);
+       }
+       if (yourrank==null){
+           logger.info("排名玩空,系统生成玩家排名");
+           redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
+           playerRank.setRank(aLong+1);
+       }
+       if (isopponent==null){
+           logger.info("挑战记录为空,系统生成挑战的人,将玩家的挑战设置为false");
+           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+           playerRank.setIsopponent(false);
+       }else if (isopponent){
+           logger.info("挑战记录不为空,系统需要重新排序6个挑战的人");
+       }
+
+       jsonObject.put("yourrank", playerRank.getRank());
+       jsonObject.put("opponentlist",jsonArray);
+       return jsonObject;
+   }
+
+   private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
+       int playersNum=6;
+       Long rank = playerRank.getRank();
+       logger.info("玩家排名为:{}",rank);
+       if (rank <=playersNum){
+           logger.info("拉取最强的6个人,也就是分数最少的那几个");
+           for (int i = 0; i < playersNum; i++) {
+               Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i);
+               updatePlayerRankOppoent(i,playerUid,playerRank);
+           }
+       }else {
+           logger.info("循环拉取6个人");
+           List<Long> list = getBandX(rank, playersNum+1);
+           for (int i = 0; i < list.size(); i++) {
+               Long aLong = list.get(i);
+               Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong);
+               updatePlayerRankOppoent(i,playerUid,playerRank);
+           }
+       }
+   }
+
+
+    /**
+     * @param rank 根据下标排名获取区间值
+     * @param playerNum 获取的玩家人数
+     * @return 返回被拉取到的玩家的集合
+     */
+   private List<Long> getBandX(Long rank,int playerNum){
+       logger.info("玩家的排名为:{}",rank);
+       long B = getRankRandom(rank);
+       logger.info("获取的区间为:{}",B);
+       Long Y = null;
+       List<Long> list = new ArrayList<>(playerNum);
+       for (int i = 0; i < playerNum; i++) {
+           if (i==0){
+               //挑战1的排名 Y1 = X-1
+               Y=rank-1;
+           }else {
+               int randomInt = RandomUtils.getRandomInt(1, (int) B);
+               Y-=randomInt;
+           }
+           list.add(Y);
+       }
+       logger.info("获取的玩家排行的集合为:{}",rank,list.toArray());
+       return list;
+   }
+
+
+
+
 
     /**获取6个挑战者*/
     private JSONArray  getMaxSixOpponenter(Integer channelid,PlayerRank playerRank){
@@ -229,6 +311,7 @@ public class PlayerRankEntrance  {
     private static final int RANK12=12;
     private static final int RANK6=6;
    /**获取随机的排名*/
+
    private long getRankRandom(Long rank){
        long randomRank;
        if (rank>RANK250 ){

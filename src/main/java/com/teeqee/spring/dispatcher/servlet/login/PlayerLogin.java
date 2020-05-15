@@ -80,8 +80,8 @@ public class PlayerLogin {
         //开启游客模式
         playerData.isTourist(openid);
         //TODO 排行榜手动取消
-        //PlayerRank playerRank = createPlayerRank(uid);
-        //session.add(PlayerCmd.PLAYER_RANK,playerRank);
+        PlayerRank playerRank = createPlayerRank(uid);
+        session.add(PlayerCmd.PLAYER_RANK,playerRank);
         session.add(PlayerCmd.PLAYER_DATA,playerData);
         session.add(PlayerCmd.PLAYER_LOG, playerLog);
         session.add(PlayerCmd.PLAYER_INFO,playerInfo);
@@ -216,10 +216,10 @@ public class PlayerLogin {
      * @return 返回用户的数据源
      */
     private PlayerRank createPlayerRank(Long uid) {
+        //排行榜初始化不添加用户的数据
         PlayerRank playerRank = playerRankMapper.selectByPrimaryKey(uid);
         if (playerRank==null){
             playerRank=new PlayerRank();
-            playerRank.setIsopponent(false);
             playerRank.setUid(uid);
             playerRankMapper.insertSelective(playerRank);
         }

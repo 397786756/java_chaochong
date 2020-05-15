@@ -40,12 +40,12 @@ public class ClientMain {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline p = socketChannel.pipeline();
-                        p.addLast(new ChannelHandler[]{new HttpClientCodec(),
-                                new HttpObjectAggregator(1024 * 1024 * 10)});
+                        p.addLast(new HttpClientCodec(),
+                                new HttpObjectAggregator(1024 * 1024 * 10));
                         p.addLast("hookedHandler", new WebSocketClientHandler());
                     }
                 });
-        URI websocketURI = new URI("ws://127.0.0.1:28081/chaochong");
+        URI websocketURI = new URI("ws://127.0.0.1:28080/game");
         HttpHeaders httpHeaders = new DefaultHttpHeaders();
         //进行握手
         WebSocketClientHandshaker handshaker = WebSocketClientHandshakerFactory.newHandshaker(websocketURI, WebSocketVersion.V13, (String) null, true, httpHeaders);
@@ -56,7 +56,6 @@ public class ClientMain {
         handshaker.handshake(channel);
         //阻塞等待是否握手成功
         handler.handshakeFuture().sync();
-        jsonString(channel);
     }
 
     private static void websocketClientSendJson(Channel channel) {
@@ -75,9 +74,4 @@ public class ClientMain {
 
     }
 
-    private static void jsonString(Channel channel) {
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("cmd", "login");
-        channel.writeAndFlush(jsonObject.toJSONString());
-    }
 }

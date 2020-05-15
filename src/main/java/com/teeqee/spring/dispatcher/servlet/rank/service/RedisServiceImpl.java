@@ -1,5 +1,6 @@
 package com.teeqee.spring.dispatcher.servlet.rank.service;
 
+import com.alibaba.fastjson.JSON;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
@@ -9,6 +10,7 @@ import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.InitPlayerRankTotal;
 import com.teeqee.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     private static final String ROUNDS = "rounds";
     /**miss*/
     private static final String MISSNUM = "missnum";
+    /**top打榜*/
+    private static final String TOPLIST = "toplist";
     /**守卫者*/
     private static final String  SHOU_WEI_ZHE = "守卫者";
     /**rank size*/
@@ -76,7 +80,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     public static final int ROUNDS_TYPE = 1;
     /**miss 排行榜*/
     public static final int MISSNUM_TYPE = 2;
-
+    /**tio lsit*/
+    public static final int TOPLIST_TYPE = 3;
     /**
      * @param channelId 平台id
      * @param type      排行榜的key
@@ -142,6 +147,42 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         }
     }
 
+    /**
+     * @param channelId 渠道的id
+     * @param type      排行榜的类型
+     * @return 返回排行榜的数量
+     */
+    @Override
+    public Long rankPlayerSize(Integer channelId, Integer type) {
+            String redisZSetKey = getRedisZSetKey(channelId, type);
+            return redisTemplate.opsForZSet().size(redisZSetKey);
+    }
+
+    /**
+     * @param channelId 取代id
+     * @param rank      玩家的排名
+     * @return 返回玩家的uid
+     */
+    @Override
+    public Long getTopRankUid(Integer channelId, Integer type, Long rank) {
+        //分数是从小到大
+        String redisZSetKey = getRedisZSetKey(channelId, type);
+        Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, rank);
+        if (set!=null&&set.size()>0){
+            int index = 0;
+            for (ZSetOperations.TypedTuple<Object> tuple : set) {
+                if (index==rank){
+                    Object value = tuple.getValue();
+                    if (value!=null){
+                        return Long.valueOf(value.toString());
+                    }
+                }
+                index++;
+            }
+        }
+        return null;
+    }
+
 
     /**
      * 玩家排行榜的热更新
@@ -178,7 +219,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      * @param pastDate 检查的日期
      */
     private int deleteNotLoginDay(String redisKey,Date pastDate){
-        Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisKey, 0, -1);
+        //重大到小排序
+        Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().reverseRangeWithScores(redisKey, 0, -1);
         int removeSize=0;
         if (set!=null&&set.size()>0){
             for (ZSetOperations.TypedTuple<Object> tuple : set) {
@@ -218,9 +260,12 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 return serverId + "_" + ROUNDS;
             } else if (type == MISSNUM_TYPE) {
                 return serverId + "_" + MISSNUM;
+            }else if (type==TOPLIST_TYPE){
+                return serverId+"_"+TOPLIST;
             }
+            throw new RuntimeException("this rank type not exit " + type);
         }
-        throw new RuntimeException("this rank type not exit " + type);
+        throw new RuntimeException("server not exit " + channelId);
     }
 
     /**
@@ -229,7 +274,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     @Override
     public void destroy() throws Exception {
         logger.info("delete redis zSet info");
-        int type = 2;
+        //三种排行榜
+        int type = 3;
         serverInfoMap.forEach((k, v) -> {
             for (int i = 1; i <= type; i++) {
                 String redisZSetKey = getRedisZSetKey(v.getChannelId(), i);
@@ -321,6 +367,10 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 topRankInfo.setNickname(topRankInfo.getNickname()==null?"":topRankInfo.getNickname());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
             }
+            //加载分数排行榜
+            List<InitPlayerRankTotal> playerRankList = playerRankMapper.initPlayerRankTotal(k);
+            playerRankList.forEach(playerRank-> addRank(k, 3, playerRank.getUid(), playerRank.getRank().doubleValue(), true));
+            logger.info("gameserver id:{},playerRankListSize:{}", channelId, playerRankList.size());
             logger.info("gameserver id:{},roundsListSize:{}", channelId, roundsList.size());
             logger.info("gameserver id:{},missListSize:{}", channelId, missList.size());
             missRankMap.put(channelId, missList);
@@ -356,6 +406,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             missRankMap.put(channelId, updateTopRankInfo(missKey, missSize));
         });
     }
+
 
 
     /**

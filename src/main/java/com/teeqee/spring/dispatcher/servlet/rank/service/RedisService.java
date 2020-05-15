@@ -37,4 +37,21 @@ public interface RedisService {
      * @return 返回是否加入成功
      */
     void addRank(Integer channelId, Integer type,Long uid, Double score, boolean siCover);
+
+
+    /**
+     * @param channelId 渠道的id
+     * @param type 排行榜的类型
+     * @return 返回该排行榜的数量
+     */
+    Long rankPlayerSize(Integer channelId, Integer type);
+
+
+    /**
+     * @param channelId 取代id
+     * @param rank 玩家的排名
+     * @return 返回改uuid,如果为空则不返回
+     */
+    Long getTopRankUid(Integer channelId, Integer type, Long rank);
+
 }

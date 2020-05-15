@@ -39,8 +39,8 @@ public class SessionEventServiceImpl implements SessionEventService {
     private PlayerLogMapper playerLogMapper;
     @Resource
     private PlayerInfoMapper playerInfoMapper;
-    // @Resource
-    // private PlayerRankMapper playerRankMapper;
+    @Resource
+    private PlayerRankMapper playerRankMapper;
 
     @Override
     public void close(Session session,boolean isClose) {
@@ -99,10 +99,12 @@ public class SessionEventServiceImpl implements SessionEventService {
             playerInfoMapper.updateByPrimaryKeySelective(playerInfo);
         }
         //排行榜手动取消
-        // PlayerRank playerRank = session.getPlayerRank();
-        // if (playerRank!=null){
-        //     playerRankMapper.updateByPrimaryKeySelective(playerRank);
-        // }
+         PlayerRank playerRank = session.getPlayerRank();
+         if (playerRank!=null){
+             //不能手动修改自己的rank
+             playerRank.setRank(null);
+             playerRankMapper.updateByPrimaryKeySelective(playerRank);
+         }
         if (isClose){
             ChannelSupervise.removeSession(session.getChannel());
         }

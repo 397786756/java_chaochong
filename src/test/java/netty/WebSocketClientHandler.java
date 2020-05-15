@@ -16,6 +16,7 @@ import xyz.noark.network.codec.json.SimpleJsonCodec;
 public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> {
     WebSocketClientHandshaker handshaker;
     ChannelPromise handshakeFuture;
+
     public void handlerAdded(ChannelHandlerContext ctx) {
         this.handshakeFuture = ctx.newPromise();
     }
@@ -23,7 +24,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         return handshaker;
     }
 
-    public void setHandshaker(WebSocketClientHandshaker handshaker) {
+    void setHandshaker(WebSocketClientHandshaker handshaker) {
         this.handshaker = handshaker;
     }
 
@@ -35,7 +36,7 @@ public class WebSocketClientHandler extends SimpleChannelInboundHandler<Object> 
         this.handshakeFuture = handshakeFuture;
     }
 
-    public ChannelFuture handshakeFuture() {
+    ChannelFuture handshakeFuture() {
         return this.handshakeFuture;
     }
 
