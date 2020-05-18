@@ -167,13 +167,17 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      * @return 返回玩家的uid
      */
     @Override
-    public Long getTopRankUid(Integer channelId, Integer type, Long rank) {
+    public Long getTopRankUid(Integer channelId, Integer type, Long rank,Long uid) {
         //分数是从小到大
+        String redisZSetKey = getRedisZSetKey(channelId, type);
+        //删除玩家的排行榜
+        Double score = redisTemplate.opsForZSet().score(redisZSetKey, uid);
+        redisTemplate.opsForZSet().remove(redisZSetKey, uid);
+        Long findPlayerUid = null;
         Long aLong = rankPlayerSize(channelId, type);
         if (rank>aLong){
             rank=aLong-1;
         }
-        String redisZSetKey = getRedisZSetKey(channelId, type);
         Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, rank);
         if (set!=null&&set.size()>0){
             int index = 0;
@@ -181,14 +185,18 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 if (index==rank){
                     Object value = tuple.getValue();
                     if (value!=null){
-                        return Long.valueOf(value.toString());
+                        findPlayerUid= Long.valueOf(value.toString());
+                        continue;
                     }
                 }
                 index++;
             }
         }
-        return null;
+        addRank(channelId, type, uid, score, true);
+        return findPlayerUid;
     }
+
+
 
 
     /**

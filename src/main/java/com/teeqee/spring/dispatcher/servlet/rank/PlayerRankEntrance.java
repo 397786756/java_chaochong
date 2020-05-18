@@ -117,7 +117,7 @@ public class PlayerRankEntrance  {
        if (rank <=playersNum){
            logger.info("get max sixPlayer");
            for (int i = 0; i < playersNum; i++) {
-               Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i);
+               Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i,uid);
                if (playerUid==null){
                    logger.info("null index:{}",i);
                }else {
@@ -129,7 +129,7 @@ public class PlayerRankEntrance  {
            List<Long> list = getBandX(rank, playersNum);
            for (int i = 0; i < list.size(); i++) {
                Long aLong = list.get(i);
-               Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong);
+               Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong,uid);
                if (playerUid==null){
                    logger.info("null index:{}",i);
                }else {

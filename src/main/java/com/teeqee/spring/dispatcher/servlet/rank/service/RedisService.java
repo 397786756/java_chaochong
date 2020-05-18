@@ -50,8 +50,9 @@ public interface RedisService {
     /**
      * @param channelId 取代id
      * @param rank 玩家的排名
+     * @param uid 玩家的uid
      * @return 返回改uuid,如果为空则不返回
      */
-    Long getTopRankUid(Integer channelId, Integer type, Long rank);
+    Long getTopRankUid(Integer channelId, Integer type, Long rank,Long uid);
 
 }
