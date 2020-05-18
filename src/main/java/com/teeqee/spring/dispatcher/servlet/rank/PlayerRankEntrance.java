@@ -85,20 +85,20 @@ public class PlayerRankEntrance  {
        JSONObject jsonObject = new JSONObject(2);
        Long aLong = redisService.rankPlayerSize(channelid, toplistType);
        if (yourrank!=null&&yourrank>aLong){
-           logger.info("排行榜人数为:{},玩家的排名为:{}",aLong,yourrank);
+           logger.info("topList rank num :{},thisPlayer rank:{}",aLong,yourrank);
            playerRank.setRank(aLong+1);
        }
        if (yourrank==null){
-           logger.info("排名玩空,系统生成玩家排名");
+           logger.info("this playerRank is null");
            redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
            playerRank.setRank(aLong+1);
        }
        if (isopponent==null){
-           logger.info("挑战记录为空,系统生成挑战的人,将玩家的挑战设置为false");
+           logger.info("isopponent is  null");
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            playerRank.setIsopponent(false);
        }else if (isopponent){
-           logger.info("挑战记录不为空并且挑战过了,系统需要重新排序");
+           logger.info("isopponent is not null and true");
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
        }
        //返回的挑战人数
@@ -109,17 +109,18 @@ public class PlayerRankEntrance  {
    }
 
    private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
+        logger.info("start:{}",JSON.toJSONString(playerRank));
        int playersNum=6;
        Long rank = playerRank.getRank();
-       logger.info("玩家排名为:{}",rank);
+       logger.info("player rank:{}",rank);
        if (rank <=playersNum){
-           logger.info("拉取最强的6个人,也就是分数最少的那几个");
+           logger.info("get max sixPlayer");
            for (int i = 0; i < playersNum; i++) {
                Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i);
                updatePlayerRankOppoent(i,playerUid,playerRank);
            }
        }else {
-           logger.info("循环拉取6个人");
+           logger.info("for ger six");
            List<Long> list = getBandX(rank, playersNum+1);
            for (int i = 0; i < list.size(); i++) {
                Long aLong = list.get(i);
@@ -127,6 +128,7 @@ public class PlayerRankEntrance  {
                updatePlayerRankOppoent(i,playerUid,playerRank);
            }
        }
+       logger.info("end:{}",JSON.toJSONString(playerRank));
    }
 
 
@@ -136,9 +138,8 @@ public class PlayerRankEntrance  {
      * @return 返回被拉取到的玩家的集合
      */
    private List<Long> getBandX(Long rank,int playerNum){
-       logger.info("玩家的排名为:{}",rank);
        long B = getRankRandom(rank);
-       logger.info("获取的区间为:{}",B);
+       logger.info("rank B:{}",B);
        Long Y = null;
        List<Long> list = new ArrayList<>(playerNum);
        for (int i = 0; i < playerNum; i++) {
@@ -151,7 +152,7 @@ public class PlayerRankEntrance  {
            }
            list.add(Y);
        }
-       logger.info("获取的玩家排行为:{},拉取的集合为:{}",rank,list.toArray());
+       logger.info("this player rank:{},rankList:{}",rank,list.toArray());
        return list;
    }
 
