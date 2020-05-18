@@ -213,22 +213,26 @@ public class PlayerRankEntrance  {
     /**将动物转成客户端是json串*/
     private Opponent selectChannelidPlayerRank(Integer channelid, long uid){
         Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,uid);
-        String animalString = opponent.getAnimal();
-        if (animalString!=null&&!"".equals(animalString)){
-            JSONArray list = JSONArray.parseArray(animalString);
-            JSONArray jsonArray = new JSONArray(6);
-            int size = list.size();
-            for (int i = 0; i < size; i++) {
-                JSONArray animalJsonArrayBean = list.getJSONArray(i);
-                Integer id = animalJsonArrayBean.getInteger(0);
-                Integer lv = animalJsonArrayBean.getInteger(1);
-                Integer blood = animalJsonArrayBean.getInteger(2);
-                Integer attack = animalJsonArrayBean.getInteger(3);
-                Integer defense = animalJsonArrayBean.getInteger(4);
-                Animal animal = new Animal(id, lv, blood, attack, defense);
-                jsonArray.add(animal);
+        if (opponent!=null){
+            String animalString = opponent.getAnimal();
+            if (animalString!=null){
+                JSONArray list = JSONArray.parseArray(animalString);
+                JSONArray jsonArray = new JSONArray(6);
+                int size = list.size();
+                for (int i = 0; i < size; i++) {
+                    JSONArray animalJsonArrayBean = list.getJSONArray(i);
+                    Integer id = animalJsonArrayBean.getInteger(0);
+                    Integer lv = animalJsonArrayBean.getInteger(1);
+                    Integer blood = animalJsonArrayBean.getInteger(2);
+                    Integer attack = animalJsonArrayBean.getInteger(3);
+                    Integer defense = animalJsonArrayBean.getInteger(4);
+                    Animal animal = new Animal(id, lv, blood, attack, defense);
+                    jsonArray.add(animal);
+                }
+                opponent.setAnimal(jsonArray.toJSONString());
+            }else {
+                opponent.setAnimal("[]");
             }
-            opponent.setAnimal(jsonArray.toJSONString());
         }
         return opponent;
     }
