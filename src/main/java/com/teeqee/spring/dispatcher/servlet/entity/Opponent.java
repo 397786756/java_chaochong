@@ -14,7 +14,7 @@ public class Opponent {
     private Long rank;
     private String nickname="";
     private String avatar="";
-    private String animal="[]";
+    private String animal=null;
 
     public Opponent() {
     }
