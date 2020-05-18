@@ -1,6 +1,9 @@
 package com.teeqee;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +23,11 @@ import java.util.function.Function;
  * @Software: IntelliJ IDEA
  */
 public class ChaoChongMap {
+    public static void main(String[] args) {
+        Opponent opponent = new Opponent();
+        String s = JSON.toJSONString(opponent, SerializerFeature.WriteMapNullValue);
+        System.out.println(s);
+    }
     @Test
     public void testFormat() {
 

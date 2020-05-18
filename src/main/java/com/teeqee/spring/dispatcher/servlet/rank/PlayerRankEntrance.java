@@ -180,14 +180,16 @@ public class PlayerRankEntrance  {
         Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
         Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
         JSONArray jsonArray = new JSONArray(6);
-        jsonArray.add(opponent1);
-        jsonArray.add(opponent2);
-        jsonArray.add(opponent3);
-        jsonArray.add(opponent4);
-        jsonArray.add(opponent5);
-        jsonArray.add(opponent6);
+        jsonArray.add(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue));
         return jsonArray;
     }
+
+
 
     /**
      * @param i 位置
