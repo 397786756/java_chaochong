@@ -232,8 +232,6 @@ public class PlayerRankEntrance  {
                     jsonArray.add(animal);
                 }
                 opponent.setAnimal(jsonArray.toJSONString());
-            }else {
-                opponent.setAnimal("[]");
             }
         }
         return opponent;
