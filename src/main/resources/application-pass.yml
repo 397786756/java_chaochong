@@ -1,4 +1,4 @@
-#超宠微信端配置
+#微信
 wx:
   miniapp:
     #App ID (智能小程序ID)
@@ -7,3 +7,10 @@ wx:
     secret: ZmO4NXzPKCHQImGnzuBmgg5VObDVL1mH
     #App Key
     aesKey: FKdrlMtsA7eGRmHcqvaABFmxIISyQf4r
+#头条
+toutiao:
+  miniapp:
+    #App ID (智能小程序ID)
+    appid: tt5a2c2c91c50628e8
+    #app secret
+    secret: 5c8930253aee3e422ff37b94f2cf5911b7814bc7

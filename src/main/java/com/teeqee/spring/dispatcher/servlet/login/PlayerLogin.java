@@ -45,7 +45,7 @@ public class PlayerLogin {
 
     @Dispather(value = "login")
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject login(MethodModel model) throws IOException {
+    public JSONObject login(MethodModel model)  {
         Session session = model.getSession();
         PlayerData playerData = session.getPlayerData();
         if (playerData ==null){
@@ -86,9 +86,13 @@ public class PlayerLogin {
         return jsonObject;
     }
 
-    private String getOpenId( Integer channelid, String code) throws IOException {
+    private String getOpenId( Integer channelid, String code) {
         if (channelid!=null&&code!=null){
-           return   quDaoLoginService.login(channelid, code);
+            try {
+                return   quDaoLoginService.login(channelid, code);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
           return null;
     }

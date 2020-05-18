@@ -10,5 +10,6 @@ public class QuDao {
     public static final int TOURIST=1;
     /**微信端*/
     public static final int WECHAT =2;
-
+    /**头条*/
+    public static final int TOU_TIAO =3;
 }
