@@ -169,6 +169,10 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     @Override
     public Long getTopRankUid(Integer channelId, Integer type, Long rank) {
         //分数是从小到大
+        Long aLong = rankPlayerSize(channelId, type);
+        if (rank>aLong){
+            rank=aLong-1;
+        }
         String redisZSetKey = getRedisZSetKey(channelId, type);
         Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, rank);
         if (set!=null&&set.size()>0){

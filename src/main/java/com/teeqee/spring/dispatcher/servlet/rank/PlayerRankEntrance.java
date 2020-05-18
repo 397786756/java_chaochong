@@ -118,7 +118,11 @@ public class PlayerRankEntrance  {
            logger.info("get max sixPlayer");
            for (int i = 0; i < playersNum; i++) {
                Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i);
-               updatePlayerRankOppoent(i,playerUid,playerRank);
+               if (playerUid==null){
+                   logger.info("null index:{}",i);
+               }else {
+                   updatePlayerRankOppoent(i,playerUid,playerRank);
+               }
            }
        }else {
            logger.info("for get six");
@@ -126,7 +130,11 @@ public class PlayerRankEntrance  {
            for (int i = 0; i < list.size(); i++) {
                Long aLong = list.get(i);
                Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong);
-               updatePlayerRankOppoent(i,playerUid,playerRank);
+               if (playerUid==null){
+                   logger.info("null index:{}",i);
+               }else {
+                   updatePlayerRankOppoent(i,playerUid,playerRank);
+               }
            }
        }
        logger.info("end:{}",JSON.toJSONString(playerRank));
