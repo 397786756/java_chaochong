@@ -12,6 +12,8 @@ import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import com.teeqee.spring.dispatcher.model.MethodModel;
+import com.teeqee.spring.dispatcher.servlet.login.pingtai.entity.QuDaoLoginService;
+import com.teeqee.spring.dispatcher.servlet.login.pingtai.qudao.QuDao;
 import com.teeqee.spring.mode.annotation.Dispather;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.utils.IdWorker;
@@ -21,15 +23,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.Date;
 
 
 @DataSourceType("login")
 @Service("playerLogin")
 public class PlayerLogin {
-    /**测试服*/
-    private static final int TOURIST=1;
-
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     /**dao*/
     @Resource
@@ -40,10 +40,12 @@ public class PlayerLogin {
     private PlayerInfoMapper playerInfoMapper;
     @Resource
     private PlayerRankMapper playerRankMapper;
+    @Resource
+    private QuDaoLoginService quDaoLoginService;
 
     @Dispather(value = "login")
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject login(MethodModel model) {
+    public JSONObject login(MethodModel model) throws IOException {
         Session session = model.getSession();
         PlayerData playerData = session.getPlayerData();
         if (playerData ==null){
@@ -52,9 +54,17 @@ public class PlayerLogin {
                 String openid = data.getString("openid");
                 if (openid != null) {
                     //登录传过来的openid
-                    tourist(session,openid,TOURIST);
+                    tourist(session,openid, QuDao.TOURIST);
                 }else {
                     //调用http接口
+                    Integer channelid = data.getInteger("channelid");
+                    String code = data.getString("code");
+                    String openId = getOpenId(channelid, code);
+                    if (openId!=null){
+                        tourist(session,openId,channelid);
+                    }else {
+                        return errorLogin(channelid);
+                    }
                 }
             }
             return session.getPlayerData().loginPush();
@@ -62,6 +72,29 @@ public class PlayerLogin {
             return playerData.loginPush();
         }
     }
+
+
+    /**
+     * @param channelid 渠道
+     * @return 返回错误码
+     */
+    private static JSONObject errorLogin(Integer channelid){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("error", 500);
+        jsonObject.put("channelid", channelid);
+        jsonObject.put("info", "please check your mobile phone");
+        return jsonObject;
+    }
+
+    private String getOpenId( Integer channelid, String code) throws IOException {
+        if (channelid!=null&&code!=null){
+           return   quDaoLoginService.login(channelid, code);
+        }
+          return null;
+    }
+
+
+
     /**
      * @param openid 玩家的openid
      * @param channelid 渠道id
