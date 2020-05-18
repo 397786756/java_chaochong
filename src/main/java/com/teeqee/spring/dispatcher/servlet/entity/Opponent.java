@@ -12,9 +12,9 @@ import lombok.Data;
 public class Opponent {
     private Long uid;
     private Long rank;
-    private String nickname;
-    private String avatar;
-    private String animal;
+    private String nickname="";
+    private String avatar="";
+    private String animal="[]";
 
     public Opponent() {
     }
