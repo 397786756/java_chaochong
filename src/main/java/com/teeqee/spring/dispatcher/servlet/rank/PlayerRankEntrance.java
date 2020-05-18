@@ -180,12 +180,12 @@ public class PlayerRankEntrance  {
         Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
         Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
         JSONArray jsonArray = new JSONArray(6);
-        jsonArray.add(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue));
-        jsonArray.add(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue));
-        jsonArray.add(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue));
-        jsonArray.add(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue));
-        jsonArray.add(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue));
-        jsonArray.add(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
+        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
         return jsonArray;
     }
 
