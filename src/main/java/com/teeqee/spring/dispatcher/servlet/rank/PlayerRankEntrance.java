@@ -111,6 +111,7 @@ public class PlayerRankEntrance  {
    private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
         logger.info("start:{}",JSON.toJSONString(playerRank));
        int playersNum=6;
+       Long uid = playerRank.getUid();
        Long rank = playerRank.getRank();
        logger.info("player rank:{}",rank);
        if (rank <=playersNum){
@@ -120,8 +121,8 @@ public class PlayerRankEntrance  {
                updatePlayerRankOppoent(i,playerUid,playerRank);
            }
        }else {
-           logger.info("for ger six");
-           List<Long> list = getBandX(rank, playersNum+1);
+           logger.info("for get six");
+           List<Long> list = getBandX(rank, playersNum);
            for (int i = 0; i < list.size(); i++) {
                Long aLong = list.get(i);
                Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong);
