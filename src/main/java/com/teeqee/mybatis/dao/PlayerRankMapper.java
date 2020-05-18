@@ -35,7 +35,7 @@ public interface PlayerRankMapper {
     /**
      * 去数据库拉取玩家
      */
-    Opponent selectChannelidPlayerRank(@Param("channelid") Integer channelid, @Param("rank") Long rank);
+    Opponent selectChannelidPlayerRank(@Param("channelid") Integer channelid, @Param("uid") Long uid);
 
 
     /**

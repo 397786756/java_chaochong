@@ -33,7 +33,7 @@ public class ScoreDoubleUtil {
      */
     public static double intToDouble(int i) {
         //2065-01-24 13:20:00
-        long unreachable = 3000000000L;
+        long unreachable = 3800000000L;
         long notTime = System.currentTimeMillis() / 1000;
         //截取第一个
         long space = unreachable - notTime;

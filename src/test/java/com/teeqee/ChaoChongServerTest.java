@@ -25,9 +25,6 @@ public class ChaoChongServerTest {
    private RedisTemplate redisTemplate;
     @Test
     public void  test() throws Exception {
-        PlayerRank playerRank = new PlayerRank();
-        playerRank.setRank(2500L);
-        playerRank.setUid(2555555555552L);
-        System.out.println(playerRankEntrance.initPlayerWorldrank(playerRank, 1));
+
     }
 }

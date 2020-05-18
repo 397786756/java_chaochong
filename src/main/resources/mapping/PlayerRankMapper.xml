@@ -163,7 +163,7 @@
   and
   info.channelid=#{channelid,jdbcType=INTEGER}
   and
-  rank.rank=#{rank,jdbcType=INTEGER}
+  rank.uid=#{uid,jdbcType=BIGINT}
   </select>
     <!--拉取排行榜中的任务,按照分数和创建时间进行拉取-->
     <select id="initPlayerRankTotal" resultType="com.teeqee.spring.dispatcher.servlet.rank.entity.InitPlayerRankTotal">

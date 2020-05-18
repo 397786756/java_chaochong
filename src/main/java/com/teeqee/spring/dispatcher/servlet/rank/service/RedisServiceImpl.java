@@ -12,6 +12,7 @@ import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.rank.entity.InitPlayerRankTotal;
 import com.teeqee.utils.DateUtils;
+import com.teeqee.utils.ScoreDoubleUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -139,6 +140,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     public void addRank(Integer channelId, Integer type, Long uid, Double score, boolean isCover) {
         if (channelId != null && type != null && uid != null && score != null && score > 0) {
             String redisZSetKey = getRedisZSetKey(channelId, type);
+            //分数转换一下
+            score = ScoreDoubleUtil.intToDouble(score.intValue());
             if (isCover) {
                 redisTemplate.opsForZSet().add(redisZSetKey, uid, score);
             } else {

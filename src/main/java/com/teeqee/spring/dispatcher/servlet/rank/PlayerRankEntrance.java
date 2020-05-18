@@ -71,54 +71,14 @@ public class PlayerRankEntrance  {
     /**获取我的session*/
     private JSONObject getworldrankJson( Session session){
         //因为现在的打榜是存到数据库中的,所以玩家去拉取只能拉取到这个
-        PlayerRank playerRank = playerRankMapper.selectByPrimaryKey(session.getUid());
-        return initPlayerWorldRank(playerRank,session.getChannelid());
+        return initPlayerWorldRank(session.getPlayerRank(),session.getChannelid());
     }
 
-    /**
-     * @param playerRank 玩家的排行榜 初始化6个敌人
-     */
-    private JSONObject initPlayerWorldRank(PlayerRank playerRank,Integer channelid){
-        JSONObject jsonObject = new JSONObject(2);
-        Boolean isopponent = playerRank.getIsopponent();
-        JSONArray jsonArray = null;
-        Long rank = playerRank.getRank();
-        int rankPlayerSize=6;
-       //如果没有挑战过
-       if (isopponent==null||!isopponent){
-           Long opponent1 = playerRank.getOpponent1();
-           Long opponent6 = playerRank.getOpponent6();
-           if (opponent1==null||opponent6==null){
-               if (rank==null){
-                   rank=getMyRank( playerRank,channelid);
-               }
-              if (rank<=rankPlayerSize){
-                  //拉取前五个
-                  jsonArray= getMaxSixOpponenter(channelid,playerRank);
-              }else {
-                  jsonArray=getSixOpponenter(channelid,playerRank);
-              }
-           }
-       }else {
-           if (rank<=rankPlayerSize){
-               jsonArray= getMaxSixOpponenter(channelid,playerRank);
-           }else {
-               jsonArray= getSixOpponenter(channelid,playerRank);
-           }
-       }
-       jsonObject.put("yourrank", playerRank.getRank());
-       jsonObject.put("opponentlist",jsonArray);
-       return jsonObject;
-   }
 
-
-
-   public JSONObject initPlayerWorldrank(PlayerRank playerRank,Integer channelid){
+   private JSONObject initPlayerWorldRank(PlayerRank playerRank, Integer channelid){
         //挑战的类型
        int toplistType = RedisServiceImpl.TOPLIST_TYPE;
        Boolean isopponent = playerRank.getIsopponent();
-       //返回的挑战人数
-       JSONArray jsonArray =new JSONArray(5);
        //我的排名
        Long yourrank=playerRank.getRank();
        //返回的数据源
@@ -138,9 +98,11 @@ public class PlayerRankEntrance  {
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            playerRank.setIsopponent(false);
        }else if (isopponent){
-           logger.info("挑战记录不为空,系统需要重新排序6个挑战的人");
+           logger.info("挑战记录不为空并且挑战过了,系统需要重新排序");
+           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
        }
-
+       //返回的挑战人数
+       JSONArray jsonArray=getSixOpponenter(channelid,playerRank);
        jsonObject.put("yourrank", playerRank.getRank());
        jsonObject.put("opponentlist",jsonArray);
        return jsonObject;
@@ -189,42 +151,33 @@ public class PlayerRankEntrance  {
            }
            list.add(Y);
        }
-       logger.info("获取的玩家排行的集合为:{}",rank,list.toArray());
+       logger.info("获取的玩家排行为:{},拉取的集合为:{}",rank,list.toArray());
        return list;
    }
 
-
-
-
-
     /**获取6个挑战者*/
-    private JSONArray  getMaxSixOpponenter(Integer channelid,PlayerRank playerRank){
-        logger.info("max size opponenter");
-        playerRank.setIsopponent(true);
+    private JSONArray  getSixOpponenter(Integer channelid,PlayerRank playerRank){
+        Long opponent1id = playerRank.getOpponent1();
+        Long opponent2id = playerRank.getOpponent2();
+        Long opponent3id = playerRank.getOpponent3();
+        Long opponent4id = playerRank.getOpponent4();
+        Long opponent5id = playerRank.getOpponent5();
+        Long opponent6id = playerRank.getOpponent6();
+        Opponent opponent1 = selectChannelidPlayerRank(channelid, opponent1id);
+        Opponent opponent2 = selectChannelidPlayerRank(channelid, opponent2id);
+        Opponent opponent3 = selectChannelidPlayerRank(channelid, opponent3id);
+        Opponent opponent4 = selectChannelidPlayerRank(channelid, opponent4id);
+        Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
+        Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
         JSONArray jsonArray = new JSONArray(6);
-        int rankPlayerSize=6;
-        //获取我的排名
-        Long rank = playerRank.getRank();
-        for (int i = 1; i <= rankPlayerSize; i++) {
-            //防止拉取到自己
-            if (rank==i){
-                rank+=1;
-            }
-            Opponent opponent = selectChannelidPlayerRank(channelid, rank);
-            if (opponent!=null){
-                Long uid = opponent.getUid();
-                updatePlayerRankOppoent(i,uid,playerRank);
-            }
-            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(opponent, SerializerFeature.WriteNullListAsEmpty,
-                    SerializerFeature.WriteNullStringAsEmpty,
-                    SerializerFeature.WriteNullNumberAsZero,
-                    SerializerFeature.WriteNullBooleanAsFalse,
-                    SerializerFeature.WriteMapNullValue));
-            jsonArray.add(jsonObject);
-        }
+        jsonArray.add(opponent1);
+        jsonArray.add(opponent2);
+        jsonArray.add(opponent3);
+        jsonArray.add(opponent4);
+        jsonArray.add(opponent5);
+        jsonArray.add(opponent6);
         return jsonArray;
     }
-
 
     /**
      * @param i 位置
@@ -248,8 +201,8 @@ public class PlayerRankEntrance  {
     }
 
     /**将动物转成客户端是json串*/
-    public Opponent selectChannelidPlayerRank(Integer channelid,long index){
-        Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,index);
+    private Opponent selectChannelidPlayerRank(Integer channelid, long uid){
+        Opponent opponent = playerRankMapper.selectChannelidPlayerRank(channelid,uid);
         String animalString = opponent.getAnimal();
         if (animalString!=null&&!"".equals(animalString)){
             JSONArray list = JSONArray.parseArray(animalString);
@@ -269,42 +222,6 @@ public class PlayerRankEntrance  {
         }
         return opponent;
     }
-
-
-
-   /**获取6个挑战者*/
-   private JSONArray  getSixOpponenter(Integer channelid,PlayerRank playerRank){
-       playerRank.setIsopponent(true);
-       JSONArray jsonArray = new JSONArray(6);
-       Long rank = playerRank.getRank();
-       long B = getRankRandom(rank);
-       int rankPlayerSize=6;
-       long index=0;
-       for (int i = 0; i < rankPlayerSize; i++) {
-           if (i==0){
-               //挑战1的排名 Y1 = X-1
-               index=rank-1;
-           }else {
-               int randomInt = RandomUtils.getRandomInt(1, (int) B);
-               index-=randomInt;
-           }
-           if (rank==index){
-               index+=1;
-           }
-           Opponent opponent = selectChannelidPlayerRank(channelid, index);
-           JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(opponent, SerializerFeature.WriteNullListAsEmpty,
-                   SerializerFeature.WriteNullStringAsEmpty,
-                   SerializerFeature.WriteNullNumberAsZero,
-                   SerializerFeature.WriteNullBooleanAsFalse,
-                   SerializerFeature.WriteMapNullValue));
-           jsonArray.add(jsonObject);
-           if (opponent!=null){
-               Long uid = opponent.getUid();
-               updatePlayerRankOppoent(i,uid,playerRank);
-           }
-       }
-       return jsonArray;
-   }
 
     private static final int RANK250=250;
     private static final int RANK50=50;
@@ -326,20 +243,6 @@ public class PlayerRankEntrance  {
            randomRank=6;
        }
        return randomRank;
-   }
-
-    /**
-     * @param playerRank 玩家挑战
-     * @param channelid 渠道id
-     * @return 返回一个排名
-     */
-    private synchronized Long getMyRank(PlayerRank playerRank,Integer channelid){
-       Integer rankNum = playerRankMapper.findChannelIdRobotRankNum(channelid);
-       //服务器需要维持一个人数id
-       logger.info("get playerRank rank:{}",rankNum+1);
-       playerRank.setRank(rankNum.longValue()+1);
-       playerRankMapper.updateByPrimaryKeySelective(playerRank);
-       return (rankNum.longValue()+1);
    }
 
     /**世界排行榜*/
