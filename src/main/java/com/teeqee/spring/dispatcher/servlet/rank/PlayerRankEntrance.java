@@ -93,11 +93,11 @@ public class PlayerRankEntrance  {
            redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
            playerRank.setRank(aLong+1);
        }
-       if (isopponent==null){
+       if (isopponent==null||!isopponent){
            logger.info("isopponent is  null");
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            playerRank.setIsopponent(false);
-       }else if (isopponent){
+       }else {
            logger.info("isopponent is not null and true");
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
        }
