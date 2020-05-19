@@ -10,10 +10,10 @@ import lombok.Data;
  */
 @Data
 public class Opponent {
-    private Long uid;
-    private Long rank;
-    private String nickname="";
-    private String avatar="";
+    private Long uid=0L;
+    private Long rank=0L;
+    private String nickname;
+    private String avatar;
     private String animal;
 
     public Opponent() {

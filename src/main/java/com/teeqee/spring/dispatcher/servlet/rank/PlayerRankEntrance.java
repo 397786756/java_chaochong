@@ -3,6 +3,7 @@ package com.teeqee.spring.dispatcher.servlet.rank;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.teeqee.mybatis.dao.PlayerRankLogMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
@@ -24,9 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
@@ -102,7 +101,7 @@ public class PlayerRankEntrance  {
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
        }
        //返回的挑战人数
-       JSONArray jsonArray=getSixOpponenter(channelid,playerRank);
+       JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
        jsonObject.put("yourrank", playerRank.getRank());
        jsonObject.put("opponentlist",jsonArray);
        return jsonObject;
@@ -166,7 +165,7 @@ public class PlayerRankEntrance  {
    }
 
     /**获取6个挑战者*/
-    private JSONArray  getSixOpponenter(Integer channelid,PlayerRank playerRank){
+    private JSONArray  getSixOpponenter(Integer channelid, PlayerRank playerRank){
         Long opponent1id = playerRank.getOpponent1();
         Long opponent2id = playerRank.getOpponent2();
         Long opponent3id = playerRank.getOpponent3();
@@ -179,15 +178,17 @@ public class PlayerRankEntrance  {
         Opponent opponent4 = selectChannelidPlayerRank(channelid, opponent4id);
         Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
         Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
-        JSONArray jsonArray = new JSONArray(6);
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
-        jsonArray.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
-        return jsonArray;
+        JSONArray list = new JSONArray(6);
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
+        list.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
+        logger.info("list Opponente:{}",list);
+        return list;
     }
+
 
 
 
