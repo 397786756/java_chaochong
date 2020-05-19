@@ -68,6 +68,7 @@ public class SessionEventServiceImpl implements SessionEventService {
                 }
             }
         } catch (Exception e) {
+            logger.info("playerUid:{}", session.getUid());
             e.printStackTrace();
         }
     }
