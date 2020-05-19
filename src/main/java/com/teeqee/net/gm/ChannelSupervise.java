@@ -41,7 +41,7 @@ public class ChannelSupervise implements DisposableBean {
     private void taskService(boolean close){
         for (Channel channel : GlobalGroup) {
             Session session = channel.attr(NettyPlayerInfoAttributeKey.PLAYER_INFO_ATTRIBUTEKEY).get();
-            sessionEventService.close(session, false);
+            sessionEventService.close(session, close);
         }
     }
     /**
