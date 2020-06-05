@@ -200,6 +200,9 @@ public class PlayerData {
         jsonObject.put("todaysign", false);
         turntableinvitenum=0;
         jsonObject.put("turntableinvitenum", 0);
+        if (weeksign==null){
+            weeksign=1;
+        }
         weeksign+=1;
         jsonObject.put("weeksign", weeksign);
         //任务
@@ -226,19 +229,24 @@ public class PlayerData {
     /**初始化taskData*/
     private  JSONArray initTaskData(){
        if (taskdata!=null){
-           List<Taskdata> list = JSONArray.parseArray(taskdata, Taskdata.class);
-           if (list!=null&&list.size()>0){
-               JSONArray jsonArray = new JSONArray();
-               for (Taskdata taskdata : list) {
-                   if (taskdata!=null){
-                       taskdata.init();
-                       jsonArray.add(taskdata);
-                   }
-               }
-               updateTaskdata(jsonArray);
-               //转换
-               return jsonArray;
+           JSONArray jsonArray = new JSONArray();
+           JSONArray parseArray = JSONArray.parseArray(taskdata);
+           //转成服务器需要的
+           JSONArray parse = new JSONArray();
+           int size = parseArray.size();
+           for (int i = 0; i < size; i++) {
+               JSONObject object = parseArray.getJSONObject(i);
+               int d=0;
+               int n=0;
+               Integer t = object.getInteger("t");
+               Integer nr = object.getInteger("nr");
+               Taskdata taskdata = new Taskdata(t, n, d, nr);
+               JSONObject json = taskdata.initJson();
+               parse.add(json);
+               jsonArray.add(taskdata);
            }
+           taskdata=parse.toJSONString();
+           return jsonArray;
        }
        return null;
     }
@@ -375,6 +383,19 @@ public class PlayerData {
         }
         jsonObject.put(PlayerCmd.TASK_DATA, jsonArray);
         return jsonObject;
+    }
+
+    public static void main(String[] args) {
+        StaticData staticData = new StaticData();
+        staticData.initTaskData();
+        PlayerData playerData = new PlayerData();
+        System.out.println(playerData.gettask());
+        playerData.gettask();
+        System.out.println(playerData.gettask());
+        playerData.gettask();
+        System.out.println(playerData.gettask());
+        playerData.init();
+        System.out.println(playerData.gettask());
     }
 
 

@@ -42,7 +42,7 @@ public class StaticData {
 
 
     @PostConstruct
-    private  void initTaskData() {
+    public   void initTaskData() {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 50, 50, 1, 3, 20, 2, 5, 1, 5));
         List<Taskdata> taskdataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {

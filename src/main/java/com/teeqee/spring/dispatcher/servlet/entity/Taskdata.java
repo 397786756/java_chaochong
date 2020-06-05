@@ -2,6 +2,7 @@ package com.teeqee.spring.dispatcher.servlet.entity;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.annotation.JSONField;
+import com.teeqee.spring.dispatcher.cmd.StaticData;
 import lombok.Data;
 import lombok.ToString;
 
