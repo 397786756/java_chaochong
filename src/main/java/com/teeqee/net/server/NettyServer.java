@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Order(2)
 public class NettyServer implements CommandLineRunner, DisposableBean {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);
 
     @Value("${server.socket-port}")
     private int socketPort;
@@ -52,6 +52,8 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     private WebsocketServerHandler websocketServerHandler;
     @Override
     public void run(String... args) throws Exception {
+        logger.info("chaochong server open");
+        Thread.sleep(5000);
         bind();
     }
 
@@ -95,8 +97,8 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         future.addListener(fl -> {
             if (fl.isSuccess()) {
                 serverChannel = future.channel();
-                LOGGER.info("Netty gameserver start");
-                LOGGER.info("gameserver port = {}",socketPort);
+                logger.info("Netty gameserver start");
+                logger.info("gameserver port = {}",socketPort);
             }
         });
         future.channel().closeFuture().addListener(fl -> {
@@ -116,7 +118,7 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
         if (workerGroup != null) {
             workerGroup.shutdownGracefully();
         }
-        LOGGER.info("Netty gameserver byeBye");
+        logger.info("Netty gameserver byeBye");
     }
 
     @Override
