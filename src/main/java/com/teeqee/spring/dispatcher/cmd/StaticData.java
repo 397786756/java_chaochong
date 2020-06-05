@@ -33,7 +33,7 @@ public class StaticData {
     /**
      * 拉取任务
      */
-    public static  String TASK_DATA = "";
+    public static String TASK_DATA = "";
     /**
      * 拉取建筑
      */
@@ -42,7 +42,7 @@ public class StaticData {
 
 
     @PostConstruct
-    private static void initTaskData() {
+    private  void initTaskData() {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 50, 50, 1, 3, 20, 2, 5, 1, 5));
         List<Taskdata> taskdataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -51,5 +51,6 @@ public class StaticData {
             taskdataList.add(taskdata);
         }
         TASK_DATA= JSONArray.parseArray(JSONArray.toJSONString(taskdataList)).toJSONString();
+        System.out.println("TASK_DATA:"+TASK_DATA);
     }
 }

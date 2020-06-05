@@ -90,8 +90,6 @@ public class PlayerData {
     private String avatar="";
     /**昵称*/
     private String nickname="未授权的玩家";
-    /**任务List*/
-    private List<Taskdata> taskdataList=new ArrayList<>();
     /**活跃度(周活跃和日活跃)*/
     private String activedata;
     /**是否为机器人*/
@@ -204,7 +202,9 @@ public class PlayerData {
         jsonObject.put("turntableinvitenum", 0);
         weeksign+=1;
         jsonObject.put("weeksign", weeksign);
-        jsonObject.put("taskdata",  initTaskData());
+        //任务
+        JSONArray value = initTaskData();
+        jsonObject.put("taskdata", value);
         return jsonObject;
 
      //  if (lasttime==null||(isYesterday(lasttime,new Date()))){
@@ -226,7 +226,7 @@ public class PlayerData {
     /**初始化taskData*/
     private  JSONArray initTaskData(){
        if (taskdata!=null){
-           List<Taskdata> list = JSONArray.parseArray(this.taskdata, Taskdata.class);
+           List<Taskdata> list = JSONArray.parseArray(taskdata, Taskdata.class);
            if (list!=null&&list.size()>0){
                JSONArray jsonArray = new JSONArray();
                for (Taskdata taskdata : list) {
@@ -349,7 +349,7 @@ public class PlayerData {
     public JSONObject gettask(){
         //需要进行转义
         if (taskdata==null){
-          taskdata=StaticData.TASK_DATA;
+           taskdata=StaticData.TASK_DATA;
         }
         List<Taskdata> list = JSONArray.parseArray(taskdata,Taskdata.class);
         for (Taskdata taskdata : list) {
@@ -364,7 +364,6 @@ public class PlayerData {
             JSONObject jsonObject = task.initJson();
             jsonArray.add(jsonObject);
         }
-        this.taskdataList=list;
         this.taskdata=jsonArray.toJSONString();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.TASK_DATA, list);
@@ -484,8 +483,6 @@ public class PlayerData {
                 jsonObject.put("nr",nr );
                 jsonArray.add(jsonObject);
             }
-            //转成json对象
-            this.taskdataList=taskDataList;
             this.taskdata=jsonArray.toJSONString();
         }
     }
@@ -616,7 +613,7 @@ public class PlayerData {
 
 
     /**返回用户的金币和钻石*/
-    public JSONObject goldAndDiamondInfo(){
+    private JSONObject goldAndDiamondInfo(){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("gold", gold);
         jsonObject.put("diamond", diamond);

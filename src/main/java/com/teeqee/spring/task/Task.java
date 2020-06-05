@@ -1,6 +1,7 @@
 package com.teeqee.spring.task;
 
 import com.alibaba.fastjson.JSONObject;
+import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.net.gm.ChannelSupervise;
 import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
 import com.teeqee.net.handler.Session;
@@ -25,13 +26,16 @@ public class Task {
             if (channel!=null&&channel.isActive()){
                 Session session = NettyPlayerInfoAttributeKey.getSession(channel);
                  if (session!=null){
-                    JSONObject init = session.getPlayerData().init();
-                    if (init!=null){
-                        Result result = new Result();
-                        result.setCmd(INIT_CMD);
-                        result.setData(init);
-                        session.send(result);
-                    }
+                     PlayerData playerData = session.getPlayerData();
+                     if (playerData!=null){
+                         JSONObject init = playerData.init();
+                         if (init!=null){
+                             Result result = new Result();
+                             result.setCmd(INIT_CMD);
+                             result.setData(init);
+                             session.send(result);
+                         }
+                     }
                 }
             }
         }
