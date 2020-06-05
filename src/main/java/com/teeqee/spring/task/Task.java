@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description: 定时器
+ * @Description: 定时器(每日初始化)
  * @Author: zhengsongjie
  * @Time: 2020-06-05 上午 11:37
  * @Software: IntelliJ IDEA
@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Task {
     private static final String INIT_CMD="init";
-    //@Scheduled(cron = "0 0 12 * * ?")
-    @Scheduled(cron = "0/5 * * * * ?")
+    //@Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0/55 * * * * ?")
     private void init() {
         for (Channel channel : ChannelSupervise.getGlobalGroup()) {
             if (channel!=null&&channel.isActive()){
