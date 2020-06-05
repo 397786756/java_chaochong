@@ -1,6 +1,7 @@
 package com.teeqee.net.handler;
 
 
+import com.alibaba.fastjson.JSON;
 import com.teeqee.mybatis.pojo.PlayerData;
 import com.teeqee.mybatis.pojo.PlayerInfo;
 import com.teeqee.mybatis.pojo.PlayerLog;
@@ -43,7 +44,8 @@ public class Session<T>  {
     }
 
     public void send(Object o){
-        channel.writeAndFlush(o);
+        String s = JSON.toJSONString(o);
+        channel.writeAndFlush(s);
     }
 
     public Integer getChannelid() {
