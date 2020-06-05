@@ -225,18 +225,21 @@ public class PlayerData {
 
     /**初始化taskData*/
     private  JSONArray initTaskData(){
-        if (taskdataList==null){
-            gettask();
-        }
-        for (Taskdata taskdata : taskdataList) {
-            taskdata.init();
-        }
-        JSONArray taskArray = JSONArray.parseArray(JSON.toJSONString(taskdataList));
-        updateTaskdata(taskArray);
-        logger.info("initTaskData");
-        logger.info("taskData:{}",taskdata);
-        logger.info("taskdataList:{}",JSONArray.toJSONString(taskdataList));
-        return taskArray;
+       if (taskdata!=null){
+           List<Taskdata> list = JSONArray.parseArray(this.taskdata, Taskdata.class);
+           if (list!=null&&list.size()>0){
+               JSONArray jsonArray = new JSONArray();
+               for (Taskdata taskdata : list) {
+                   taskdata.init();
+                   JSONObject jsonObject = taskdata.initJsonObject();
+                   jsonArray.add(jsonObject);
+               }
+               updateTaskdata(jsonArray);
+               //转换
+               return jsonArray;
+           }
+       }
+       return null;
     }
 
     /**世界打榜次数会减一*/
