@@ -195,32 +195,32 @@ public class PlayerData {
 
     /**日更新数据*/
     public JSONObject init(){
+        lasttime=new Date();
+        logger.info("uid init everyDay:{}",uid);
+        JSONObject jsonObject = new JSONObject();
+        todaysign=false;
+        jsonObject.put("todaysign", false);
+        turntableinvitenum=0;
+        jsonObject.put("turntableinvitenum", 0);
+        weeksign+=1;
+        jsonObject.put("weeksign", weeksign);
+        jsonObject.put("taskdata",  initTaskData());
+        return jsonObject;
 
-      if (lasttime==null||(isYesterday(lasttime,new Date()))){
-          lasttime=new Date();
-          logger.info("uid init everyDay:{}",uid);
-          JSONObject jsonObject = new JSONObject();
-          todaysign=false;
-          jsonObject.put("todaysign", false);
-          turntableinvitenum=0;
-          jsonObject.put("turntableinvitenum", 0);
-          weeksign+=1;
-          jsonObject.put("weeksign", weeksign);
-          jsonObject.put("taskdata",  initTaskData());
-          return jsonObject;
-      }else {
-          lasttime=new Date();
-          logger.info("uid init everyDay:{}",uid);
-          JSONObject jsonObject = new JSONObject();
-          todaysign=false;
-          jsonObject.put("todaysign", false);
-          turntableinvitenum=0;
-          jsonObject.put("turntableinvitenum", 0);
-          weeksign+=1;
-          jsonObject.put("weeksign", weeksign);
-          jsonObject.put("taskdata",  initTaskData());
-          return jsonObject;
-      }
+     //  if (lasttime==null||(isYesterday(lasttime,new Date()))){
+     //      lasttime=new Date();
+     //      logger.info("uid init everyDay:{}",uid);
+     //      JSONObject jsonObject = new JSONObject();
+     //      todaysign=false;
+     //      jsonObject.put("todaysign", false);
+     //      turntableinvitenum=0;
+     //      jsonObject.put("turntableinvitenum", 0);
+     //      weeksign+=1;
+     //      jsonObject.put("weeksign", weeksign);
+     //      jsonObject.put("taskdata",  initTaskData());
+     //      return jsonObject;
+     //  }
+     //  return null;
     }
 
     /**初始化taskData*/
