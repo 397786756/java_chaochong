@@ -42,6 +42,10 @@ public class Session<T>  {
         return false;
     }
 
+    public void send(Object o){
+        channel.writeAndFlush(o);
+    }
+
     public Integer getChannelid() {
         return channelid;
     }

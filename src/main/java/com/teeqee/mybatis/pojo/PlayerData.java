@@ -194,12 +194,42 @@ public class PlayerData {
     }
 
     /**日更新数据*/
-    public void dailyUpdate(){
-           if (lasttime==null||(isYesterday(lasttime,new Date()))){
-                  logger.info("uid init everyDay:{}",uid);
-               turntableinvitenum=0;
-           }
+    public JSONObject init(){
+      if (lasttime==null||(isYesterday(lasttime,new Date()))){
+          lasttime=new Date();
+          logger.info("uid init everyDay:{}",uid);
+          JSONObject jsonObject = new JSONObject();
+          todaysign=false;
+          jsonObject.put("todaysign", false);
+          turntableinvitenum=0;
+          jsonObject.put("turntableinvitenum", 0);
+          weeksign+=1;
+          jsonObject.put("weeksign", weeksign);
+          jsonObject.put("taskdata",  initTaskData());
+          return jsonObject;
+      }
+      return null;
     }
+
+    /**初始化taskData*/
+    private  JSONArray initTaskData(){
+        List<Taskdata> taskDataList = JSONArray.parseArray(this.taskdata, Taskdata.class);
+        if (taskDataList!=null&&taskDataList.size()>0){
+            JSONArray jsonArray = new JSONArray();
+            JSONArray dataArray = new JSONArray();
+            for (Taskdata task : taskDataList) {
+                task.init();
+                jsonArray.add(task);
+                JSONObject jsonObject = task.getJsonObject();
+                dataArray.add(jsonObject);
+            }
+            //转成json对象
+            this.taskdata=dataArray.toJSONString();
+            return jsonArray;
+        }
+        return null;
+    }
+
     /**世界打榜次数会减一*/
     public JSONObject worldrankstart() {
          if (rankchallengenum<0){
@@ -309,17 +339,14 @@ public class PlayerData {
             this.taskdata=StaticData.TASK_DATA;
         }
         JSONArray jsonArray = JSONArray.parseArray(taskdata);
-        int taskdataSize=10;
-        if (jsonArray.size()<taskdataSize){
-            jsonArray = JSONArray.parseArray(StaticData.TASK_DATA);
-        }
-        List<Taskdata> list = new ArrayList<Taskdata>();
+        List<Taskdata> list = new ArrayList<>();
         for (Object o : jsonArray) {
             JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
             Integer d = jsonObject.getInteger("d");
             Integer t = jsonObject.getInteger("t");
             Integer n = jsonObject.getInteger("n");
-            Taskdata taskdata = new Taskdata(t, n, d);
+            Integer nr = jsonObject.getInteger("nr");
+            Taskdata taskdata = new Taskdata(t, n, d,nr);
             list.add(taskdata);
         }
         this.taskdataList=list;
@@ -437,10 +464,12 @@ public class PlayerData {
                 Integer d = task.getD();
                 Integer n = task.getN();
                 Integer t = task.getT();
+                Integer nr = task.getNr();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("d",d );
                 jsonObject.put("n",n );
                 jsonObject.put("t",t );
+                jsonObject.put("nr",nr );
                 jsonArray.add(jsonObject);
             }
             //转成json对象
@@ -558,16 +587,6 @@ public class PlayerData {
         return jsonArray;
     }
 
-    public static void main(String[] args) {
-        int kind=2;
-        List<Active> list = new ArrayList<>();
-        for (int i = 0; i < kind; i++) {
-            Active active = new Active();
-            active.init(i+1);
-            list.add(active);
-        }
-        System.out.println(JSONArray.parseArray(JSON.toJSONString(list)));
-    }
     /**玩家获取自己vip相关信息*/
     public  JSONObject getvipInfo(){
         JSONObject jsonObject = new JSONObject(4);
