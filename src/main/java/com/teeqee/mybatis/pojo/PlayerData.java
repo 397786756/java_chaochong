@@ -348,27 +348,32 @@ public class PlayerData {
      */
     public JSONObject gettask(){
         //需要进行转义
-        if (taskdata==null){
-           taskdata=StaticData.TASK_DATA;
-        }
-        List<Taskdata> list = JSONArray.parseArray(taskdata,Taskdata.class);
-        for (Taskdata taskdata : list) {
-            if (taskdata==null){
-                this.taskdata=StaticData.TASK_DATA;
-                list = JSONArray.parseArray(this.taskdata,Taskdata.class);
-                break;
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        if (taskdata==null) {
+            List<Taskdata> list = JSONArray.parseArray(StaticData.TASK_DATA, Taskdata.class);
+            for (Taskdata task : list) {
+                JSONObject json = task.initJson();
+                jsonArray.add(json);
+            }
+            taskdata=jsonArray.toJSONString();
+        }else {
+            JSONArray parseArray = JSONArray.parseArray(taskdata);
+            int size = parseArray.size();
+            for (int i = 0; i < size; i++) {
+                JSONObject object = parseArray.getJSONObject(i);
+                Integer d = object.getInteger("d");
+                Integer n = object.getInteger("n");
+                Integer t = object.getInteger("t");
+                Integer nr = object.getInteger("nr");
+                Taskdata taskdata = new Taskdata(t, n, d, nr);
+                jsonArray.add(taskdata);
             }
         }
-        JSONArray jsonArray = new JSONArray();
-        for (Taskdata task : list) {
-            JSONObject jsonObject = task.initJson();
-            jsonArray.add(jsonObject);
-        }
-        this.taskdata=jsonArray.toJSONString();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(PlayerCmd.TASK_DATA, list);
+        jsonObject.put(PlayerCmd.TASK_DATA, jsonArray);
         return jsonObject;
     }
+
 
     /**
      * 我觉得我是个心跳包
