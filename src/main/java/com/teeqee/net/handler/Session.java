@@ -47,7 +47,7 @@ public class Session<T>  {
     public void send(Object o){
         if (o!=null){
             String s = JSON.toJSONString(o);
-            TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(JSON.toJSONString(s));
+            TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(s);
             channel.writeAndFlush(textWebSocketFrame);
         }
     }
