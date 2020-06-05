@@ -63,6 +63,11 @@ public class PlayerUpdate {
     public JSONObject getactive(MethodModel model){
         return model.getSession().getPlayerData().getactive();
     }
+    /**玩家修改活跃度相关*/
+    @Dispather(value = "updateactive")
+    public Boolean updateactive(MethodModel model){
+        return model.getSession().getPlayerData().updateactive(model.getData());
+    }
     /**玩家获取自己vip相关信息 不能使用get方法作为普通方法*/
     @Dispather(value = "getvip")
     public JSONObject getvip(MethodModel model) {

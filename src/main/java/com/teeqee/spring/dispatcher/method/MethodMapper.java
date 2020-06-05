@@ -67,6 +67,8 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.OPEN_SOUND,map->playerUpdate.opensound(map));
         /**玩家获取活跃度相关*/
         map.put(DispatcherCmd.GET_ACTIVE,map->playerUpdate.getactive(map));
+        /**修改活跃度*/
+        map.put(DispatcherCmd.UPDATE_ACTIVE,map->playerUpdate.updateactive(map));
         /**玩家获取自己vip相关信息*/
         map.put(DispatcherCmd.GET_VIP,map->playerUpdate.getvip(map));
         /**签到*/

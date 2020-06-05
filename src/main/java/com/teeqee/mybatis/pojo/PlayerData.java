@@ -555,8 +555,14 @@ public class PlayerData {
     }
 
     public static void main(String[] args) {
-        PlayerData playerData = new PlayerData();
-        System.out.println(playerData.initActive());
+        int kind=2;
+        List<Active> list = new ArrayList<>();
+        for (int i = 0; i < kind; i++) {
+            Active active = new Active();
+            active.init(i+1);
+            list.add(active);
+        }
+        System.out.println(JSONArray.parseArray(JSON.toJSONString(list)));
     }
     /**玩家获取自己vip相关信息*/
     public  JSONObject getvipInfo(){
@@ -655,4 +661,12 @@ public class PlayerData {
         return jsonObject;
     }
 
+    /**修改用户活跃度*/
+    public Boolean updateactive(JSONObject data) {
+        logger.info("updateactive client:{}",data.toJSONString());
+        if (data!=null){
+            this.activedata=data.toJSONString();
+        }
+       return false;
+    }
 }

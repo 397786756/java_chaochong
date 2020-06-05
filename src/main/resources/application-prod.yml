@@ -3,7 +3,7 @@ spring:
   datasource:
     url: jdbc:mysql://172.27.0.9:33330/chaochong?useUnicode=true&characterEncoding=utf-8&serverTimezone=Hongkong&useSSL=false
     username: sanguo
-    password: b6ad6aa6-aaf6-47e9-9bfb-40a258fc411a
+    password: 1f251ac6-ea99-44f7-8da1-66d6d0293bbf
     driver-class-name: com.mysql.jdbc.Driver
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource

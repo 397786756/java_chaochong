@@ -32,6 +32,8 @@ public class DispatcherCmd {
     public static final String CLOSE_SOUND="closesound";
     /**玩家获取活跃度相关*/
     public static final String GET_ACTIVE="getactive";
+    /**玩家修改活跃度*/
+    public static final String UPDATE_ACTIVE="updateactive";
     /**玩家获取自己vip相关信息*/
     public static final String GET_VIP="getvip";
     /**签到*/
