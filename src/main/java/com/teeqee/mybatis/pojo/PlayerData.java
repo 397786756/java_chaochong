@@ -548,7 +548,7 @@ public class PlayerData {
         int kind=2;
         for (int i = 0; i < kind; i++) {
             Active active = new Active();
-            active.init(i);
+            active.init(i+1);
             jsonArray.add(active);
         }
         return jsonArray;
