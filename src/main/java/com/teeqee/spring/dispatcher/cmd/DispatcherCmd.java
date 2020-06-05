@@ -70,4 +70,6 @@ public class DispatcherCmd {
     public static final String GET_RANK_REPORT = "getrankreport";
     /**打榜开始 减次数减钻石*/
     public static final String WORLD_RANK_START = "worldrankstart";
+    /**纪录转盘邀请次数*/
+    public static final String ADD_ZHUANPAN = "addZhuanPan";
 }

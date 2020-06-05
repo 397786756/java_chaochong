@@ -35,13 +35,14 @@
     <result column="buildingdata" property="buildingdata" jdbcType="VARCHAR" />
     <result column="missnum" property="missnum" jdbcType="INTEGER" />
     <result column="activedata" property="activedata" jdbcType="VARCHAR" />
+    <result column="turntableinvitenum" property="turntableinvitenum" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     uid, isrobot, stockmax, stock, gold, diamond, newgamer, sound, biggestanimalid, viplv,
     vipreward, vip, invitevip, todaysign, weeksign, rounds, rankchallengenum, refreshworldnum,
     speedincubate, lastweekrank, lastweekreward, totalincubate, lasttime, rankpermission,
     phonefare, phonefarenumber, sitedata, animaldata, taskdata, dartnum, buildingdata,
-    missnum, activedata
+    missnum, activedata,turntableinvitenum
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select
@@ -78,6 +79,7 @@
     data.buildingdata ,
     data.missnum,
     data.activedata,
+    data.turntableinvitenum,
     info.avatar ,
     info.nickname
     from
@@ -191,6 +193,9 @@
       <if test="activedata != null" >
         activedata,
       </if>
+      <if test="turntableinvitenum != null" >
+        turntableinvitenum,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="uid != null" >
@@ -290,7 +295,10 @@
         #{missnum,jdbcType=INTEGER},
       </if>
       <if test="activedata != null" >
-        #{activedata,jdbcType=VARCHAR},
+      #{activedata,jdbcType=VARCHAR},
+    </if>
+      <if test="turntableinvitenum != null" >
+        #{turntableinvitenum,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -392,6 +400,9 @@
       </if>
       <if test="activedata != null" >
         activedata = #{activedata,jdbcType=VARCHAR},
+      </if>
+      <if test="turntableinvitenum != null" >
+        turntableinvitenum = #{turntableinvitenum,jdbcType=INTEGER},
       </if>
     </set>
     where uid = #{uid,jdbcType=BIGINT}

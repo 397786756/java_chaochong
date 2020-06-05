@@ -128,5 +128,7 @@ public class PlayerUpdate {
     /**使用飞镖*/
     @Dispather(value = "worldrankstart")
     public JSONObject worldrankstart(MethodModel model) {return model.getSession().getPlayerData().worldrankstart();}
-
+    /**增加转盘次数*/
+    @Dispather(value = "worldrankstart")
+    public Boolean addZhuanPan(MethodModel model) {return model.getSession().getPlayerData().addZhuanPan();}
 }

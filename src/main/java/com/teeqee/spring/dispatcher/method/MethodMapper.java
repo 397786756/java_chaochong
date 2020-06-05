@@ -105,5 +105,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.GET_RANK_REPORT,map-> playerRankEntrance.getrankreport(map));
         /**打榜次数减1返回金币*/
         map.put(DispatcherCmd.WORLD_RANK_START,map-> playerUpdate.worldrankstart(map));
+        /**纪录转盘邀请次数*/
+        map.put(DispatcherCmd.ADD_ZHUANPAN,map-> playerUpdate.addZhuanPan(map));
     }
 }

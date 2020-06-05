@@ -52,9 +52,10 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     private WebsocketServerHandler websocketServerHandler;
     @Override
     public void run(String... args) throws Exception {
-        logger.info("chaochong server open");
+        logger.info("chaochong server sleep");
         Thread.sleep(5000);
         bind();
+        logger.info("chaochong server open");
     }
 
     private void bind() throws InterruptedException {

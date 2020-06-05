@@ -96,7 +96,8 @@ public class PlayerData {
     private String activedata;
     /**是否为机器人*/
     private Boolean isrobot;
-
+    /**纪录转盘邀请次数*/
+    private Integer turntableinvitenum;
     public PlayerData() {
 
     }
@@ -140,6 +141,7 @@ public class PlayerData {
         this.phonefarenumber=0;
         this.missnum=0;
         this.lasttime=new Date();
+        turntableinvitenum=0;
     }
 
     /**需要初始化的数据*/
@@ -186,6 +188,7 @@ public class PlayerData {
         data.put("lastweekrank", lastweekrank);
         data.put("refreshworldnum", refreshworldnum);
         data.put("rounds", rounds);
+        data.put("turntableinvitenum", turntableinvitenum);
         jsonObject.put(PlayerCmd.PLAYER_DATA, data);
         return jsonObject;
     }
@@ -193,7 +196,8 @@ public class PlayerData {
     /**日更新数据*/
     public void dailyUpdate(){
            if (lasttime==null||(isYesterday(lasttime,new Date()))){
-                  logger.info("uid:{} last login is yesterday",uid);
+                  logger.info("uid init everyDay:{}",uid);
+               turntableinvitenum=0;
            }
     }
     /**世界打榜次数会减一*/
@@ -664,9 +668,20 @@ public class PlayerData {
     /**修改用户活跃度*/
     public Boolean updateactive(JSONObject data) {
         logger.info("updateactive client:{}",data.toJSONString());
-        if (data!=null){
-            this.activedata=data.toJSONString();
+        this.activedata=data.toJSONString();
+        return false;
+    }
+
+    /**纪录转盘邀请次数*/
+    public Boolean addZhuanPan() {
+        if (turntableinvitenum==null){
+            turntableinvitenum=1;
         }
-       return false;
+        if (turntableinvitenum>=10){
+            turntableinvitenum=10;
+        }else {
+            turntableinvitenum+=1;
+        }
+        return true;
     }
 }
