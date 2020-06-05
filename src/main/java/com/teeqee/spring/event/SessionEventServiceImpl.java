@@ -64,7 +64,7 @@ public class SessionEventServiceImpl implements SessionEventService {
                 MethodModel methodModel = new MethodModel(cmd, data, session);
                 Result result = methodMapper.run(methodModel);
                 if (result!=null&&result.getData()!=null){
-                    ChannelSupervise.sendToUser(session.getChannel().id(), result);
+                    session.send(result);
                 }
             }
         } catch (Exception e) {

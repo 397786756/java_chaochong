@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * netty服务器
  */
 @Component("nettyServer")
-@Order(2)
+@Order(3)
 public class NettyServer implements CommandLineRunner, DisposableBean {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyServer.class);

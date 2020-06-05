@@ -7,6 +7,7 @@ import com.teeqee.net.gm.NettyPlayerInfoAttributeKey;
 import com.teeqee.net.handler.Session;
 import com.teeqee.spring.result.Result;
 import io.netty.channel.Channel;
+import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  * @Software: IntelliJ IDEA
  */
 @Component
+@Order(2)
 public class Task {
     private static final String INIT_CMD="init";
     //@Scheduled(cron = "0 0 0 * * ?")
