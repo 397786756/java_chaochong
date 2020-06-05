@@ -36,4 +36,12 @@ public class Taskdata {
         n = 0;
     }
 
+    public JSONObject initJson(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("t",t );
+        jsonObject.put("n",n );
+        jsonObject.put("d",d );
+        jsonObject.put("nr",nr);
+        return jsonObject;
+    }
 }

@@ -230,8 +230,10 @@ public class PlayerData {
            if (list!=null&&list.size()>0){
                JSONArray jsonArray = new JSONArray();
                for (Taskdata taskdata : list) {
-                    taskdata.init();
-                   jsonArray.add(taskdata);
+                   if (taskdata!=null){
+                       taskdata.init();
+                       jsonArray.add(taskdata);
+                   }
                }
                updateTaskdata(jsonArray);
                //转换
@@ -347,25 +349,27 @@ public class PlayerData {
     public JSONObject gettask(){
         //需要进行转义
         if (taskdata==null){
-            this.taskdata=StaticData.TASK_DATA;
+          taskdata=StaticData.TASK_DATA;
         }
-        JSONArray jsonArray = JSONArray.parseArray(taskdata);
-        List<Taskdata> list = new ArrayList<>();
-        for (Object o : jsonArray) {
-            JSONObject jsonObject = JSONObject.parseObject(JSON.toJSONString(o));
-            Integer d = jsonObject.getInteger("d");
-            Integer t = jsonObject.getInteger("t");
-            Integer n = jsonObject.getInteger("n");
-            Integer nr = jsonObject.getInteger("nr");
-            Taskdata taskdata = new Taskdata(t, n, d,nr);
-            list.add(taskdata);
+        List<Taskdata> list = JSONArray.parseArray(taskdata,Taskdata.class);
+        for (Taskdata taskdata : list) {
+            if (taskdata==null){
+                this.taskdata=StaticData.TASK_DATA;
+                list = JSONArray.parseArray(this.taskdata,Taskdata.class);
+                break;
+            }
+        }
+        JSONArray jsonArray = new JSONArray();
+        for (Taskdata task : list) {
+            JSONObject jsonObject = task.initJson();
+            jsonArray.add(jsonObject);
         }
         this.taskdataList=list;
+        this.taskdata=jsonArray.toJSONString();
         JSONObject jsonObject = new JSONObject();
         jsonObject.put(PlayerCmd.TASK_DATA, list);
         return jsonObject;
     }
-
 
     /**
      * 我觉得我是个心跳包
@@ -416,9 +420,6 @@ public class PlayerData {
             if (totalincubate!=null){
                 this.totalincubate=totalincubate;
             }
-            data.clear();
-            data.put("info", true);
-            return data;
         }
         return new JSONObject();
     }
