@@ -437,7 +437,14 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             int top = 1;
             for (ZSetOperations.TypedTuple<Object> tuple : set) {
                 Double score = tuple.getScore();
-                Long uid = (Long) tuple.getValue();
+                Object value = tuple.getValue();
+                Long uid=null;
+                if (value instanceof Integer){
+                    uid=((Integer) value).longValue();
+                }
+                if (value instanceof Long){
+                    uid= (Long) value;
+                }
                 if (score != null) {
                     TopRankInfo topRankInfo = new TopRankInfo(top, score.longValue());
                     //获取头像昵称
