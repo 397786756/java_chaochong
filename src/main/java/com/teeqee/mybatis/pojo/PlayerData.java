@@ -221,7 +221,6 @@ public class PlayerData {
           jsonObject.put("taskdata",  initTaskData());
           return jsonObject;
       }
-      return null;
     }
 
     /**初始化taskData*/
