@@ -89,7 +89,7 @@ public class PlayerLogin {
     private String getOpenId( Integer channelid, String code) {
         if (channelid!=null&&code!=null){
             try {
-                return   quDaoLoginService.login(channelid, code);
+                return  quDaoLoginService.login(channelid, code);
             } catch (IOException e) {
                 e.printStackTrace();
             }

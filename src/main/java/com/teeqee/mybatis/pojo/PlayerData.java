@@ -230,9 +230,8 @@ public class PlayerData {
            if (list!=null&&list.size()>0){
                JSONArray jsonArray = new JSONArray();
                for (Taskdata taskdata : list) {
-                   taskdata.init();
-                   JSONObject jsonObject = taskdata.initJsonObject();
-                   jsonArray.add(jsonObject);
+                    taskdata.init();
+                   jsonArray.add(taskdata);
                }
                updateTaskdata(jsonArray);
                //转换
