@@ -39,7 +39,7 @@ public class Active {
                 Reward  reward=new Reward();
                 int rewardid = reward.getId();
                 if (rewardid==0){
-                    reward.setId(i+1);
+                    reward.setId(i);
                 }
                 list.add(reward);
             }
