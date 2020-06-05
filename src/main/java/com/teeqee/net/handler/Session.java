@@ -8,6 +8,7 @@ import com.teeqee.mybatis.pojo.PlayerLog;
 import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.spring.dispatcher.cmd.PlayerCmd;
 import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 
 
 import java.util.Date;
@@ -44,8 +45,11 @@ public class Session<T>  {
     }
 
     public void send(Object o){
-        String s = JSON.toJSONString(o);
-        channel.writeAndFlush(s);
+        if (o!=null){
+            String s = JSON.toJSONString(o);
+            TextWebSocketFrame textWebSocketFrame = new TextWebSocketFrame(JSON.toJSONString(s));
+            channel.writeAndFlush(textWebSocketFrame);
+        }
     }
 
     public Integer getChannelid() {
