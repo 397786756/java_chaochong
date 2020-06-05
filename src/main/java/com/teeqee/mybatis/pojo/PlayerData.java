@@ -386,6 +386,7 @@ public class PlayerData {
     }
 
     public static void main(String[] args) {
+
         StaticData staticData = new StaticData();
         staticData.initTaskData();
         PlayerData playerData = new PlayerData();

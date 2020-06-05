@@ -47,7 +47,7 @@ public class StaticData {
         List<Taskdata> taskdataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Integer neednumber = list.get(i);
-            Taskdata taskdata = new Taskdata(i,0,i+1,neednumber);
+            Taskdata taskdata = new Taskdata(i+1,0,i+1,neednumber);
             taskdataList.add(taskdata);
         }
         TASK_DATA= JSONArray.parseArray(JSONArray.toJSONString(taskdataList)).toJSONString();
