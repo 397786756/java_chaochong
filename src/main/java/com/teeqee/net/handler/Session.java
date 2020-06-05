@@ -31,6 +31,17 @@ public class Session<T>  {
     /**登录的时间*/
     private Date loginTime=new Date();
 
+
+    public boolean close(){
+        if (this.channel!=null){
+            if (channel.isOpen()&&channel.isActive()){
+                channel.close();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Integer getChannelid() {
         return channelid;
     }

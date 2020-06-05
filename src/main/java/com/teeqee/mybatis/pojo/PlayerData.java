@@ -92,7 +92,7 @@ public class PlayerData {
     private String nickname="未授权的玩家";
     /**任务List*/
     private List<Taskdata> taskdataList=new ArrayList<>();
-    /**活跃度*/
+    /**活跃度(周活跃和日活跃)*/
     private String activedata;
     /**是否为机器人*/
     private Boolean isrobot;
@@ -526,42 +526,38 @@ public class PlayerData {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray;
         if (activedata==null){
+            //初始化一下小老弟
             jsonArray= initActive();
-        }else {
-            jsonArray= retrunActive();
+            activedata=jsonArray.toJSONString();
         }
+        jsonArray= retrunActive();
         jsonObject.put("activedata",jsonArray);
         return jsonObject;
     }
 
     /**初始化活动*/
     private JSONArray retrunActive(){
-        return JSONArray.parseArray(activedata);
+        List<Active> list = JSONArray.parseArray(activedata, Active.class);
+        return JSONArray.parseArray(JSON.toJSONString(list));
     }
 
     /**初始化活动*/
     private JSONArray initActive(){
         JSONArray jsonArray = new JSONArray();
-        int size = 10;
-        int rewardidIndex=0;
-        for (int i = 0; i < size; i++) {
+        //有两种类型
+        int kind=2;
+        for (int i = 0; i < kind; i++) {
             Active active = new Active();
-            if (rewardidIndex>4){
-                rewardidIndex=0;
-            }
-            if (i>=5){
-                active.setK(1);
-            }else {
-                 active.setK(2);
-            }
-            active.setR(rewardidIndex);
-            active.setRe(0);
+            active.init(i);
             jsonArray.add(active);
-            rewardidIndex++;
         }
         return jsonArray;
     }
 
+    public static void main(String[] args) {
+        PlayerData playerData = new PlayerData();
+        System.out.println(playerData.initActive());
+    }
     /**玩家获取自己vip相关信息*/
     public  JSONObject getvipInfo(){
         JSONObject jsonObject = new JSONObject(4);

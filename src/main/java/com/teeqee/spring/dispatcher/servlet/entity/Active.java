@@ -4,6 +4,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Description: 玩家获取活跃度相关
  * @Author: zhengsongjie
@@ -16,11 +19,31 @@ public class Active {
     @JSONField(name = "kind")
     private int k;
     /**奖励id*/
-    @JSONField(name = "rewardid")
-    private int r;
-    /**奖励是否已经领取 0代表未领取 1代表已经领取*/
-    @JSONField(name = "rewarded")
-    private int re;
+    @JSONField(name = "rewardlist")
+    private List<Reward> list;
+    /**活跃度*/
+    @JSONField(name = "liveness")
+    private int live;
 
+    public void init(int kind){
+        k=kind;
+        live=0;
+        if (list==null){
+            list=new ArrayList<>(16);
+        }
+        //听说有五个
+        int rewardlistSize =5;
+        int size = list.size();
+        for (int i = 0; i < rewardlistSize; i++) {
+            if (rewardlistSize!=size){
+                Reward  reward=new Reward();
+                int rewardid = reward.getId();
+                if (rewardid==0){
+                    reward.setId(i+1);
+                }
+                list.add(reward);
+            }
+        }
+    }
 }
 

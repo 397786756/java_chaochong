@@ -1,17 +1,5 @@
 package com.teeqee.spring.dispatcher.cmd;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.teeqee.spring.dispatcher.servlet.entity.Active;
-import com.teeqee.spring.dispatcher.servlet.entity.Animaldata;
-import com.teeqee.spring.dispatcher.servlet.entity.BuildingData;
-import com.teeqee.spring.dispatcher.servlet.entity.Taskdata;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.alibaba.fastjson.serializer.SerializerFeature.WriteMapNullValue;
 
 /**
  * @Description: 静态配置类

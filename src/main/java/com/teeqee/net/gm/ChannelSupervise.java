@@ -84,7 +84,7 @@ public class ChannelSupervise implements DisposableBean {
 
     @Override
     public void destroy() throws Exception {
-        logger.info("close gameserver update player info task");
+        logger.info("close gameServer update player info task");
         taskService(true);
     }
 }
