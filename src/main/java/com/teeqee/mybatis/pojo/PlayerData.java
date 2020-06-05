@@ -352,11 +352,14 @@ public class PlayerData {
         JSONArray jsonArray = new JSONArray();
         if (taskdata==null) {
             List<Taskdata> list = JSONArray.parseArray(StaticData.TASK_DATA, Taskdata.class);
+            jsonArray.addAll(list);
+            //客户端的数据
+            JSONArray taskDataArray = new JSONArray();
             for (Taskdata task : list) {
                 JSONObject json = task.initJson();
-                jsonArray.add(json);
+                taskDataArray.add(json);
             }
-            taskdata=jsonArray.toJSONString();
+            taskdata=taskDataArray.toJSONString();
         }else {
             JSONArray parseArray = JSONArray.parseArray(taskdata);
             int size = parseArray.size();
