@@ -131,4 +131,7 @@ public class PlayerUpdate {
     /**增加转盘次数*/
     @Dispather(value = "worldrankstart")
     public Boolean addZhuanPan(MethodModel model) {return model.getSession().getPlayerData().addZhuanPan();}
+    /**玩家极速孵化次数+1*/
+    @Dispather(value = "speedincubate")
+    public Boolean speedincubate(MethodModel model) {return model.getSession().getPlayerData().addZhuanPan();}
 }

@@ -1,5 +1,6 @@
 package com.teeqee.controller.gm;
 
+import com.alibaba.fastjson.JSONObject;
 import com.teeqee.spring.result.Result;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class GMController {
     @RequestMapping("/hello")
     public Result helloWord(){
-        return null;
+        return new Result();
     }
 }

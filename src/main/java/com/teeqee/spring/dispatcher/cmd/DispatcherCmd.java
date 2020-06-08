@@ -72,4 +72,6 @@ public class DispatcherCmd {
     public static final String WORLD_RANK_START = "worldrankstart";
     /**纪录转盘邀请次数*/
     public static final String ADD_ZHUANPAN = "addZhuanPan";
+    /**玩家的每日极速孵化次数*/
+    public static final String SPEEDIN_CUBATE = "speedincubate";
 }

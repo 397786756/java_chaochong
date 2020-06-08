@@ -191,8 +191,18 @@ public class PlayerData {
         return jsonObject;
     }
 
+    /**看我像极速孵化吗*/
+    public boolean speedincubate(){
+        if (speedincubate==null){
+            speedincubate=1;
+        }else {
+            speedincubate+=1;
+        }
+        return true;
+    }
     /**日更新数据*/
     public JSONObject init(){
+        speedincubate=0;
         lasttime=new Date();
         logger.info("uid init everyDay:{}",uid);
         JSONObject jsonObject = new JSONObject();

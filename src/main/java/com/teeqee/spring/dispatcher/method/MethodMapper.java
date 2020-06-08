@@ -107,5 +107,7 @@ public class MethodMapper implements CommandLineRunner{
         map.put(DispatcherCmd.WORLD_RANK_START,map-> playerUpdate.worldrankstart(map));
         /**纪录转盘邀请次数*/
         map.put(DispatcherCmd.ADD_ZHUANPAN,map-> playerUpdate.addZhuanPan(map));
+        /**极速孵化*/
+        map.put(DispatcherCmd.SPEEDIN_CUBATE,map-> playerUpdate.speedincubate(map));
     }
 }
