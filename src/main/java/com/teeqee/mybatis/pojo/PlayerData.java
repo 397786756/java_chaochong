@@ -240,9 +240,14 @@ public class PlayerData {
                int n=0;
                Integer t = object.getInteger("t");
                Integer nr = object.getInteger("nr");
+               if (i==0){
+                   n=1;
+                   d=1;
+               }
                Taskdata taskdata = new Taskdata(t, n, d, nr);
                JSONObject json = taskdata.initJson();
                parse.add(json);
+
                jsonArray.add(taskdata);
            }
            taskdata=parse.toJSONString();
