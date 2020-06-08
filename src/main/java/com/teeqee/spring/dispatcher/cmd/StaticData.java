@@ -46,9 +46,16 @@ public class StaticData {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 50, 50, 1, 3, 20, 2, 5, 1, 5));
         List<Taskdata> taskdataList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            Integer neednumber = list.get(i);
-            Taskdata taskdata = new Taskdata(i+1,1,1,neednumber);
-            taskdataList.add(taskdata);
+            if (i==0){
+                //特殊的第一个位置的时候都是1
+                Integer neednumber = list.get(i);
+                Taskdata taskdata = new Taskdata(1,1,1,neednumber);
+                taskdataList.add(taskdata);
+            }else {
+                Integer neednumber = list.get(i);
+                Taskdata taskdata = new Taskdata(i+1,0,0,neednumber);
+                taskdataList.add(taskdata);
+            }
         }
         TASK_DATA= JSONArray.parseArray(JSONArray.toJSONString(taskdataList)).toJSONString();
         System.out.println("TASK_DATA:"+TASK_DATA);
