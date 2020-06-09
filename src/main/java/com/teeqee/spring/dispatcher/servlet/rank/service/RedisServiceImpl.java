@@ -186,14 +186,17 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 myRank+=1;
             }
         }
+        logger.info("myRank:{}",myRank);
           if (myRank!=null){
                 List<Long> list = RandomUtils.getBandX(myRank, 6);
+              logger.info("list:{}",list);
                 //从大到小
                 Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, -1);
                 if (set!=null){
                     //获取的小标
                     int  checkNum =0;
                     int  listSize = list.size();
+                    int size = list.size();
                     for (ZSetOperations.TypedTuple<Object> tuple : set) {
                         checkNum++;
                         if (checkNum==list.get(listSize-1)){
@@ -204,7 +207,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                                 if (uid.longValue() != playerUid){
                                     playerList.add(playerUid);
                                 }
-                                if (playerList.size()==6){
+                                if (playerList.size()==size||playerList.size()==6){
                                     break;
                                 }
                             }
