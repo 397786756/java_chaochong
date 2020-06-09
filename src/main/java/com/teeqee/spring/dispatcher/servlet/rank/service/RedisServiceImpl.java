@@ -216,6 +216,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                     }
                 }
             }
+          logger.info("myRank:{},playerList:{}",myRank,playerList);
         return playerList;
     }
 
