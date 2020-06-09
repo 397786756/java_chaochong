@@ -367,7 +367,6 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 roundsList= new ArrayList<>();
             }
             for (TopRankInfo topRankInfo : roundsList) {
-                logger.info("channelid:{},uid:{},rounds:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 topRankInfo.setAvatar(topRankInfo.getAvatar()==null?"":topRankInfo.getAvatar());
                 topRankInfo.setNickname(topRankInfo.getNickname()==null?"":topRankInfo.getNickname());
                 addRank(channelId, ROUNDS_TYPE, topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
@@ -377,7 +376,6 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 missList= new ArrayList<>();
             }
             for (TopRankInfo topRankInfo : missList) {
-                logger.info("channelid:{},uid:{},miss:{}",k,topRankInfo.getUid(), topRankInfo.getRounds());
                 topRankInfo.setAvatar(topRankInfo.getAvatar()==null?"":topRankInfo.getAvatar());
                 topRankInfo.setNickname(topRankInfo.getNickname()==null?"":topRankInfo.getNickname());
                 addRank(channelId, MISSNUM_TYPE,  topRankInfo.getUid(), topRankInfo.getRounds().doubleValue(),true);
