@@ -258,6 +258,7 @@ public class PlayerLogin {
         if (playerRank==null){
             playerRank=new PlayerRank();
             playerRank.setUid(uid);
+            playerRank.setRanktotal(0);
             playerRankMapper.insertSelective(playerRank);
         }
         return playerRank;
