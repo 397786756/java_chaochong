@@ -348,6 +348,7 @@ public class PlayerRankEntrance  {
             Long uid1 = methodModel.getSession().getUid();
             String animal = worldRankEnd.getAnimal();
             String animal2 = worldRankEnd.getOpponentanimal();
+            //我的排名
             Long rank1 = worldRankEnd.getRank();
             Long rank2 = worldRankEnd.getOpponentrank();
             if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
@@ -358,6 +359,7 @@ public class PlayerRankEntrance  {
                          rank1=rank2;
                          rank2=rank1;
                          logger.info("original rank:{},now rank:{},default rank:{}", rank1,rank2,rank1);
+                         methodModel.getSession().getPlayerRank().setRank(rank1);
                      }
                 }
                   //打赢了
@@ -372,7 +374,7 @@ public class PlayerRankEntrance  {
      * @param animalStringJson 动物的json
      * @return 返回成优化好的json 字符串
      */
-    public String  checkAnimalJosn(String animalStringJson){
+    private String  checkAnimalJosn(String animalStringJson){
         String animalJson=null;
         if (animalStringJson!=null&&!"".equals(animalStringJson)){
             List<Animal> list = JSONArray.parseArray(animalStringJson, Animal.class);
