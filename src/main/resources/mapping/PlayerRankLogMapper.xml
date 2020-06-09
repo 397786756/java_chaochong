@@ -26,7 +26,8 @@
 		left join player_info info
 		on ranklog.uid2=info.uid
     where
-    ranklog.uid = #{uid,jdbcType=BIGINT}
+    ranklog.uid2 = #{uid,jdbcType=BIGINT}
+
     order by ranklog.datatime limit 20
   </select>
 
