@@ -84,24 +84,19 @@ public class PlayerRankEntrance  {
            Boolean isopponent = playerRank.getIsopponent();
            //我的排名
            Long yourrank=playerRank.getRank();
-           //返回的数据源
-
+           //获取排行榜的人数
            Long aLong = redisService.rankPlayerSize(channelid, toplistType);
            if (yourrank!=null&&yourrank>aLong){
-               logger.info("topList rank num :{},thisPlayer rank:{}",aLong,yourrank);
                playerRank.setRank(aLong+1);
            }
            if (yourrank==null){
-               logger.info("this playerRank is null");
                redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
                playerRank.setRank(aLong+1);
            }
            if (isopponent==null||!isopponent){
-               logger.info("isopponent is  null");
                updatePlayerRankOpponenter(playerRank,channelid,toplistType);
                playerRank.setIsopponent(false);
            }else {
-               logger.info("isopponent is not null and true");
                updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            }
            //返回的挑战人数
@@ -112,61 +107,22 @@ public class PlayerRankEntrance  {
        return jsonObject;
    }
 
-   private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
-        logger.info("start:{}",JSON.toJSONString(playerRank));
-       int playersNum=6;
-       Long uid = playerRank.getUid();
-       Long rank = playerRank.getRank();
-       logger.info("player rank:{}",rank);
-       if (rank <=playersNum){
-           logger.info("get max sixPlayer");
-           for (int i = 0; i < playersNum; i++) {
-               Long playerUid = redisService.getTopRankUid(channelid, toplistType, (long) i,uid);
-               if (playerUid==null){
-                   logger.info("null index:{}",i);
-               }else {
-                   updatePlayerRankOppoent(i,playerUid,playerRank);
-               }
-           }
-       }else {
-           logger.info("for get six");
-           List<Long> list = getBandX(rank, playersNum);
-           for (int i = 0; i < list.size(); i++) {
-               Long aLong = list.get(i);
-               Long playerUid = redisService.getTopRankUid(channelid, toplistType, aLong,uid);
-               if (playerUid==null){
-                   logger.info("null index:{}",i);
-               }else {
-                   updatePlayerRankOppoent(i,playerUid,playerRank);
-               }
-           }
-       }
-       logger.info("end:{}",JSON.toJSONString(playerRank));
-   }
-
-
     /**
-     * @param rank 根据下标排名获取区间值
-     * @param playerNum 获取的玩家人数
-     * @return 返回被拉取到的玩家的集合
+     * @param playerRank 玩家的信息
+     * @param channelid 渠道的id
+     * @param toplistType 排行榜的类型
      */
-   private List<Long> getBandX(Long rank,int playerNum){
-       long B = getRankRandom(rank);
-       logger.info("rank B:{}",B);
-       Long Y = null;
-       List<Long> list = new ArrayList<>(playerNum);
-       for (int i = 0; i < playerNum; i++) {
-           if (i==0){
-               //挑战1的排名 Y1 = X-1
-               Y=rank-1;
-           }else {
-               int randomInt = RandomUtils.getRandomInt(1, (int) B);
-               Y-=randomInt;
+   private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
+       Long uid = playerRank.getUid();
+       List<Long> topRankList = redisService.getTopRankList(channelid, toplistType, uid);
+       int playerNum=6;
+       if (topRankList!=null&&topRankList.size()==playerNum){
+           int i=0;
+           for (Long aLong : topRankList) {
+               updatePlayerRankOppoent(i,aLong,playerRank);
+               i++;
            }
-           list.add(Y);
        }
-       logger.info("this player rank:{},rankList:{}",rank,list.toArray());
-       return list;
    }
 
     /**获取6个挑战者*/
@@ -243,28 +199,6 @@ public class PlayerRankEntrance  {
         }
         return opponent;
     }
-
-    private static final int RANK250=250;
-    private static final int RANK50=50;
-    private static final int RANK12=12;
-    private static final int RANK6=6;
-   /**获取随机的排名*/
-
-   private long getRankRandom(Long rank){
-       long randomRank;
-       if (rank>RANK250 ){
-           randomRank=50;
-       }else if (RANK50<rank){
-           randomRank=10;
-       }else if (RANK12<rank&&rank<RANK50){
-           randomRank=2;
-       }else if (RANK6<rank&&rank<=RANK12){
-           randomRank=1;
-       }else {
-           randomRank=6;
-       }
-       return randomRank;
-   }
 
     /**世界排行榜*/
     @Dispather(value = "toplist")

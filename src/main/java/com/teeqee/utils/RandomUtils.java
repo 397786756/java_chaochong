@@ -1,9 +1,6 @@
 package com.teeqee.utils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomUtils {
@@ -29,6 +26,62 @@ public class RandomUtils {
   */
  public static boolean canChance(float chance) {
   return Math.random()>chance;
+ }
+
+
+ /**
+  * @param rank 根据下标排名获取区间值
+  * @param playerNum 获取的玩家人数
+  * @return 返回被拉取到的玩家的集合
+  */
+ public static List<Long> getBandX(Long rank,int playerNum){
+  if (rank==null||rank<6){
+   rank=6L;
+   ;      }
+  if (playerNum!=6){
+   playerNum=6;
+  }
+  List<Long> list = new ArrayList<>(playerNum);
+  if (rank<=6){
+   for (long l = 7L; l > 0; l--) {
+    list.add(l);
+   }
+  }else {
+   long B = getRankRandom(rank);
+   Long Y = null;
+   for (int i = 0; i < playerNum; i++) {
+    if (i==0){
+     //挑战1的排名 Y1 = X-1
+     Y=rank-1;
+    }else {
+     int randomInt = RandomUtils.getRandomInt(1, (int) B);
+     Y-=randomInt;
+    }
+    list.add(Y);
+   }
+  }
+  return list;
+ }
+ private static final int RANK250=250;
+ private static final int RANK50=50;
+ private static final int RANK12=12;
+ private static final int RANK6=6;
+ /**获取随机的排名*/
+
+ private static long getRankRandom(Long rank){
+  long randomRank;
+  if (rank>RANK250 ){
+   randomRank=50;
+  }else if (RANK50<rank){
+   randomRank=10;
+  }else if (RANK12<rank&&rank<RANK50){
+   randomRank=2;
+  }else if (RANK6<rank&&rank<=RANK12){
+   randomRank=1;
+  }else {
+   randomRank=6;
+  }
+  return randomRank;
  }
 
 

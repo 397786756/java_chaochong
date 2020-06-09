@@ -11,7 +11,7 @@ import lombok.Data;
 public class PlayerRank {
     /**uid*/
     private Long uid;
-
+    /**五个敌人*/
     private Long opponent1;
 
     private Long opponent2;
@@ -23,7 +23,7 @@ public class PlayerRank {
     private Long opponent5;
 
     private Long opponent6;
-
+    /**今天有没有战斗*/
     private Boolean isopponent;
 
     private Long rank;

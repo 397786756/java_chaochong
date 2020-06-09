@@ -12,6 +12,7 @@ import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.rank.entity.InitPlayerRankTotal;
 import com.teeqee.utils.DateUtils;
+import com.teeqee.utils.RandomUtils;
 import com.teeqee.utils.ScoreDoubleUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,41 +163,61 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     }
 
     /**
-     * @param channelId 取代id
-     * @param rank      玩家的排名
-     * @return 返回玩家的uid
+     * @param key rediskey
+     * @param uid uid
+     * @return
      */
-    @Override
-    public Long getTopRankUid(Integer channelId, Integer type, Long rank,Long uid) {
-        //分数是从小到大
-        String redisZSetKey = getRedisZSetKey(channelId, type);
-        //删除玩家的排行榜
-        Double score = redisTemplate.opsForZSet().score(redisZSetKey, uid);
-        redisTemplate.opsForZSet().remove(redisZSetKey, uid);
-        Long findPlayerUid = null;
-        Long aLong = rankPlayerSize(channelId, type);
-        if (rank>aLong){
-            rank=aLong-1;
-        }
-        Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, rank);
-        if (set!=null&&set.size()>0){
-            int index = 0;
-            for (ZSetOperations.TypedTuple<Object> tuple : set) {
-                if (index==rank){
-                    Object value = tuple.getValue();
-                    if (value!=null){
-                        findPlayerUid= Long.valueOf(value.toString());
-                        continue;
-                    }
-                }
-                index++;
-            }
-        }
-        addRank(channelId, type, uid, score, true);
-        return findPlayerUid;
+    private Long getMyRank(String key,Long uid){
+        return redisTemplate.opsForZSet().rank(key, uid);
     }
 
-
+    @Override
+    public List<Long> getTopRankList(Integer channelId, Integer type, Long uid) {
+       //获取排名
+        List<Long> playerList=new ArrayList<>(6);
+        String redisZSetKey = getRedisZSetKey(channelId, type);
+        Long myRank = getMyRank(redisZSetKey, uid);
+        if (myRank==null){
+            myRank= rankPlayerSize(channelId, type);
+            if (myRank!=null){
+                addRank(channelId, type, uid, myRank.doubleValue(), true);
+                //假装加1
+                myRank+=1;
+            }
+        }
+          if (myRank!=null){
+                List<Long> list = RandomUtils.getBandX(myRank, 6);
+                //从大到小
+                Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, -1);
+                if (set!=null){
+                    //获取的小标
+                    int  checkNum =0;
+                    int  listSize = list.size();
+                    for (ZSetOperations.TypedTuple<Object> tuple : set) {
+                        checkNum++;
+                        if (checkNum==list.get(listSize-1)){
+                            listSize--;
+                            Object value = tuple.getValue();
+                            if (value!=null){
+                                Long playerUid = null;
+                                if (value instanceof String){
+                                    playerUid=Long.valueOf((String)value);
+                                }else if (value instanceof  Long ){
+                                    playerUid=(long)value;
+                                }
+                                if (playerUid!=null&&uid.longValue()!=playerUid){
+                                    playerList.add(playerUid);
+                                }
+                                if (listSize==0||playerList.size()==6){
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        return playerList;
+    }
 
 
     /**
