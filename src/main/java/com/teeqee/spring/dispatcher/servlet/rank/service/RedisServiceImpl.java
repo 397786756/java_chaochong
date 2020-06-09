@@ -1,6 +1,7 @@
 package com.teeqee.spring.dispatcher.servlet.rank.service;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.teeqee.mybatis.dao.PlayerDataMapper;
 import com.teeqee.mybatis.dao.PlayerInfoMapper;
 import com.teeqee.mybatis.dao.PlayerRankMapper;
@@ -199,16 +200,11 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                             listSize--;
                             Object value = tuple.getValue();
                             if (value!=null){
-                                Long playerUid = null;
-                                if (value instanceof String){
-                                    playerUid=Long.valueOf((String)value);
-                                }else if (value instanceof  Long ){
-                                    playerUid=(long)value;
-                                }
-                                if (playerUid!=null&&uid.longValue()!=playerUid){
+                                Long playerUid = Long.valueOf(String.valueOf(value));
+                                if (uid.longValue() != playerUid){
                                     playerList.add(playerUid);
                                 }
-                                if (listSize==0||playerList.size()==6){
+                                if (playerList.size()==6){
                                     break;
                                 }
                             }
@@ -217,7 +213,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                 }
             }
           logger.info("myRank:{},playerList:{}",myRank,playerList);
-        return playerList;
+          return playerList;
     }
 
 

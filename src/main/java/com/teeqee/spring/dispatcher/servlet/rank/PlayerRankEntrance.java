@@ -88,7 +88,6 @@ public class PlayerRankEntrance  {
         //   }else if(isopponent){
         //       updatePlayerRankOpponenter(playerRank,channelid,toplistType);
         //   }
-
            updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            //返回的挑战人数
            JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
@@ -141,9 +140,6 @@ public class PlayerRankEntrance  {
         }
         return list;
     }
-
-
-
 
     /**
      * @param i 位置
