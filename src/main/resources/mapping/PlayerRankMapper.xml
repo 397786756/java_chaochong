@@ -179,6 +179,7 @@
   info.channelid=#{channelid,jdbcType=INTEGER}
   and
   rank.rank>0
-  order by rank.rank desc , info.createtime desc ;
+  order by rank.rank desc ,
+  info.createtime desc ;
   </select>
 </mapper>

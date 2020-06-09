@@ -625,7 +625,14 @@ public class PlayerData {
 
     /**初始化活动*/
     private JSONArray retrunActive(){
-        return JSONArray.parseArray(activedata);
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = JSONArray.parseArray(activedata);
+        } catch (Exception e) {
+            jsonArray= initActive();
+            e.printStackTrace();
+        }
+        return jsonArray;
     }
 
     /**初始化活动*/

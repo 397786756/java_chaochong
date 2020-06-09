@@ -78,9 +78,9 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**rank size*/
     private static final long MAX_NUM=20;
     /**rank type*/
-    public static final int ROUNDS_TYPE = 1;
+    private static final int ROUNDS_TYPE = 1;
     /**miss 排行榜*/
-    public static final int MISSNUM_TYPE = 2;
+    private static final int MISSNUM_TYPE = 2;
     /**tio lsit*/
     public static final int TOPLIST_TYPE = 3;
     /**
