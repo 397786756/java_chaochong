@@ -625,8 +625,7 @@ public class PlayerData {
 
     /**初始化活动*/
     private JSONArray retrunActive(){
-        List<Active> list = JSONArray.parseArray(activedata, Active.class);
-        return JSONArray.parseArray(JSON.toJSONString(list));
+        return JSONArray.parseArray(activedata);
     }
 
     /**初始化活动*/
@@ -742,8 +741,13 @@ public class PlayerData {
     /**修改用户活跃度*/
     public Boolean updateactive(JSONObject data) {
         logger.info("updateactive client:{}",data.toJSONString());
-        this.activedata=data.toJSONString();
-        return false;
+        JSONArray datalist = data.getJSONArray("datalist");
+        if (datalist!=null&&datalist.size()>0){
+            this.activedata=datalist.toJSONString();
+            return true;
+        }else {
+           return false;
+        }
     }
 
     /**纪录转盘邀请次数*/

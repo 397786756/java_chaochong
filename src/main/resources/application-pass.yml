@@ -2,9 +2,9 @@
 wx:
   miniapp:
     #App ID (智能小程序ID)
-    appid: 19743309
+    appid: wxf5e30fd3cb6f3030
     #app secret
-    secret: ZmO4NXzPKCHQImGnzuBmgg5VObDVL1mH
+    secret: beb40e27500acbb1f37487b377d23ad2
     #App Key
     aesKey: FKdrlMtsA7eGRmHcqvaABFmxIISyQf4r
 #头条

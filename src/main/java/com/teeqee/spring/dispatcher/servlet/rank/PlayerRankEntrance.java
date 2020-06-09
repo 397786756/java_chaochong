@@ -45,16 +45,18 @@ public class PlayerRankEntrance  {
     /**获取打榜战报*/
     @Dispather(value = "getrankreport")
     public JSONObject getrankreport(MethodModel method) {
-        PlayerRankLog playerRankLog = playerRankLogMapper.selectByPrimaryKey(method.getSession().getUid());
+        List<PlayerRankLog> playerRankLog = playerRankLogMapper.selectByPrimaryKey(method.getSession().getUid());
         if (playerRankLog!=null){
-            String opponentnickname = playerRankLog.getOpponentnickname();
-            String opponentavatar = playerRankLog.getOpponentavatar();
-            if (opponentnickname==null){
-                playerRankLog.setOpponentnickname("");
-            }
-            if (opponentavatar==null){
-                playerRankLog.setOpponentavatar("");
-            }
+            playerRankLog.forEach(log->{
+                String opponentnickname = log.getOpponentnickname();
+                String opponentavatar = log.getOpponentavatar();
+                if (opponentnickname==null){
+                    log.setOpponentnickname("");
+                }
+                if (opponentavatar==null){
+                    log.setOpponentavatar("");
+                }
+            });
         }
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("reportlist", playerRankLog);

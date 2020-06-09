@@ -49,7 +49,7 @@ public class WeiXinGameProperties implements CommandLineRunner {
             String json = SpringbootHttpClientTest.sendPostData(url, ENCODING);
             if (json!=null){
                 JSONObject jsonObject = JSONObject.parseObject(json);
-                String openId = jsonObject.getString("open_id");
+                String openId = jsonObject.getString("openid");
                 if (openId!=null){
                     return openId;
                 }

@@ -27,7 +27,7 @@
 		on ranklog.uid2=info.uid
     where
     ranklog.uid = #{uid,jdbcType=BIGINT}
-    order by ranklog.datatime desc limit 1
+    order by ranklog.datatime limit 20
   </select>
 
   <insert id="insertSelective" parameterType="com.teeqee.mybatis.pojo.PlayerRankLog" >

@@ -103,11 +103,10 @@ public class SessionEventServiceImpl implements SessionEventService {
          PlayerRank playerRank = session.getPlayerRank();
          if (playerRank!=null){
              //不能手动修改自己的rank
-             playerRank.setRank(null);
              playerRankMapper.updateByPrimaryKeySelective(playerRank);
          }
-        session.close();
         if (isClose){
+            session.close();
             ChannelSupervise.removeSession(session.getChannel());
         }
     }
