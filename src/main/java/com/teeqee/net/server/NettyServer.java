@@ -53,7 +53,6 @@ public class NettyServer implements CommandLineRunner, DisposableBean {
     @Override
     public void run(String... args) throws Exception {
         logger.info("chaochong server sleep");
-        Thread.sleep(5000);
         bind();
         logger.info("chaochong server open");
     }

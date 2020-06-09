@@ -77,35 +77,38 @@ public class PlayerRankEntrance  {
 
 
    private JSONObject initPlayerWorldRank(PlayerRank playerRank, Integer channelid){
-        //挑战的类型
-       int toplistType = RedisServiceImpl.TOPLIST_TYPE;
-       Boolean isopponent = playerRank.getIsopponent();
-       //我的排名
-       Long yourrank=playerRank.getRank();
-       //返回的数据源
        JSONObject jsonObject = new JSONObject(2);
-       Long aLong = redisService.rankPlayerSize(channelid, toplistType);
-       if (yourrank!=null&&yourrank>aLong){
-           logger.info("topList rank num :{},thisPlayer rank:{}",aLong,yourrank);
-           playerRank.setRank(aLong+1);
+       if (playerRank!=null&&channelid!=null){
+           //挑战的类型
+           int toplistType = RedisServiceImpl.TOPLIST_TYPE;
+           Boolean isopponent = playerRank.getIsopponent();
+           //我的排名
+           Long yourrank=playerRank.getRank();
+           //返回的数据源
+
+           Long aLong = redisService.rankPlayerSize(channelid, toplistType);
+           if (yourrank!=null&&yourrank>aLong){
+               logger.info("topList rank num :{},thisPlayer rank:{}",aLong,yourrank);
+               playerRank.setRank(aLong+1);
+           }
+           if (yourrank==null){
+               logger.info("this playerRank is null");
+               redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
+               playerRank.setRank(aLong+1);
+           }
+           if (isopponent==null||!isopponent){
+               logger.info("isopponent is  null");
+               updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+               playerRank.setIsopponent(false);
+           }else {
+               logger.info("isopponent is not null and true");
+               updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+           }
+           //返回的挑战人数
+           JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
+           jsonObject.put("yourrank", playerRank.getRank());
+           jsonObject.put("opponentlist",jsonArray);
        }
-       if (yourrank==null){
-           logger.info("this playerRank is null");
-           redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
-           playerRank.setRank(aLong+1);
-       }
-       if (isopponent==null||!isopponent){
-           logger.info("isopponent is  null");
-           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
-           playerRank.setIsopponent(false);
-       }else {
-           logger.info("isopponent is not null and true");
-           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
-       }
-       //返回的挑战人数
-       JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
-       jsonObject.put("yourrank", playerRank.getRank());
-       jsonObject.put("opponentlist",jsonArray);
        return jsonObject;
    }
 
@@ -168,26 +171,27 @@ public class PlayerRankEntrance  {
 
     /**获取6个挑战者*/
     private JSONArray  getSixOpponenter(Integer channelid, PlayerRank playerRank){
-        Long opponent1id = playerRank.getOpponent1();
-        Long opponent2id = playerRank.getOpponent2();
-        Long opponent3id = playerRank.getOpponent3();
-        Long opponent4id = playerRank.getOpponent4();
-        Long opponent5id = playerRank.getOpponent5();
-        Long opponent6id = playerRank.getOpponent6();
-        Opponent opponent1 = selectChannelidPlayerRank(channelid, opponent1id);
-        Opponent opponent2 = selectChannelidPlayerRank(channelid, opponent2id);
-        Opponent opponent3 = selectChannelidPlayerRank(channelid, opponent3id);
-        Opponent opponent4 = selectChannelidPlayerRank(channelid, opponent4id);
-        Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
-        Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
         JSONArray list = new JSONArray(6);
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
-        list.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
-        logger.info("list Opponente:{}",list);
+        if (channelid!=null&&playerRank!=null){
+            Long opponent1id = playerRank.getOpponent1();
+            Long opponent2id = playerRank.getOpponent2();
+            Long opponent3id = playerRank.getOpponent3();
+            Long opponent4id = playerRank.getOpponent4();
+            Long opponent5id = playerRank.getOpponent5();
+            Long opponent6id = playerRank.getOpponent6();
+            Opponent opponent1 = selectChannelidPlayerRank(channelid, opponent1id);
+            Opponent opponent2 = selectChannelidPlayerRank(channelid, opponent2id);
+            Opponent opponent3 = selectChannelidPlayerRank(channelid, opponent3id);
+            Opponent opponent4 = selectChannelidPlayerRank(channelid, opponent4id);
+            Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
+            Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
+            list.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
+        }
         return list;
     }
 
