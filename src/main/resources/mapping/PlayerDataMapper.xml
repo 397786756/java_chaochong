@@ -427,7 +427,7 @@
    and
    data.lasttime>#{lasttime,jdbcType=TIMESTAMP}
    order by data.${orderByName} desc,
-   info.createtime desc
+   info.createtime
    limit 20
   </select>
 </mapper>

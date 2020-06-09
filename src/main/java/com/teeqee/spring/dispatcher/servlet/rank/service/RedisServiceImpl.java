@@ -358,7 +358,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      */
     private void initMysqlRankInfo() {
         logger.info("init redis zSet info");
-        //获取七天登录过的玩家
+        //获取七天前登录过的玩家
         Date pastDate = DateUtils.getPastDate(7);
         serverInfoMap.forEach((k, v) -> {
             Integer channelId = v.getChannelId();
@@ -432,7 +432,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
         }
         Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().reverseRangeWithScores(redisZSetKey, 0, size);
         if (set != null && set.size() > 0) {
-            int top = 1;
+            long top = 1;
             for (ZSetOperations.TypedTuple<Object> tuple : set) {
                 Double score = tuple.getScore();
                 Object value = tuple.getValue();
@@ -444,7 +444,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                     uid= (Long) value;
                 }
                 if (score != null) {
-                    TopRankInfo topRankInfo = new TopRankInfo(top, score.longValue());
+                    TopRankInfo topRankInfo = new TopRankInfo(score.intValue(),top);
                     //获取头像昵称
                     PlayerInfo playerInfo = playerInfoMapper.selectByPrimaryKey(uid);
                     if (playerInfo != null) {
