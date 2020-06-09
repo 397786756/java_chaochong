@@ -21,8 +21,7 @@ import org.springframework.stereotype.Component;
 @Order(2)
 public class Task {
     private static final String INIT_CMD="init";
-    //@Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(cron = "0/55 * * * * ?")
+    @Scheduled(cron = "0 0 0 * * ?")
     private void init() {
         for (Channel channel : ChannelSupervise.getGlobalGroup()) {
             if (channel!=null&&channel.isActive()){
