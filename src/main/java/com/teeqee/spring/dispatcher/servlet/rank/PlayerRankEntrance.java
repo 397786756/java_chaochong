@@ -81,24 +81,15 @@ public class PlayerRankEntrance  {
        if (playerRank!=null&&channelid!=null){
            //挑战的类型
            int toplistType = RedisServiceImpl.TOPLIST_TYPE;
-           Boolean isopponent = playerRank.getIsopponent();
-           //我的排名
-           Long yourrank=playerRank.getRank();
-           //获取排行榜的人数
-           Long aLong = redisService.rankPlayerSize(channelid, toplistType);
-           if (yourrank!=null&&yourrank>aLong){
-               playerRank.setRank(aLong+1);
-           }
-           if (yourrank==null){
-               redisService.addRank(channelid, toplistType, playerRank.getUid(), aLong.doubleValue()+1, true);
-               playerRank.setRank(aLong+1);
-           }
-           if (isopponent==null||!isopponent){
-               updatePlayerRankOpponenter(playerRank,channelid,toplistType);
-               playerRank.setIsopponent(false);
-           }else {
-               updatePlayerRankOpponenter(playerRank,channelid,toplistType);
-           }
+        //   Boolean isopponent = playerRank.getIsopponent();
+        //   if (isopponent==null){
+        //       updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+        //       playerRank.setIsopponent(false);
+        //   }else if(isopponent){
+        //       updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+        //   }
+
+           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
            //返回的挑战人数
            JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
            jsonObject.put("yourrank", playerRank.getRank());
