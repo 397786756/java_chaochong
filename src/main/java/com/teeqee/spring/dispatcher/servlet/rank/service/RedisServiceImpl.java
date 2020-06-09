@@ -312,7 +312,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
 
     /**生成机器人*/
     private void initServerRobot(){
-        logger.info("检测机器人生成情况");
+        logger.info("initServerRobot");
         int robotMaxSize=100;
         serverInfoMap.forEach((k,v)->{
             Integer channelIdRobotRankNum = playerRankMapper.findChannelIdRobotRankNum(k);
