@@ -142,23 +142,11 @@ public class PlayerData {
         turntableinvitenum=0;
     }
 
-    /**需要初始化的数据*/
-    private void loginInitData(){
-        //判断是否为同一天
-        if (lasttime==null){
-            lasttime=new Date();
-        }
-        boolean sameDay = DateUtils.isSameDay(lasttime, new Date());
-            int maxWeekSign=7;
-            if (weeksign==maxWeekSign&&!sameDay){
-                weeksign=7;
-            }
-    }
     /**
      * @return 返回用户登录需要的数据
      */
     public JSONObject loginPush(){
-        loginInitData();
+        loginInit();
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
         data.put("rankpermission", rankpermission);

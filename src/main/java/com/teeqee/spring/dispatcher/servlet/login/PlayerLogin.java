@@ -115,8 +115,6 @@ public class PlayerLogin {
         PlayerLog playerLog = createPlayerLog(uid);
         //不初始化排行榜
         PlayerData playerData = localLogin(uid);
-        //登录重置
-        playerData.loginInit();
         //开启游客模式
         playerData.isTourist(openid);
         //TODO 排行榜手动取消
