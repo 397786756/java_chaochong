@@ -1,11 +1,17 @@
 package com.teeqee.spring.dispatcher.servlet.update;
 
 import com.alibaba.fastjson.JSONObject;
+import com.teeqee.net.handler.Session;
 import com.teeqee.spring.dispatcher.model.MethodModel;
 
+import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
+import com.teeqee.spring.dispatcher.servlet.rank.service.RedisServiceImpl;
 import com.teeqee.spring.mode.annotation.DataSourceType;
 import com.teeqee.spring.mode.annotation.Dispather;
+import jdk.nashorn.internal.ir.annotations.Reference;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @Description: 用户修改数据
@@ -16,7 +22,8 @@ import org.springframework.stereotype.Service;
 @DataSourceType("update")
 @Service
 public class PlayerUpdate {
-
+    @Resource
+    private RedisService redisService;
 
 
     /**
@@ -28,7 +35,6 @@ public class PlayerUpdate {
         JSONObject data = model.getData();
         return model.getSession().getPlayerData().newheart(data);
     }
-
 
     /**
      * 获取幸运大转盘
@@ -43,6 +49,8 @@ public class PlayerUpdate {
     public Boolean endofguide(MethodModel model){
         JSONObject data = model.getData();
         Double step = data.getDouble("step");
+        Session session = model.getSession();
+        Integer channelid = session.getChannelid();
         return model.getSession().getPlayerData().endofguide(step);
     }
 
@@ -82,7 +90,14 @@ public class PlayerUpdate {
     /**通关统计*/
     @Dispather(value = "rounds")
     public JSONObject rounds(MethodModel model) {
-        return model.getSession().getPlayerData().rounds(model.getData());
+        JSONObject data = model.getData();
+        Integer rounds = data.getInteger("rounds");
+        Session session = model.getSession();
+        Integer channelid = session.getChannelid();
+        if (rounds!=null){
+            redisService.addRank(channelid, RedisServiceImpl.ROUNDS_TYPE,session.getUid(),1D, false);
+        }
+        return session.getPlayerData().rounds(data);
     }
     /**话费增加*/
     @Dispather(value = "updatephonefarenumber")
@@ -120,7 +135,10 @@ public class PlayerUpdate {
     /**飞镖没射中, 发给后端纪录次数*/
     @Dispather(value = "addmissnum")
     public Object addmissnum(MethodModel model) {
-        return model.getSession().getPlayerData().addmissnum();
+        Session session = model.getSession();
+        Integer channelid = session.getChannelid();
+        redisService.addRank(channelid, RedisServiceImpl.MISSNUM_TYPE,session.getUid(),1D, false);
+        return session.getPlayerData().addmissnum();
     }
     /**使用飞镖*/
     @Dispather(value = "useDart")

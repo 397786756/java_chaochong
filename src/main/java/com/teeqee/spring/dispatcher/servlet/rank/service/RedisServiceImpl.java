@@ -81,9 +81,9 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
     /**rank size*/
     private static final long MAX_NUM=20;
     /**rank type*/
-    private static final int ROUNDS_TYPE = 1;
+    public static final int ROUNDS_TYPE = 1;
     /**miss 排行榜*/
-    private static final int MISSNUM_TYPE = 2;
+    public static final int MISSNUM_TYPE = 2;
     /**tio lsit*/
     public static final int TOPLIST_TYPE = 3;
     /**
@@ -230,7 +230,7 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
 
 
     /**
-     * 玩家排行榜的热更新
+     * 玩家排行榜的热更新(一小时更新一次)
      */
     @Scheduled(cron = "0 * */1 * * ?")
     public void hotTask() {
