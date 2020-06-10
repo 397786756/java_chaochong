@@ -180,6 +180,8 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
             }
             redisTemplate.opsForZSet().add(key, uid, size);
             rank=size;
+        }else {
+            rank+=1;
         }
         return rank;
     }
