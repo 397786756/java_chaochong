@@ -52,15 +52,13 @@ public class PlayerLogin {
         PlayerData playerData = session.getPlayerData();
         if (playerData ==null){
             JSONObject data = model.getData();
-            if (data != null && data.size() > 0) {
+            if (data != null) {
                 String openid = data.getString("openid");
                 Integer channelid = data.getInteger("channelid");
                 if (openid != null) {
-                      if (channelid==null){
-                          channelid=QuDao.TOURIST;
-                      }
+                      if (channelid==null) channelid=QuDao.TOURIST;
                     //登录传过来的openid
-                    tourist(session,openid,channelid);
+                     tourist(session,openid,channelid);
                 }else if (channelid!=null){
                     //调用http接口
                     String code = data.getString("code");

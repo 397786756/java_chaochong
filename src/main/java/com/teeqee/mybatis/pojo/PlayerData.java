@@ -147,6 +147,9 @@ public class PlayerData {
      * @return 返回用户登录需要的数据
      */
     public JSONObject loginPush(){
+        if (uid==null){
+            return null;
+        }
         //登录的时候进行检查
         loginInit();
         JSONObject jsonObject = new JSONObject();
