@@ -99,8 +99,8 @@ public class PlayerRankEntrance  {
                opponent.setRank(aLong);
            }
            jsonObject.put("yourrank", playerRank.getRank());
-           //反转一下呗
-           Collections.shuffle(opponentList);
+           //排序倒的
+           opponentList.sort(Comparator.comparing(Opponent::getRank));
            jsonObject.put("opponentlist",opponentList);
        }
        return jsonObject;
