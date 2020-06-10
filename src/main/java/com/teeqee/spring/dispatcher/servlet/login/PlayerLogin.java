@@ -42,6 +42,8 @@ public class PlayerLogin {
     private PlayerRankMapper playerRankMapper;
     @Resource
     private QuDaoLoginService quDaoLoginService;
+    @Resource
+    private IdWorker idWorker;
 
     @Dispather(value = "login")
     @Transactional(rollbackFor = Exception.class)
@@ -52,18 +54,28 @@ public class PlayerLogin {
             JSONObject data = model.getData();
             if (data != null && data.size() > 0) {
                 String openid = data.getString("openid");
+                Integer channelid = data.getInteger("channelid");
                 if (openid != null) {
+                      if (channelid==null){
+                          channelid=QuDao.TOURIST;
+                      }
                     //登录传过来的openid
-                    tourist(session,openid, QuDao.TOURIST);
-                }else {
+                    tourist(session,openid,channelid);
+                }else if (channelid!=null){
                     //调用http接口
-                    Integer channelid = data.getInteger("channelid");
                     String code = data.getString("code");
-                    String openId = getOpenId(channelid, code);
-                    if (openId!=null){
-                        tourist(session,openId,channelid);
+                    if (code!=null){
+                        String openId = getOpenId(channelid, code);
+                        if (openId!=null){
+                            tourist(session,openId,channelid);
+                        }else {
+                            return errorLogin(channelid);
+                        }
                     }else {
-                        return errorLogin(channelid);
+                        //游客模式
+                        long l = idWorker.nextId();
+                        String openId = String.valueOf(l);
+                        tourist(session,openId,channelid);
                     }
                 }
             }
