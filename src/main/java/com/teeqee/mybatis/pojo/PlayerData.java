@@ -96,7 +96,8 @@ public class PlayerData {
     private Boolean isrobot;
     /**纪录转盘邀请次数*/
     private Integer turntableinvitenum;
-    public PlayerData() {
+
+    private PlayerData() {
 
     }
     /**是否为机器人*/
@@ -146,6 +147,7 @@ public class PlayerData {
      * @return 返回用户登录需要的数据
      */
     public JSONObject loginPush(){
+        //登录的时候进行检查
         loginInit();
         JSONObject jsonObject = new JSONObject();
         JSONObject data = new JSONObject();
@@ -190,6 +192,7 @@ public class PlayerData {
     }
     /**日更新数据*/
     public JSONObject init(){
+        //手残
         speedincubate=0;
         lasttime=new Date();
         logger.info("uid init everyDay:{}",uid);
@@ -198,22 +201,20 @@ public class PlayerData {
         jsonObject.put("todaysign", false);
         turntableinvitenum=0;
         jsonObject.put("turntableinvitenum", 0);
-        if (weeksign==null){
-            weeksign=1;
+        //玩家签到
+        if (weeksign==null||weeksign==7){
+            weeksign=0;
         }
-        weeksign+=1;
         jsonObject.put("weeksign", weeksign);
         //任务
         JSONArray value = initTaskData();
         jsonObject.put("taskdata", value);
-        if (weeksign==null||weeksign==7){
-            weeksign=0;
-        }
+
         return jsonObject;
 
     }
 
-    public void loginInit(){
+    private void loginInit(){
         if (lasttime==null||(isYesterday(lasttime,new Date()))){
             init();
         }
