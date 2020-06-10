@@ -91,10 +91,10 @@ public class PlayerUpdate {
     @Dispather(value = "rounds")
     public JSONObject rounds(MethodModel model) {
         JSONObject data = model.getData();
-        Integer rounds = data.getInteger("rounds");
+        Integer success= data.getInteger("success");
         Session session = model.getSession();
         Integer channelid = session.getChannelid();
-        if (rounds!=null){
+        if (success!=null&&success>0){
             redisService.addRank(channelid, RedisServiceImpl.ROUNDS_TYPE,session.getUid(),1D, false);
         }
         return session.getPlayerData().rounds(data);
