@@ -99,6 +99,8 @@ public class PlayerRankEntrance  {
                opponent.setRank(aLong);
            }
            jsonObject.put("yourrank", playerRank.getRank());
+           //反转一下呗
+           Collections.shuffle(opponentList);
            jsonObject.put("opponentlist",opponentList);
        }
        return jsonObject;

@@ -33,13 +33,20 @@ public class ScoreDoubleUtil {
      */
     public static double intToDouble(int i) {
         //2065-01-24 13:20:00
-        long unreachable = 3800000000L;
+        long unreachable = 3700000000L;
         long notTime = System.currentTimeMillis() / 1000;
         //截取第一个
         long space = unreachable - notTime;
         String replace = Long.toString(space);
         String intString = Integer.toString(i);
         return Double.valueOf(intString + "." + replace);
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        for (int i = 0; i < 5; i++) {
+            Thread.sleep(2002);
+            System.out.println(intToDouble(1));
+        }
     }
 
 
