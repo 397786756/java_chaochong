@@ -75,6 +75,9 @@ public class PlayerLogin {
                         String openId = String.valueOf(l);
                         tourist(session,openId,channelid);
                     }
+                }else {
+                    //发送渠道错误
+                    return channelidError();
                 }
             }
             return session.getPlayerData().loginPush();
@@ -95,6 +98,20 @@ public class PlayerLogin {
         jsonObject.put("info", "please check your mobile phone");
         return jsonObject;
     }
+
+
+
+    /**
+     * @param channelid 渠道
+     * @return 返回错误码
+     */
+    private static JSONObject channelidError(){
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("error", 500);
+        jsonObject.put("info", "please check your channelid");
+        return jsonObject;
+    }
+
 
     private String getOpenId( Integer channelid, String code) {
         if (channelid!=null&&code!=null){
