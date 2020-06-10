@@ -6,6 +6,8 @@ package com.teeqee.spring.dispatcher.cmd;
  * @Software: IntelliJ IDEA
  */
 public class DispatcherCmd {
+    /**玩家未登陆*/
+    public static final String NOT_LOGIN = "notLogin";
     /**登录*/
     public static final String  LOGIN = "login";
     /**获取宠物的位置信息*/
@@ -74,4 +76,5 @@ public class DispatcherCmd {
     public static final String ADD_ZHUANPAN = "addZhuanPan";
     /**玩家的每日极速孵化次数*/
     public static final String SPEEDIN_CUBATE = "speedincubate";
+
 }

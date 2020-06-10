@@ -2,6 +2,7 @@ package com.teeqee.spring.dispatcher.servlet.rank.service;
 
 
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.TopListRankResult;
 
 import java.util.List;
 
@@ -53,6 +54,6 @@ public interface RedisService {
      * @param uid 玩家的uid
      * @return 返回改uuid,如果为空则不返回
      */
-    List<Long> getTopRankList(Integer channelId, Integer type,Long uid);
+    TopListRankResult getTopRankList(Integer channelId, Integer type, Long uid);
 
 }

@@ -29,7 +29,7 @@ public class Session {
     /**channel*/
     private Channel channel;
     /** 是否已经传openId并且登录*/
-    private boolean loginStatus;
+    private boolean loginStatus=false;
     /**登录的时间*/
     private Date loginTime=new Date();
 
@@ -87,13 +87,11 @@ public class Session {
   }
 
     /**
-     * @param uid
+     * 用户登录完毕
      */
-    public void isLogin(Long uid){
-        if (this.uid==null){
-            this.uid=uid;
-            loginStatus=true;
-        }
+    public boolean isLogin(){
+        loginStatus=true;
+        return true;
     }
 
 

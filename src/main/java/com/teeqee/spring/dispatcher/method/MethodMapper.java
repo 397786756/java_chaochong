@@ -30,12 +30,18 @@ public class MethodMapper implements CommandLineRunner{
 
     public Result run(MethodModel model) {
         String cmd = model.getCmd();
+        if (!cmd.equals(DispatcherCmd.LOGIN)){
+            boolean loginStatus = model.getSession().isLoginStatus();
+            if (!loginStatus){
+                return new Result(DispatcherCmd.NOT_LOGIN);
+            }
+        }
         Function<MethodModel, Object> function = map.get(cmd);
         if (function!=null){
             //结果集可能不返回
             return new Result(cmd, function.apply(model));
         }else {
-            return new Result("error","undefined "+cmd);
+            return new Result("error","undefined cmd->"+cmd);
         }
     }
 

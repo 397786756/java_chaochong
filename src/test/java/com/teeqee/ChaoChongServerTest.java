@@ -36,9 +36,9 @@ public class ChaoChongServerTest {
         for (int i = 0; i < 1000; i++) {
             redisTemplate.opsForZSet().add(key, i+"",i);
         }
-        for (long i = 0; i < 100L; i++) {
-            List<Long> topRankList = redisService.getTopRankList(1, 3, 64646454L);
-            System.out.println(topRankList);
-        }
+       // for (long i = 0; i < 100L; i++) {
+       //     List<Long> topRankList = redisService.getTopRankList(1, 3, 64646454L);
+       //     System.out.println(topRankList);
+       // }
     }
 }

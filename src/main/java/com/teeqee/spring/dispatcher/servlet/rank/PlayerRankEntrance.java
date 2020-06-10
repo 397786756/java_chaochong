@@ -16,6 +16,7 @@ import com.teeqee.spring.dispatcher.servlet.entity.Animal;
 import com.teeqee.spring.dispatcher.servlet.entity.Opponent;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.WorldRankEnd;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.TopListRankResult;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisService;
 import com.teeqee.spring.dispatcher.servlet.rank.service.RedisServiceImpl;
 import com.teeqee.spring.mode.annotation.Dispather;
@@ -88,11 +89,17 @@ public class PlayerRankEntrance  {
         //   }else if(isopponent){
         //       updatePlayerRankOpponenter(playerRank,channelid,toplistType);
         //   }
-           updatePlayerRankOpponenter(playerRank,channelid,toplistType);
+           TopListRankResult topListRankResult = updatePlayerRankOpponenter(playerRank, channelid, toplistType);
            //返回的挑战人数
-           JSONArray jsonArray = getSixOpponenter(channelid, playerRank);
+           List<Opponent> opponentList = getSixOpponenter(channelid, playerRank);
+           List<Long> xList = topListRankResult.getXList();
+           for (int i = 0; i < opponentList.size(); i++) {
+               Long aLong = xList.get(i);
+               Opponent opponent = opponentList.get(i);
+               opponent.setRank(aLong);
+           }
            jsonObject.put("yourrank", playerRank.getRank());
-           jsonObject.put("opponentlist",jsonArray);
+           jsonObject.put("opponentlist",opponentList);
        }
        return jsonObject;
    }
@@ -102,22 +109,26 @@ public class PlayerRankEntrance  {
      * @param channelid 渠道的id
      * @param toplistType 排行榜的类型
      */
-   private void updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
+   private TopListRankResult updatePlayerRankOpponenter(PlayerRank playerRank,Integer channelid,Integer toplistType){
        Long uid = playerRank.getUid();
-       List<Long> topRankList = redisService.getTopRankList(channelid, toplistType, uid);
-       int playerNum=6;
-       if (topRankList!=null&&topRankList.size()==playerNum){
-           int i=0;
-           for (Long aLong : topRankList) {
-               updatePlayerRankOppoent(i,aLong,playerRank);
-               i++;
+       TopListRankResult topListRankResult = redisService.getTopRankList(channelid, toplistType, uid);
+       logger.info("topListRankResult:{}",JSONObject.parseObject(JSON.toJSONString(topListRankResult)));
+       if (topListRankResult!=null&&topListRankResult.getMyRank()!=null&&topListRankResult.getXList()!=null){
+           Long myRank = topListRankResult.getMyRank();
+           List<Long> xList = topListRankResult.getXList();
+           List<Long> playerList = topListRankResult.getPlayerList();
+           playerRank.setRank(myRank);
+           //设置玩家的集合
+           for (int i = 0; i < playerList.size(); i++) {
+               updatePlayerRankOppoent(i,playerList.get(i), playerRank);
            }
        }
+       return topListRankResult;
    }
 
     /**获取6个挑战者*/
-    private JSONArray  getSixOpponenter(Integer channelid, PlayerRank playerRank){
-        JSONArray list = new JSONArray(6);
+    private   List<Opponent>  getSixOpponenter(Integer channelid, PlayerRank playerRank){
+       List<Opponent> list = new ArrayList<>(6);
         if (channelid!=null&&playerRank!=null){
             Long opponent1id = playerRank.getOpponent1();
             Long opponent2id = playerRank.getOpponent2();
@@ -131,12 +142,12 @@ public class PlayerRankEntrance  {
             Opponent opponent4 = selectChannelidPlayerRank(channelid, opponent4id);
             Opponent opponent5 = selectChannelidPlayerRank(channelid, opponent5id);
             Opponent opponent6 = selectChannelidPlayerRank(channelid, opponent6id);
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent1,SerializerFeature.WriteMapNullValue)));
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent2,SerializerFeature.WriteMapNullValue)));
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent3,SerializerFeature.WriteMapNullValue)));
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent4,SerializerFeature.WriteMapNullValue)));
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent5,SerializerFeature.WriteMapNullValue)));
-            list.add(JSONObject.parseObject(JSON.toJSONString(opponent6,SerializerFeature.WriteMapNullValue)));
+            list.add(opponent1);
+            list.add(opponent2);
+            list.add(opponent3);
+            list.add(opponent4);
+            list.add(opponent5);
+            list.add(opponent6);
         }
         return list;
     }
@@ -275,14 +286,22 @@ public class PlayerRankEntrance  {
             String animal2 = worldRankEnd.getOpponentanimal();
             //我的排名
             Long  rank1= worldRankEnd.getRank();
+            //玩家的排名
             Long rank2 = worldRankEnd.getOpponentrank();
-            if (iswin!=null&&uid2!=null&&uid1!=null&&animal!=null){
+            if (iswin!=null&&uid2!=null&&uid1!=null){
+                //渠道的id
+                Integer channelid = methodModel.getSession().getChannelid();
+                int toplistType = RedisServiceImpl.TOPLIST_TYPE;
                 logger.info(iswin==WIN?"victory":"defeated");
                 if (iswin==WIN&&rank1>rank2){
+                    //排名越小越大
                     methodModel.getSession().getPlayerRank().setRank(rank2);
                     updateWorldRank(iswin,uid1,rank2, uid2, rank1, animal, animal2);
+                    redisService.addRank(channelid, toplistType, uid1, rank2.doubleValue(), true);
+                    redisService.addRank(channelid, toplistType, uid2, rank1.doubleValue(), true);
                 }else {
                     updateWorldRank(iswin,uid1,rank1, uid2, rank2, animal, animal2);
+                    logger.info("change error redis do not touch");
                 }
                   //打赢了
                 return getworldrank(methodModel);
@@ -333,7 +352,7 @@ public class PlayerRankEntrance  {
         playerRank2.setUid(uid2);
         playerRank2.setRank(rank2);
         playerRank2.setAnimal(animal2);
-        logger.info("update playerRank1:{},animal:{},rank:{},update playerRank2:{},animal:{},rank:{}",uid1,animal1,rank1,uid2,animal2,rank2);
+        logger.info("update playerRank1:{},rank:{},update playerRank2:{},,rank:{}",uid1,rank1,uid2,rank2);
         playerRankMapper.updateByPrimaryKeySelective(playerRank1);
         playerRankMapper.updateByPrimaryKeySelective(playerRank2);
         PlayerRankLog playerRankLog = new PlayerRankLog();

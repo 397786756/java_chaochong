@@ -29,6 +29,10 @@ public class RandomUtils {
  }
 
 
+ public static void main(String[] args) {
+  List<Long> bandX = getBandX(6L, 6);
+  System.out.println(bandX);
+ }
  /**
   * @param rank 根据下标排名获取区间值
   * @param playerNum 获取的玩家人数

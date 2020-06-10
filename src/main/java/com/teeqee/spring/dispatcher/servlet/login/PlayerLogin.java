@@ -110,6 +110,7 @@ public class PlayerLogin {
         //初始化用户数据信息
         //初始化用户日志数据
         session.setUid(uid);
+        session.isLogin();
         session.setChannelid(channelid);
         PlayerLog playerLog = createPlayerLog(uid);
         //不初始化排行榜

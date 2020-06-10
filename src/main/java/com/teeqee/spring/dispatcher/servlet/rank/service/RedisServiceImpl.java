@@ -12,6 +12,7 @@ import com.teeqee.mybatis.pojo.PlayerRank;
 import com.teeqee.mybatis.pojo.ServerInfo;
 import com.teeqee.spring.dispatcher.servlet.entity.TopRankInfo;
 import com.teeqee.spring.dispatcher.servlet.rank.entity.InitPlayerRankTotal;
+import com.teeqee.spring.dispatcher.servlet.rank.entity.TopListRankResult;
 import com.teeqee.utils.DateUtils;
 import com.teeqee.utils.RandomUtils;
 import com.teeqee.utils.ScoreDoubleUtil;
@@ -169,28 +170,32 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
      * @return
      */
     private Long getMyRank(String key,Long uid){
-        return redisTemplate.opsForZSet().rank(key, uid);
+        Long rank = redisTemplate.opsForZSet().rank(key, uid);
+        if (rank==null){
+            Long size = redisTemplate.opsForZSet().size(key);
+            if (size==null){
+                size=0L;
+            }else {
+                size+=1;
+            }
+            redisTemplate.opsForZSet().add(key, uid, size);
+            rank=size;
+        }
+        return rank;
     }
 
     @Override
-    public List<Long> getTopRankList(Integer channelId, Integer type, Long uid) {
+    public TopListRankResult getTopRankList(Integer channelId, Integer type, Long uid) {
        //获取排名
         List<Long> playerList=new ArrayList<>(6);
+        List<Long> list = null;
         String redisZSetKey = getRedisZSetKey(channelId, type);
         Long myRank = getMyRank(redisZSetKey, uid);
-        if (myRank==null){
-            myRank= rankPlayerSize(channelId, type);
-            if (myRank!=null){
-                addRank(channelId, type, uid, myRank.doubleValue(), true);
-                //假装加1
-                myRank+=1;
-            }
-        }
         logger.info("myRank:{}",myRank);
           if (myRank!=null){
-                List<Long> list = RandomUtils.getBandX(myRank, 6);
+              list = RandomUtils.getBandX(myRank, 6);
               logger.info("list:{}",list);
-                //从大到小
+                //通过索引区间返回有序集合成指定区间内的成员对象，其中有序集成员按分数值递增(从小到大)顺序排列
                 Set<ZSetOperations.TypedTuple<Object>> set = redisTemplate.opsForZSet().rangeWithScores(redisZSetKey, 0, -1);
                 if (set!=null){
                     //获取的小标
@@ -215,8 +220,10 @@ public class RedisServiceImpl implements RedisService, CommandLineRunner, Dispos
                     }
                 }
             }
-          logger.info("myRank:{},playerList:{}",myRank,playerList);
-          return playerList;
+        Collections.reverse(playerList);
+        TopListRankResult topListRankResult = new TopListRankResult(myRank,playerList,list);
+        logger.info("myRank:{},playerList:{}",myRank,playerList);
+          return topListRankResult;
     }
 
 

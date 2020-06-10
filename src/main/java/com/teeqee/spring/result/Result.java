@@ -20,11 +20,14 @@ public class Result implements Serializable {
     private String cmd;
     private Object data;
 
+
+
     public Result() {
         super();
     }
-
-
+    public Result(String cmd) {
+        this.cmd=cmd;
+    }
     public Result( String cmd,Object data) {
         super();
         this.cmd=cmd;
