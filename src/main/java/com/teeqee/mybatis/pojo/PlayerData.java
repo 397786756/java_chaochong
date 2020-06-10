@@ -192,22 +192,25 @@ public class PlayerData {
     }
     /**日更新数据*/
     public JSONObject init(){
-        //手残
-        speedincubate=0;
+        JSONObject jsonObject = new JSONObject();
         lasttime=new Date();
         logger.info("uid init everyDay:{}",uid);
-        JSONObject jsonObject = new JSONObject();
+        //玩家急速孵化总次数
+        speedincubate=0;
+        //今日是否签到
         todaysign=false;
-        jsonObject.put("todaysign", false);
-        turntableinvitenum=0;
-        jsonObject.put("turntableinvitenum", 0);
-        //玩家签到
         if (weeksign==null||weeksign==7){
             weeksign=0;
         }
-        jsonObject.put("weeksign", weeksign);
-        //任务
+        //纪录转盘邀请次数
+        turntableinvitenum=0;
+        //初始化玩家的任务信息
         JSONArray value = initTaskData();
+
+        jsonObject.put("todaysign", false);
+        jsonObject.put("turntableinvitenum", 0);
+        jsonObject.put("weeksign", weeksign);
+
         jsonObject.put("taskdata", value);
 
         return jsonObject;

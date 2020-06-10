@@ -98,6 +98,7 @@ public class SpringbootHttpClientTest {
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             result = EntityUtils.toString(response.getEntity(), "utf-8");
         }
+        System.out.println(result);
         // 释放链接
         response.close();
         return result;

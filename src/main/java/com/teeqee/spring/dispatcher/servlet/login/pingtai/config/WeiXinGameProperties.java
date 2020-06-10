@@ -3,6 +3,8 @@ package com.teeqee.spring.dispatcher.servlet.login.pingtai.config;
 
 import com.alibaba.fastjson.JSONObject;
 import com.teeqee.utils.SpringbootHttpClientTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -17,6 +19,8 @@ import java.io.IOException;
 @Component
 @ConfigurationProperties(prefix = "wx.miniapp")
 public class WeiXinGameProperties implements CommandLineRunner {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Value("${wx.miniapp.appid}")
     private String appid;
@@ -52,6 +56,8 @@ public class WeiXinGameProperties implements CommandLineRunner {
                 String openId = jsonObject.getString("openid");
                 if (openId!=null){
                     return openId;
+                }else {
+                    logger.info("wechat:{}",json);
                 }
             }
         }
