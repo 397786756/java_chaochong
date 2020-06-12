@@ -11,7 +11,7 @@ spring:
     serialization:
       write-dates-as-timestamps: true #  返回 时间戳
     # date-format: yyyy-MM-dd HH:mm:ss   格式化
-    # time-zone: GMT+8
+    # time-zone:  GMT+8
     time-zone: GMT+8
   profiles:
     active: prod,pass
