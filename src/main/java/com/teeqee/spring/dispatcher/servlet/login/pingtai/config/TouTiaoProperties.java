@@ -38,12 +38,14 @@ public class TouTiaoProperties implements CommandLineRunner {
     public String getPlayerInfo(String code) throws IOException {
         if (code!=null){
             String url = URL.replace(CODE, code);
-            String json = SpringbootHttpClientTest.sendPostData(url, ENCODING);
+            String json = SpringbootHttpClientTest.sendGetData(url, ENCODING);
             if (json!=null){
                 JSONObject jsonObject = JSONObject.parseObject(json);
-                String openId = jsonObject.getString("open_id");
-                if (openId!=null){
-                    return openId;
+                if (jsonObject!=null&&jsonObject.size()>0){
+                    String openId = jsonObject.getString("openid");
+                    if (openId!=null){
+                        return openId;
+                    }
                 }
             }
         }

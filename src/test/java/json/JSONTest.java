@@ -20,7 +20,12 @@ import java.util.List;
  */
 public class JSONTest {
     public static void main(String[] args) {
+        int add = add(3);
+        System.out.println(add);
+    }
 
+    private static  int add(int n){
+        return ((n>0)?2*add(n-1)+add(n-2):-1);
     }
 
     private void getJsonKey(String json){
