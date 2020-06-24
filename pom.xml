@@ -14,17 +14,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
-        <!--小流氓启动类-->
-        <dependency>
-            <groupId>xyz.noark</groupId>
-            <artifactId>noark-game</artifactId>
-            <version>3.3.8.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.protobuf</groupId>
-            <artifactId>protobuf-java</artifactId>
-            <version>3.5.1</version>
-        </dependency>
         <!--mysql连接-->
         <dependency>
             <groupId>mysql</groupId>
@@ -47,6 +36,11 @@
                     <groupId>com.fasterxml.jackson.core</groupId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.33.Final</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

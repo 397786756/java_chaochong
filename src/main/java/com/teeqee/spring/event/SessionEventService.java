@@ -2,8 +2,6 @@ package com.teeqee.spring.event;
 
 
 import com.teeqee.net.handler.Session;
-import io.netty.channel.Channel;
-import io.netty.handler.codec.http.FullHttpRequest;
 
 /**
  * @Description: 会话管理层
